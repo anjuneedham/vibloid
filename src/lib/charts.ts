@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { createCanvas, type SKRSContext2D } from "@napi-rs/canvas";
 import type { Dataset, OhlcPoint, SeriesPoint } from "./datasets";
 
-export type ChartSpec = { kind: "line" | "candles" | "bars" | "counter"; title?: string };
+export type ChartSpec = { kind: "line" | "candles" | "bars" | "counter"; title?: string; accent?: string; bg?: string; unit?: string; hidePct?: boolean };
 
 const GOLD = "#f5c542", GREEN = "#3ecf8e", RED = "#ff6b6b", MUTE = "#98a2b0";
 const FONT = "Inter, 'DejaVu Sans', sans-serif";
@@ -17,7 +17,8 @@ function values(ds: Dataset): number[] {
 export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dataset, spec: ChartSpec, p: number) {
   const portrait = H > W;
   const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, "#0b0d10"); bg.addColorStop(1, "#141a22");
+  bg.addColorStop(0, spec.bg ?? "#0b0d10"); bg.addColorStop(1, spec.bg ?? "#141a22");
+  const GOLD_ = spec.accent ?? GOLD;
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
 
   const title = spec.title ?? ds.name;
@@ -65,13 +66,13 @@ export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dat
       if (n <= 8 && grow >= 1) { ctx.textAlign = "center"; ctx.fillStyle = "#fff"; ctx.font = `700 ${Math.round(W / 26)}px ${FONT}`; ctx.fillText(fmt(vals[i]), X(i), top - 12); ctx.fillStyle = MUTE; ctx.font = `500 ${Math.round(W / 36)}px ${FONT}`; ctx.fillText(String((ds.points[i] as any).t), X(i), y1 + H * 0.032); } }
   } else {
     // line (also the fallback for candles requested on a plain series)
-    const area = ctx.createLinearGradient(0, y0, 0, y1); area.addColorStop(0, "rgba(245,197,66,.28)"); area.addColorStop(1, "rgba(245,197,66,0)");
+    const area = ctx.createLinearGradient(0, y0, 0, y1); area.addColorStop(0, GOLD_ + "47"); area.addColorStop(1, GOLD_ + "00");
     ctx.beginPath(); ctx.moveTo(X(0), Y(vals[0])); for (let i = 1; i < shown; i++) ctx.lineTo(X(i), Y(vals[i]));
-    ctx.lineJoin = "round"; ctx.lineCap = "round"; ctx.strokeStyle = GOLD; ctx.lineWidth = Math.max(5, W / 160); ctx.shadowColor = GOLD; ctx.shadowBlur = 24; ctx.stroke(); ctx.shadowBlur = 0;
+    ctx.lineJoin = "round"; ctx.lineCap = "round"; ctx.strokeStyle = GOLD_; ctx.lineWidth = Math.max(5, W / 160); ctx.shadowColor = GOLD_; ctx.shadowBlur = 24; ctx.stroke(); ctx.shadowBlur = 0;
     ctx.lineTo(X(shown - 1), y1); ctx.lineTo(X(0), y1); ctx.closePath(); ctx.fillStyle = area; ctx.fill();
     ctx.beginPath(); ctx.arc(X(shown - 1), Y(cur), Math.max(9, W / 90), 0, Math.PI * 2); ctx.fillStyle = "#fff"; ctx.fill();
     ctx.textAlign = "center"; ctx.fillStyle = "#fff"; ctx.font = `700 ${Math.round(W / 16)}px ${FONT}`;
-    ctx.fillText(`${fmt(cur)}  ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`, Math.min(W * 0.72, Math.max(W * 0.28, X(shown - 1))), Math.max(y0 - 6, Y(cur) - W / 18));
+    ctx.fillText(spec.hidePct ? `${fmt(cur)}${spec.unit ?? ""}` : `${fmt(cur)}  ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`, Math.min(W * 0.72, Math.max(W * 0.28, X(shown - 1))), Math.max(y0 - 6, Y(cur) - W / 18));
   }
 
   // The source is always on screen: no unsourced numbers.

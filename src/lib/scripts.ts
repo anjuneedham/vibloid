@@ -15,16 +15,18 @@ export const STYLES = {
 } as const;
 export type Style = keyof typeof STYLES;
 
-export const VISUAL_TYPES = ["stock_video", "image", "chart", "ai_image", "ai_clip"] as const;
+export const VISUAL_TYPES = ["stock_video", "image", "chart", "ai_image", "ai_clip", "scene"] as const;
 const Beat = z.object({
   narration: z.string().min(1), on_screen_text: z.string().max(60).optional(), visual_query: z.string().min(1), clip_ref: z.string().optional(),
   visual_type: z.enum(VISUAL_TYPES).optional(),
-  chart: z.object({ dataset: z.string(), kind: z.enum(["line", "candles", "bars", "counter"]).default("line"), title: z.string().max(80).optional() }).optional(),
+  chart: z.object({ dataset: z.string(), kind: z.enum(["line", "candles", "bars", "counter"]).default("line"), title: z.string().max(80).optional(), unit: z.string().max(4).optional(), accent: z.string().optional(), bg: z.string().optional() }).optional(),
   ai_prompt: z.string().max(400).optional(),
+  scene: z.record(z.string(), z.any()).optional(), // code-drawn animation (see scenes.ts), used when visual_type is "scene"
 });
 export const ScriptBody = z.object({
   hook: z.string().min(1), promise: z.string().min(1), beats: z.array(Beat).min(3).max(12), cta: z.string(),
   claims: z.array(z.object({ text: z.string(), needs_source: z.boolean() })).default([]),
+  scenes: z.object({ hook: z.record(z.string(), z.any()).optional(), promise: z.record(z.string(), z.any()).optional(), cta: z.record(z.string(), z.any()).optional() }).optional(),
 });
 export type ScriptBody = z.infer<typeof ScriptBody>;
 
