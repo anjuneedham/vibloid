@@ -85,7 +85,7 @@ async function main() {
     await page.getByRole("link", { name: /sample\.mp4/ }).click();
     await page.getByRole("button", { name: "Find clips" }).click();
     await page.getByText("Income is not wealth").waitFor({ timeout: 90_000 });
-    await page.locator(".card", { hasText: "Income is not wealth" }).click();
+    await page.locator(".card", { hasText: "Income is not wealth" }).getByText("Income is not wealth").click(); // click text, not the card center (which hits an input)
     await page.keyboard.press("a");
     await page.locator(".card", { hasText: "Income is not wealth" }).getByText("accepted").waitFor();
 
