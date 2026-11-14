@@ -72,7 +72,7 @@ export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dat
     ctx.lineTo(X(shown - 1), y1); ctx.lineTo(X(0), y1); ctx.closePath(); ctx.fillStyle = area; ctx.fill();
     ctx.beginPath(); ctx.arc(X(shown - 1), Y(cur), Math.max(9, W / 90), 0, Math.PI * 2); ctx.fillStyle = "#fff"; ctx.fill();
     ctx.textAlign = "center"; ctx.fillStyle = "#fff"; ctx.font = `700 ${Math.round(W / 16)}px ${FONT}`;
-    ctx.fillText(spec.hidePct ? `${fmt(cur)}${spec.unit ?? ""}` : `${fmt(cur)}  ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`, Math.min(W * 0.72, Math.max(W * 0.28, X(shown - 1))), Math.max(y0 - 6, Y(cur) - W / 18));
+    ctx.fillText(spec.hidePct ? `${spec.unit === "%" ? Math.round(cur) : fmt(cur)}${spec.unit ?? ""}` : `${fmt(cur)}  ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`, Math.min(W * 0.72, Math.max(W * 0.28, X(shown - 1))), Math.max(y0 - 6, Y(cur) - W / 18));
   }
 
   // The source is always on screen: no unsourced numbers.

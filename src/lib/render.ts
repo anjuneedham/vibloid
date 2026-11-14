@@ -85,7 +85,7 @@ export async function renderProject(projectId: string, kind: RenderKind = "final
   const delays = tl.segments.map((s, i) => `[${i + 1}:a]adelay=${Math.round(s.start * 1000)}|${Math.round(s.start * 1000)},aresample=44100[a${i}]`).join(";");
   const voiceMix = `${tl.segments.map((_, i) => `[a${i}]`).join("")}amix=inputs=${n}:normalize=0:dropout_transition=0,asplit=2[voice][vkey]`;
   const music = `[${n + 1}:a]volume=${tl.music.volume},aresample=44100[m];[m][vkey]sidechaincompress=threshold=0.04:ratio=10:attack=20:release=400[duck]`;
-  const final = `[voice][duck]amix=inputs=2:normalize=0,loudnorm=I=${tl.style?.lufs ?? -14}:TP=-1.5:LRA=11[aout]`;
+  const final = `[voice][duck]amix=inputs=2:normalize=0,loudnorm=I=${tl.style?.lufs ?? -14}:TP=${tl.style?.tp ?? -1.5}:LRA=11[aout]`;
   const ass = storage.localPath(tl.captionsKey).replace(/\\/g, "/").replace(/:/g, "\\:").replace(/'/g, "\\'");
   const fontsdir = fs.existsSync("/usr/share/fonts") ? ":fontsdir=/usr/share/fonts" : "";
   const filter = `${delays};${voiceMix};${music};${final};[0:v]ass='${ass}'${fontsdir}[vout]`;

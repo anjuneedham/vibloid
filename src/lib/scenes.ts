@@ -29,7 +29,9 @@ function rr(c: SKRSContext2D, x: number, y: number, w: number, h: number, r: num
 }
 function bg(c: SKRSContext2D, W: number, H: number) { c.fillStyle = PAL.bg; c.fillRect(0, 0, W, H); }
 function text(c: SKRSContext2D, s: string, x: number, y: number, size: number, color: string, weight = 700, align: CanvasTextAlign = "center", maxW?: number) {
-  c.font = `${weight} ${size}px ${FONT}`; c.fillStyle = color; c.textAlign = align; c.fillText(s, x, y, maxW);
+  c.font = `${weight} ${size}px ${FONT}`;
+  if (maxW) { const w = c.measureText(s).width; if (w > maxW) { size = Math.floor((size * maxW) / w); c.font = `${weight} ${size}px ${FONT}`; } } // shrink, never squash
+  c.fillStyle = color; c.textAlign = align; c.fillText(s, x, y);
 }
 /** Always-on label for anything that looks like app data. Placed in the top safe zone. */
 function badge(c: SKRSContext2D, W: number, H: number, a = 1) {
@@ -66,7 +68,7 @@ export function drawScene(c: SKRSContext2D, W: number, H: number, t: number, dur
         if (a <= 0) return;
         c.save(); c.globalAlpha = clamp(a * 2); rr(c, cx - w / 2, cy - h / 2, w, h, 18); c.fillStyle = it.k === "win" ? "rgba(34,197,94,.16)" : "rgba(239,68,68,.16)"; c.fill();
         c.lineWidth = 4; c.strokeStyle = it.k === "win" ? PAL.win : PAL.loss; c.stroke();
-        text(c, it.t, cx, cy + cw * 0.09, Math.round(cw * 0.3), it.k === "win" ? PAL.win : PAL.loss, 800); c.restore();
+        text(c, it.t, cx, cy + cw * 0.08, Math.round(cw * 0.24), it.k === "win" ? PAL.win : PAL.loss, 800, "center", w - 12); c.restore();
       });
       const shown = s.items.filter((_, i) => t > 0.15 + i * (dur * 0.5) / n + 0.2);
       const wins = shown.filter((i) => i.k === "win").length, losses = shown.length - wins;
@@ -84,28 +86,28 @@ export function drawScene(c: SKRSContext2D, W: number, H: number, t: number, dur
         rr(c, bx, y, Math.max(2, (bw * v * a) / maxV), bh, 14); c.fillStyle = color; c.fill();
         text(c, money(Math.round(v * a)), bx + bw, y - 14, Math.round(W / 16), color, 800, "right");
       };
-      bar("Won", s.won, H * 0.26, PAL.win, outCubic(seg(t, 0.1, 0.9)));
-      bar("Lost", s.lost, H * 0.38, PAL.loss, outCubic(seg(t, 0.5, 1.3)));
+      bar("Won", s.won, H * 0.2, PAL.win, outCubic(seg(t, 0.1, 0.9)));
+      bar("Lost", s.lost, H * 0.3, PAL.loss, outCubic(seg(t, 0.5, 1.3)));
       const n = seg(t, dur * 0.28, dur * 0.5);
       c.save(); c.globalAlpha = clamp(n * 2);
-      text(c, "Net", W / 2, H * 0.50, Math.round(W / 20), PAL.mute, 600);
-      text(c, money(Math.round(net * outCubic(n))), W / 2, H * 0.585, Math.round(W / 5.2), net < 0 ? PAL.loss : PAL.win, 800); c.restore();
+      text(c, "Net", W / 2, H * 0.405, Math.round(W / 22), PAL.mute, 600);
+      text(c, money(Math.round(net * outCubic(n))), W / 2, H * 0.485, Math.round(W / 6), net < 0 ? PAL.loss : PAL.win, 800); c.restore();
       const q = seg(t, dur * 0.52, dur * 0.72); c.save(); c.globalAlpha = clamp(q * 2);
-      rr(c, W * 0.08, H * 0.63, W * 0.4, H * 0.12, 18); c.fillStyle = PAL.panel; c.fill(); rr(c, W * 0.52, H * 0.63, W * 0.4, H * 0.12, 18); c.fill();
-      text(c, "Expectancy / trade", W * 0.28, H * 0.66, Math.round(W / 30), PAL.mute, 600); text(c, money(per * outCubic(q)), W * 0.28, H * 0.72, Math.round(W / 12), per < 0 ? PAL.loss : PAL.win, 800);
-      text(c, "Profit factor", W * 0.72, H * 0.66, Math.round(W / 30), PAL.mute, 600); text(c, (pf * outCubic(q)).toFixed(2), W * 0.72, H * 0.72, Math.round(W / 12), pf < 1 ? PAL.loss : PAL.win, 800); c.restore();
+      rr(c, W * 0.08, H * 0.525, W * 0.4, H * 0.11, 18); c.fillStyle = PAL.panel; c.fill(); rr(c, W * 0.52, H * 0.525, W * 0.4, H * 0.11, 18); c.fill();
+      text(c, "Expectancy / trade", W * 0.28, H * 0.55, Math.round(W / 30), PAL.mute, 600); text(c, money(per * outCubic(q)), W * 0.28, H * 0.61, Math.round(W / 13), per < 0 ? PAL.loss : PAL.win, 800);
+      text(c, "Profit factor", W * 0.72, H * 0.55, Math.round(W / 30), PAL.mute, 600); text(c, (pf * outCubic(q)).toFixed(2), W * 0.72, H * 0.61, Math.round(W / 13), pf < 1 ? PAL.loss : PAL.win, 800); c.restore();
       break;
     }
     case "kpis": {
       badge(c, W, H);
-      const x = W * 0.07, y = H * 0.17, w = W * 0.86, h = H * 0.56, e = outCubic(seg(t, 0, 0.4));
+      const x = W * 0.07, y = H * 0.16, w = W * 0.86, h = H * 0.475, e = outCubic(seg(t, 0, 0.4));
       c.save(); c.globalAlpha = e; rr(c, x, y + (1 - e) * 30, w, h, 26); c.fillStyle = PAL.appBg; c.fill(); c.lineWidth = 3; c.strokeStyle = PAL.appBorder; c.stroke();
       text(c, s.title ?? "Dashboard", x + 36, y + 70 + (1 - e) * 30, Math.round(W / 22), PAL.appFg, 700, "left");
       text(c, "TradeNotes", x + w - 36, y + 70 + (1 - e) * 30, Math.round(W / 34), PAL.accent, 700, "right"); c.restore();
       // The real app shows this notice above the KPI cards when there are fewer than 30 closed trades.
-      let gridTop = y + h * 0.17;
+      let gridTop = y + h * 0.15;
       if (s.note) {
-        const a = outCubic(seg(t, 0.35, 0.8)), fs = Math.round(W / 38), lines: string[] = [];
+        const a = outCubic(seg(t, 0.35, 0.8)), fs = Math.round(W / 41), lines: string[] = [];
         c.font = `500 ${fs}px ${FONT}`; let cur = "";
         for (const word of s.note.split(" ")) { const tryLine = cur ? cur + " " + word : word; if (c.measureText(tryLine).width > w - 100 && cur) { lines.push(cur); cur = word; } else cur = tryLine; }
         lines.push(cur);
@@ -114,10 +116,10 @@ export function drawScene(c: SKRSContext2D, W: number, H: number, t: number, dur
         lines.forEach((ln, i) => text(c, ln, x + 56, gridTop + 18 + fs * 1.5 * (i + 0.8), fs, PAL.appFg, 500, "left")); c.restore();
         gridTop += nh + 22;
       }
-      const cols = 2, cw = (w - 36 * 3) / cols, ch = Math.min(h * 0.3, (y + h - gridTop - 30 - 20) / 2);
+      const cols = 2, cw = (w - 36 * 3) / cols, ch = Math.min(h * 0.3, (y + h - gridTop - 24 - 16) / 2);
       const t0 = s.note ? 0.9 : 0.35;
       s.cards.slice(0, 4).forEach((k, i) => {
-        const a = seg(t, t0 + i * 0.28, t0 + 0.45 + i * 0.28), ee = outBack(a), cx = x + 36 + (i % cols) * (cw + 36), cy = gridTop + Math.floor(i / cols) * (ch + 20);
+        const a = seg(t, t0 + i * 0.28, t0 + 0.45 + i * 0.28), ee = outBack(a), cx = x + 36 + (i % cols) * (cw + 36), cy = gridTop + Math.floor(i / cols) * (ch + 16);
         if (a <= 0) return;
         c.save(); c.globalAlpha = clamp(a * 2); c.translate(cx + cw / 2, cy + ch / 2); c.scale(0.8 + 0.2 * ee, 0.8 + 0.2 * ee); c.translate(-(cx + cw / 2), -(cy + ch / 2));
         rr(c, cx, cy, cw, ch, 18); c.fillStyle = PAL.appPanel; c.fill(); c.lineWidth = 2; c.strokeStyle = PAL.appBorder; c.stroke();
@@ -142,7 +144,7 @@ export function drawScene(c: SKRSContext2D, W: number, H: number, t: number, dur
       const a = outCubic(seg(t, 0, 0.5));
       c.save(); c.globalAlpha = a; text(c, s.title, W / 2, H * 0.40 + (1 - a) * 24, Math.round(W / 9), PAL.text, 800, "center", W * 0.9);
       c.fillStyle = PAL.amber; c.fillRect(W * 0.38, H * 0.425, W * 0.24, 6);
-      text(c, s.tagline, W / 2, H * 0.48, Math.round(W / 24), PAL.mute, 500, "center", W * 0.84); c.restore();
+      s.tagline.split(/(?<=\.)\s+/).forEach((ln, i) => text(c, ln, W / 2, H * 0.49 + i * W * 0.055, Math.round(W / 24), PAL.mute, 500, "center", W * 0.84)); c.restore();
       if (s.small) text(c, s.small, W / 2, H * 0.62, Math.round(W / 34), PAL.mute, 500, "center", W * 0.86);
       break;
     }

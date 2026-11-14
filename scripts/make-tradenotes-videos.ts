@@ -39,16 +39,19 @@ const flips = (seed: number, n: number): number[] => { const r = mulberry(seed);
 let seed = 1;
 for (; seed < 100000; seed++) {
   const f = flips(seed, 300), first10 = f.slice(0, 10).reduce((a, b) => a + b, 0), all = f.reduce((a, b) => a + b, 0);
-  if (first10 >= 7 && all >= 147 && all <= 153) break;
+  if (first10 === 7 && all >= 147 && all <= 153) break; // exactly 70% after 10 flips, ~50% after 300
 }
 const f = flips(seed, 300);
 let heads = 0;
 const share = f.map((x, i) => { heads += x; return { t: `flip ${i + 1}`, v: +((heads / (i + 1)) * 100).toFixed(1) }; });
 const after10 = share[9].v, after300 = share[299].v;
 console.log(`coin seed ${seed}: ${after10}% heads after 10 flips, ${after300}% after 300`);
+// The narration says "seventy percent" and "settles near fifty": the data must say the same.
+if (after10 !== 70 || after300 < 48 || after300 > 52) throw new Error(`simulation does not match the narration: ${after10}% / ${after300}%`);
 await createDataset({ name: "Fair coin flips (simulation)", kind: "series", points: share, source: `Simulation: 300 fair coin flips (seed ${seed})` });
 
-const STYLE = { captions: "andrew" as const, dipColor: "#0A0F1A", dipS: 0.22, lufs: -16, crf: 20, endHoldS: 2 };
+const STYLE = { captions: "andrew" as const, dipColor: "#0A0F1A", dipS: 0.22, lufs: -14.8, tp: -2.5, crf: 20, // loudnorm single-pass lands ~1.2 dB under its target after AAC; calibrated so the MEASURED result is ~-16 LUFS / peak <= -1.5 dB
+    endHoldS: 2 };
 const endcard = { kind: "endcard", title: "TradeNotes", tagline: "Know your trades. Understand your patterns. Improve your process.", small: "Not financial advice." };
 
 const videos = [
@@ -141,7 +144,7 @@ for (const v of videos) {
   const lufs = Number(loud.stderr.match(/I:\s+(-?[\d.]+) LUFS/g)!.pop()!.match(/(-?[\d.]+)/)![1]);
   const peak = Number(loud.stderr.match(/Peak:\s+(-?[\d.]+) dBFS/g)!.pop()!.match(/(-?[\d.]+)/)![1]);
   const words = body.hook.split(" ").length + body.promise.split(" ").length + body.beats.reduce((a, b) => a + b.narration.split(" ").length, 0) + body.cta.split(" ").length;
-  const qa = { durationS: +dur.toFixed(1), within20to45s: dur >= 20 && dur <= 45, frame: probe.stdout.trim(), lufs, truePeakDb: peak, lufsOk: Math.abs(lufs + 16) <= 1.5, peakOk: peak <= -1.0, words };
+  const qa = { durationS: +dur.toFixed(1), within20to45s: dur >= 20 && dur <= 45, frame: probe.stdout.trim(), lufs, truePeakDb: peak, lufsOk: Math.abs(lufs + 16) <= 1.0, peakOk: peak <= -1.5, words };
 
   const disclosure = channel.disclosure.description_footer as string;
   const post = `# ${v.slug}  (${v.format})
