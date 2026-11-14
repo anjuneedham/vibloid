@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { run } from "../media";
 import type { Word } from "./transcript";
+import { httpError, wrapProvider } from "../resilience";
 
 export type TTSResult = { audioPath: string; durationS: number; words: Word[]; costUsd: number; provider: string; chars: number };
 export interface TTSProvider {
@@ -45,7 +46,7 @@ export class ElevenLabsTTSProvider implements TTSProvider {
       method: "POST", headers: { "xi-api-key": key, "content-type": "application/json" },
       body: JSON.stringify({ text, model_id: process.env.ELEVENLABS_MODEL ?? "eleven_multilingual_v2" }),
     });
-    if (!res.ok) throw new Error(`ElevenLabs ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    if (!res.ok) throw await httpError(res, "ElevenLabs");
     const j: any = await res.json();
     const mp3 = path.join(os.tmpdir(), `el-${process.pid}-${Date.now()}.mp3`);
     fs.writeFileSync(mp3, Buffer.from(j.audio_base64, "base64"));
@@ -60,5 +61,5 @@ export class ElevenLabsTTSProvider implements TTSProvider {
 }
 
 export function getTTSProvider(): TTSProvider {
-  return process.env.TTS_PROVIDER === "elevenlabs" ? new ElevenLabsTTSProvider() : new MockTTSProvider();
+  return process.env.TTS_PROVIDER === "elevenlabs" ? wrapProvider("elevenlabs", new ElevenLabsTTSProvider()) : new MockTTSProvider();
 }

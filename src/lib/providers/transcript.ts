@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { httpError, wrapProvider } from "../resilience";
 
 export type Word = { w: string; start: number; end: number };
 export type Transcript = { text: string; words: Word[]; provider: string; costUsd: number };
@@ -34,7 +35,7 @@ export class OpenAITranscriptProvider implements TranscriptProvider {
     form.append("response_format", "verbose_json");
     form.append("timestamp_granularities[]", "word");
     const res = await fetch("https://api.openai.com/v1/audio/transcriptions", { method: "POST", headers: { Authorization: `Bearer ${key}` }, body: form });
-    if (!res.ok) throw new Error(`transcription failed: ${res.status} ${await res.text()}`);
+    if (!res.ok) throw await httpError(res, "transcription");
     const j: any = await res.json();
     const words: Word[] = (j.words ?? []).map((x: any) => ({ w: x.word, start: x.start, end: x.end }));
     return { text: j.text, words, provider: "openai-whisper", costUsd: (durationS / 60) * 0.006 };
@@ -42,5 +43,5 @@ export class OpenAITranscriptProvider implements TranscriptProvider {
 }
 
 export function getTranscriptProvider(): TranscriptProvider {
-  return process.env.TRANSCRIPT_PROVIDER === "openai" ? new OpenAITranscriptProvider() : new MockTranscriptProvider();
+  return process.env.TRANSCRIPT_PROVIDER === "openai" ? wrapProvider("openai-whisper", new OpenAITranscriptProvider()) : new MockTranscriptProvider();
 }

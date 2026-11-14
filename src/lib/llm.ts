@@ -1,5 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
+import { wrapProvider } from "./resilience";
+import { ScriptedLLM } from "./llm-scripted";
 
 export type Usage = { inputTokens: number; outputTokens: number; costUsd: number };
 
@@ -23,7 +25,7 @@ export function extractJson(text: string): unknown {
 }
 
 export class AnthropicLLM implements LLM {
-  private client = new Anthropic();
+  private client = new Anthropic({ maxRetries: 0 }); // retries/backoff/circuit breaker live in wrapProvider
   async json<T>(o: { system: string; user: string; schema: z.ZodType<T>; maxTokens?: number }) {
     const model = process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5-5";
     let user = o.user, inTok = 0, outTok = 0, lastErr = "";
@@ -59,7 +61,7 @@ export class MockLLM implements LLM {
 
 let llm: LLM | undefined;
 export function getLLM(): LLM {
-  return (llm ??= new AnthropicLLM());
+  return (llm ??= process.env.LLM_PROVIDER === "mock" ? new ScriptedLLM() : wrapProvider("anthropic", new AnthropicLLM()));
 }
 export function setLLM(x: LLM) {
   llm = x;

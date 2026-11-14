@@ -2,6 +2,7 @@ import fs from "node:fs";
 import { getPool } from "./db";
 import { decrypt } from "./secrets";
 import { DeferError } from "./queue";
+import { httpError, wrapProvider } from "./resilience";
 
 export const SCOPES = [
   "https://www.googleapis.com/auth/youtube.upload",
@@ -64,7 +65,7 @@ export async function accessToken(channelId?: string): Promise<string> {
     method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ client_id: process.env.YOUTUBE_CLIENT_ID!, client_secret: process.env.YOUTUBE_CLIENT_SECRET!, refresh_token: decrypt(enc), grant_type: "refresh_token" }),
   });
-  if (!res.ok) throw new Error(`token refresh failed: ${res.status}`);
+  if (!res.ok) throw await httpError(res, "token refresh");
   return ((await res.json()) as any).access_token;
 }
 
@@ -84,7 +85,7 @@ export class GoogleYouTubeClient implements YouTubeClient {
       headers: { Authorization: `Bearer ${token}`, "content-type": "application/json; charset=UTF-8", "X-Upload-Content-Length": String(size), "X-Upload-Content-Type": "video/mp4" },
       body: JSON.stringify(body),
     });
-    if (!init.ok) throw new Error(`upload init failed: ${init.status} ${(await init.text()).slice(0, 300)}`);
+    if (!init.ok) throw await httpError(init, "upload init");
     const session = init.headers.get("location");
     if (!session) throw new Error("no resumable session URL");
     let offset = 0;
@@ -96,7 +97,7 @@ export class GoogleYouTubeClient implements YouTubeClient {
           body: fs.createReadStream(filePath, { start: offset }) as any, duplex: "half",
         } as any);
         if (res.ok) return { videoId: ((await res.json()) as any).id as string };
-        if (res.status !== 308 && res.status < 500) throw new Error(`upload failed: ${res.status} ${(await res.text()).slice(0, 300)}`);
+        if (res.status !== 308 && res.status < 500) throw await httpError(res, "upload");
       } catch (e) { if (attempt === 3) throw e; }
       // Ask the server how much it has, then resume from there.
       const probe = await fetch(session, { method: "PUT", headers: { "content-length": "0", "content-range": `bytes */${size}` } });
@@ -111,10 +112,13 @@ export class GoogleYouTubeClient implements YouTubeClient {
     const res = await fetch(`https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId=${videoId}`, {
       method: "POST", headers: { Authorization: `Bearer ${token}`, "content-type": "image/png" }, body: fs.readFileSync(imagePath),
     });
-    if (!res.ok) throw new Error(`thumbnail failed: ${res.status} ${(await res.text()).slice(0, 200)}`);
+    if (!res.ok) throw await httpError(res, "thumbnail");
   }
 }
 
 let client: YouTubeClient | undefined;
-export function getYouTubeClient(): YouTubeClient { return (client ??= new GoogleYouTubeClient()); }
+export function getYouTubeClient(): YouTubeClient {
+  // upload() is not idempotent (a retry after a lost response could create a duplicate video), so it never auto-retries; it has its own resume logic.
+  return (client ??= process.env.YOUTUBE_PROVIDER === "mock" ? new MockYouTubeClient() : wrapProvider("youtube", new GoogleYouTubeClient(), {}, { upload: { retries: 0 } }));
+}
 export function setYouTubeClient(c: YouTubeClient) { client = c; }

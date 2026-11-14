@@ -5,6 +5,7 @@ import { getPool } from "./db";
 import { getLLM, type LLM } from "./llm";
 import { logCost } from "./queue";
 import { pacificDay } from "./youtube";
+import { httpError } from "./resilience";
 
 export type VideoStats = { views: number; avgViewDurationS: number | null; ctr: number | null; subsGained: number; estMinutesWatched: number | null; retention: number[] | null };
 export interface AnalyticsClient { fetchVideoStats(videoId: string, day: string): Promise<VideoStats> }
@@ -23,7 +24,7 @@ export class GoogleAnalyticsClient implements AnalyticsClient {
   constructor(private token: () => Promise<string>) {}
   private async report(params: Record<string, string>) {
     const res = await fetch("https://youtubeanalytics.googleapis.com/v2/reports?" + new URLSearchParams({ ids: "channel==MINE", ...params }), { headers: { Authorization: `Bearer ${await this.token()}` } });
-    if (!res.ok) throw new Error(`analytics ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    if (!res.ok) throw await httpError(res, "analytics");
     return (await res.json()) as any;
   }
   async fetchVideoStats(videoId: string, day: string): Promise<VideoStats> {

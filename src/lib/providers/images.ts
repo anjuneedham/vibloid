@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import { run } from "../media";
+import { httpError, wrapProvider } from "../resilience";
 
 export type ImageLicense = { source: string; license: string; author?: string; url?: string };
 export type ImageResult = { license: ImageLicense };
@@ -24,17 +25,17 @@ export class PexelsImageProvider implements ImageProvider {
     const key = process.env.PEXELS_API_KEY;
     if (!key) throw new Error("PEXELS_API_KEY not set");
     const r = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${o.orientation}&per_page=5`, { headers: { Authorization: key } });
-    if (!r.ok) throw new Error(`Pexels ${r.status}`);
+    if (!r.ok) throw await httpError(r, "Pexels");
     const j: any = await r.json();
     const p = j.photos?.[0];
     if (!p) throw new Error(`no Pexels results for "${query}"`);
     const img = await fetch(o.orientation === "portrait" ? p.src.portrait : p.src.landscape);
-    if (!img.ok) throw new Error(`Pexels image ${img.status}`);
+    if (!img.ok) throw await httpError(img, "Pexels image");
     fs.writeFileSync(outPath, Buffer.from(await img.arrayBuffer()));
     return { license: { source: "pexels", license: "Pexels License", author: p.photographer, url: p.url } };
   }
 }
 
 export function getImageProvider(): ImageProvider {
-  return process.env.IMAGE_PROVIDER === "pexels" ? new PexelsImageProvider() : new MockImageProvider();
+  return process.env.IMAGE_PROVIDER === "pexels" ? wrapProvider("pexels", new PexelsImageProvider()) : new MockImageProvider();
 }

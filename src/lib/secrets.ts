@@ -1,8 +1,9 @@
 import crypto from "node:crypto";
 
 function key() {
-  const s = process.env.SESSION_SECRET;
-  if (!s || s.length < 16) throw new Error("SESSION_SECRET must be set (16+ chars)");
+  // Separate from SESSION_SECRET so rotating the login-cookie secret does not make stored tokens undecryptable.
+  const s = process.env.ENCRYPTION_KEY ?? process.env.SESSION_SECRET;
+  if (!s || s.length < 16) throw new Error("ENCRYPTION_KEY (or SESSION_SECRET) must be set (16+ chars)");
   return crypto.createHash("sha256").update("vibloid-secrets:" + s).digest();
 }
 /** AES-256-GCM for tokens at rest (e.g. YouTube refresh token). */
