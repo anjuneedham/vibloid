@@ -7,7 +7,7 @@ const cs = (t: number) => {
 };
 const esc = (w: string) => w.replace(/[{}\\]/g, "");
 
-export type CaptionOpts = { width: number; height: number; highlight?: string; font?: string };
+export type CaptionOpts = { width: number; height: number; highlight?: string; font?: string; overlays?: { text: string; start: number; end: number }[] };
 
 /** Group into chunks of <=3 words / <=20 chars. */
 export function chunkWords(words: Word[]): Word[][] {
@@ -34,6 +34,7 @@ export function buildAss(words: Word[], o: CaptionOpts): string {
   const hl = o.highlight ?? "&H0000D7FF&"; // gold (BGR)
   const head = `[Script Info]\nScriptType: v4.00+\nPlayResX: ${o.width}\nPlayResY: ${o.height}\nWrapStyle: 2\n\n` +
     `[V4+ Styles]\nFormat: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding\n` +
+    `Style: Top,${font},${Math.round(size * 0.8)},&H0000D7FF,&H00FFFFFF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,${Math.max(4, Math.round(size / 14))},2,8,${Math.round(o.width * 0.06)},${Math.round(o.width * 0.06)},${Math.round(o.height * 0.1)},1\n` +
     `Style: Cap,${font},${size},&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,${Math.max(4, Math.round(size / 14))},2,2,${Math.round(o.width * 0.06)},${Math.round(o.width * 0.06)},${marginV},1\n\n` +
     `[Events]\nFormat: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text\n`;
   const lines: string[] = [];
@@ -45,6 +46,7 @@ export function buildAss(words: Word[], o: CaptionOpts): string {
       lines.push(`Dialogue: 0,${cs(start)},${cs(Math.max(end, start + 0.05))},Cap,,0,0,0,,${text}`);
     });
   }
+  for (const ov of o.overlays ?? []) lines.push(`Dialogue: 1,${cs(ov.start)},${cs(ov.end)},Top,,0,0,0,,${esc(ov.text.toUpperCase())}`);
   return head + lines.join("\n") + "\n";
 }
 

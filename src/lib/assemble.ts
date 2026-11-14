@@ -70,7 +70,7 @@ export async function assembleProject(projectId: string, o: { tts?: TTSProvider;
   }
 
   const capKey = `projects/${projectId}/captions.ass`;
-  await storage.putFile(capKey, Buffer.from(buildAss(allWords, { width, height })));
+  await storage.putFile(capKey, Buffer.from(buildAss(allWords, { width, height, overlays: segments.filter((x) => x.onScreenText).map((x) => ({ text: x.onScreenText!, start: x.start, end: x.end })) })));
   await db.query("insert into assets (project_id,kind,storage_key,meta) values ($1,'caption',$2,$3)", [projectId, capKey, JSON.stringify({ words: allWords.length })]);
   const music = await ensureMusic(projectId);
   await db.query("insert into assets (project_id,kind,storage_key,license) values ($1,'music',$2,$3)", [projectId, music.key, JSON.stringify(music.license)]);
