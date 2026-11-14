@@ -22,16 +22,17 @@ export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dat
 
   const title = spec.title ?? ds.name;
   ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.font = `700 ${Math.round(W / (portrait ? 14 : 22))}px ${FONT}`;
-  ctx.fillText(title, W / 2, H * (portrait ? 0.14 : 0.13), W * 0.9);
+  ctx.fillText(title, W / 2, H * (portrait ? 0.215 : 0.21), W * 0.9);
 
   const first = ds.points[0] as any, last = ds.points[ds.points.length - 1] as any;
   ctx.fillStyle = MUTE; ctx.font = `500 ${Math.round(W / (portrait ? 28 : 44))}px ${FONT}`;
-  ctx.fillText(`${first.t} → ${last.t}`, W / 2, H * (portrait ? 0.185 : 0.19));
+  ctx.fillText(`${first.t} → ${last.t}`, W / 2, H * (portrait ? 0.265 : 0.27));
 
   const vals = values(ds);
   const n = vals.length;
-  const x0 = W * 0.09, x1 = W * 0.91, y0 = H * (portrait ? 0.26 : 0.27), y1 = H * (portrait ? 0.66 : 0.76);
-  const lo = Math.min(...(ds.kind === "ohlc" ? (ds.points as OhlcPoint[]).map((q) => q.l) : vals));
+  const x0 = W * 0.17, x1 = W * 0.93, y0 = H * (portrait ? 0.32 : 0.33), y1 = H * (portrait ? 0.62 : 0.72);
+  const lo0 = Math.min(...(ds.kind === "ohlc" ? (ds.points as OhlcPoint[]).map((q) => q.l) : vals));
+  const lo = spec.kind === "bars" ? Math.min(0, lo0) : lo0;
   const hi = Math.max(...(ds.kind === "ohlc" ? (ds.points as OhlcPoint[]).map((q) => q.h) : vals));
   const pad = (hi - lo) * 0.08 || 1;
   const Y = (v: number) => y1 - ((v - (lo - pad)) / (hi - lo + 2 * pad)) * (y1 - y0);
@@ -41,8 +42,9 @@ export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dat
   const pct = ((cur - vals[0]) / Math.abs(vals[0] || 1)) * 100;
 
   // light grid + axis labels
-  ctx.strokeStyle = "rgba(255,255,255,.07)"; ctx.lineWidth = 2; ctx.fillStyle = MUTE; ctx.textAlign = "left"; ctx.font = `500 ${Math.round(W / 34)}px ${FONT}`;
-  for (let g = 0; g <= 3; g++) { const gv = lo + ((hi - lo) * g) / 3, gy = Y(gv); ctx.beginPath(); ctx.moveTo(x0, gy); ctx.lineTo(x1, gy); ctx.stroke(); ctx.fillText(fmt(gv), x0 + 6, gy - 8); }
+  ctx.strokeStyle = "rgba(255,255,255,.07)"; ctx.lineWidth = 2; ctx.fillStyle = MUTE; ctx.textAlign = "right"; ctx.font = `500 ${Math.round(W / 34)}px ${FONT}`;
+  const axis = (v: number) => (hi - lo >= 50 ? Math.round(v).toLocaleString("en-US") : fmt(v));
+  for (let g = 0; g <= 3; g++) { const gv = lo + ((hi - lo) * g) / 3, gy = Y(gv); ctx.beginPath(); ctx.moveTo(x0, gy); ctx.lineTo(x1, gy); ctx.stroke(); ctx.fillText(axis(gv), x0 - 10, gy + 6); }
 
   if (spec.kind === "counter") {
     const v = vals[0] + (vals[n - 1] - vals[0]) * ease(p);
@@ -58,7 +60,8 @@ export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dat
     }
   } else if (spec.kind === "bars") {
     const bw = ((x1 - x0) / n) * 0.7;
-    for (let i = 0; i < shown; i++) { const grow = i === shown - 1 ? ease((ease(p) * n) % 1 || 1) : 1; const top = Y(vals[i]), base = Y(Math.max(lo - pad, Math.min(0, lo))); ctx.fillStyle = vals[i] >= (vals[i - 1] ?? vals[i]) ? GREEN : RED; ctx.fillRect(X(i) - bw / 2, base - (base - top) * grow, bw, (base - top) * grow); }
+    for (let i = 0; i < shown; i++) { const grow = i === shown - 1 ? ease((ease(p) * n) % 1 || 1) : 1; const top = Y(vals[i]), base = Y(Math.max(lo - pad, Math.min(0, lo))); ctx.fillStyle = vals[i] >= (vals[i - 1] ?? vals[i]) ? GREEN : RED; ctx.fillRect(X(i) - bw / 2, base - (base - top) * grow, bw, (base - top) * grow);
+      if (n <= 8 && grow >= 1) { ctx.textAlign = "center"; ctx.fillStyle = "#fff"; ctx.font = `700 ${Math.round(W / 26)}px ${FONT}`; ctx.fillText(fmt(vals[i]), X(i), top - 12); ctx.fillStyle = MUTE; ctx.font = `500 ${Math.round(W / 36)}px ${FONT}`; ctx.fillText(String((ds.points[i] as any).t), X(i), y1 + H * 0.032); } }
   } else {
     // line (also the fallback for candles requested on a plain series)
     const area = ctx.createLinearGradient(0, y0, 0, y1); area.addColorStop(0, "rgba(245,197,66,.28)"); area.addColorStop(1, "rgba(245,197,66,0)");
@@ -72,7 +75,7 @@ export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dat
 
   // The source is always on screen: no unsourced numbers.
   ctx.textAlign = "center"; ctx.fillStyle = MUTE; ctx.font = `500 ${Math.round(W / (portrait ? 34 : 56))}px ${FONT}`;
-  ctx.fillText(`Source: ${ds.source}${ds.as_of ? `, as of ${ds.as_of}` : ""}`, W / 2, y1 + H * 0.05, W * 0.92);
+  ctx.fillText(`Source: ${ds.source}${ds.as_of ? `, as of ${ds.as_of}` : ""}`, W / 2, y1 + H * 0.075, W * 0.92);
 }
 
 /** Render an animated chart mp4. Drawn at half resolution and upscaled (4x fewer pixels through the pipe). */
