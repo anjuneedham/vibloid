@@ -9,6 +9,11 @@ import { getImageProvider, type ImageProvider } from "./providers/images";
 import { buildAss, hexToAss } from "./captions";
 import { DIMS, type Segment, type Timeline } from "./timeline";
 import { logCost } from "./queue";
+import { getVideoProvider, type VideoProvider } from "./providers/videos";
+import { getAIImageProvider, aiImageCostUsd } from "./providers/images";
+import { getDatasetByName } from "./datasets";
+import { renderChartVideo } from "./charts";
+import { assertProjectBudget } from "./budget";
 import { run } from "./media";
 import type { Word } from "./providers/transcript";
 
@@ -28,20 +33,24 @@ async function ensureMusic(projectId: string) {
   return { key, license: { source: "generated", license: "CC0 (generated ambient pad)" } };
 }
 
-export async function assembleProject(projectId: string, o: { tts?: TTSProvider; images?: ImageProvider; jobId?: string } = {}): Promise<Timeline> {
+export async function assembleProject(projectId: string, o: { tts?: TTSProvider; images?: ImageProvider; videos?: VideoProvider | null; aiImages?: ImageProvider; jobId?: string } = {}): Promise<Timeline> {
   const { project, script } = await assertProjectRenderable(projectId);
   const db = getPool(), storage = getStorage();
   const tts = o.tts ?? getTTSProvider(), images = o.images ?? getImageProvider();
+  const videos = o.videos === undefined ? getVideoProvider() : o.videos;
+  const aiImages = o.aiImages ?? getAIImageProvider();
+  const aiMax = Number(process.env.AI_MAX_PER_VIDEO ?? 2);
+  let aiUsed = 0;
   const { width, height } = DIMS[project.format as "short" | "long"];
   const orientation = height > width ? "portrait" : "landscape";
   const b = script.body;
-  const parts: { kind: Segment["kind"]; text: string; query: string; on?: string; clipRef?: string }[] = [
+  const parts: { kind: Segment["kind"]; text: string; query: string; on?: string; clipRef?: string; beat?: any }[] = [
     { kind: "hook", text: b.hook, query: b.beats[0]?.visual_query ?? "money" },
     { kind: "promise", text: b.promise, query: b.beats[0]?.visual_query ?? "money" },
-    ...b.beats.map((x: any) => ({ kind: "beat" as const, text: x.narration, query: x.visual_query, on: x.on_screen_text, clipRef: x.clip_ref })),
+    ...b.beats.map((x: any) => ({ kind: "beat" as const, text: x.narration, query: x.visual_query, on: x.on_screen_text, clipRef: x.clip_ref, beat: x })),
     { kind: "cta", text: b.cta, query: "city skyline sunrise" },
   ];
-  await db.query("delete from assets where project_id=$1 and kind in ('audio','image','caption','timeline','music')", [projectId]);
+  await db.query("delete from assets where project_id=$1 and kind in ('audio','image','video','caption','timeline','music')", [projectId]);
 
   const segments: Segment[] = [];
   const allWords: Word[] = [];
@@ -60,10 +69,42 @@ export async function assembleProject(projectId: string, o: { tts?: TTSProvider;
       const dur = Math.min(v.durationS, Number(clip.end_s) - Number(clip.start_s));
       visual = { type: "clip", key: clip.storage_key, sourceId: clip.sid, clip: { start: Number(clip.start_s), end: Number(clip.start_s) + dur } };
     } else {
-      const imgKey = `projects/${projectId}/img${i}.png`;
-      const r = await images.fetch(p.query, storage.localPath(imgKey), { orientation });
-      await db.query("insert into assets (project_id,kind,storage_key,license,meta) values ($1,'image',$2,$3,$4)", [projectId, imgKey, JSON.stringify(r.license), JSON.stringify({ query: p.query })]);
-      visual = { type: "image", key: imgKey, license: r.license };
+      const want: string = p.beat?.visual_type ?? (videos ? "stock_video" : "image");
+      const segDur = v.durationS + GAP;
+      let chosen: Segment["visual"] | null = null;
+
+      if (want === "chart" && p.beat?.chart) {
+        // Charts render only from real, sourced datasets. A missing dataset blocks the render rather than inventing numbers.
+        const ds = await getDatasetByName(p.beat.chart.dataset);
+        if (!ds) throw new Error(`render blocked: chart dataset "${p.beat.chart.dataset}" does not exist; add it with its source first`);
+        const key = `projects/${projectId}/chart${i}.mp4`;
+        await renderChartVideo({ ds, spec: { kind: p.beat.chart.kind ?? "line", title: p.beat.chart.title }, width, height, durationS: segDur, outPath: storage.localPath(key) });
+        await db.query("insert into assets (project_id,kind,storage_key,license,meta) values ($1,'video',$2,$3,$4)", [projectId, key, JSON.stringify({ source: "own-render", license: `Chart of ${ds.source}` }), JSON.stringify({ chart: true, dataset: ds.name, source: ds.source, as_of: ds.as_of })]);
+        chosen = { type: "chart", key, license: { source: "own-render", license: `Chart of ${ds.source}` } };
+      } else if ((want === "ai_image" || want === "ai_clip") && aiUsed < aiMax) {
+        const est = aiImageCostUsd();
+        await assertProjectBudget(projectId, est); // hard stop before paying for an AI image
+        const key = `projects/${projectId}/ai${i}.png`;
+        const r = await aiImages.fetch(p.beat?.ai_prompt ?? p.query, storage.localPath(key), { orientation });
+        aiUsed++;
+        await logCost({ jobId: o.jobId, projectId, provider: r.license.source, unit: "images", quantity: 1, costUsd: r.costUsd ?? 0 });
+        await db.query("insert into assets (project_id,kind,storage_key,license,meta) values ($1,'image',$2,$3,$4)", [projectId, key, JSON.stringify(r.license), JSON.stringify({ ai: true, prompt: p.beat?.ai_prompt ?? p.query })]);
+        chosen = { type: "ai_image", key, license: r.license };
+      } else if ((want === "stock_video" || want === "ai_image" || want === "ai_clip" || want === "chart") && videos) {
+        try {
+          const key = `projects/${projectId}/vid${i}.mp4`;
+          const r = await videos.fetch(p.query, storage.localPath(key), { orientation, minSeconds: segDur });
+          await db.query("insert into assets (project_id,kind,storage_key,license,meta) values ($1,'video',$2,$3,$4)", [projectId, key, JSON.stringify(r.license), JSON.stringify({ query: p.query, duration: r.durationS })]);
+          chosen = { type: "video", key, license: r.license };
+        } catch { /* no footage for this query: fall back to a still */ }
+      }
+      if (!chosen) {
+        const imgKey = `projects/${projectId}/img${i}.png`;
+        const r = await images.fetch(p.query, storage.localPath(imgKey), { orientation });
+        await db.query("insert into assets (project_id,kind,storage_key,license,meta) values ($1,'image',$2,$3,$4)", [projectId, imgKey, JSON.stringify(r.license), JSON.stringify({ query: p.query })]);
+        chosen = { type: "image", key: imgKey, license: r.license };
+      }
+      visual = chosen;
     }
     segments.push({ id: `s${i}`, kind: p.kind, text: p.text, start: +t.toFixed(3), end: +(t + v.durationS).toFixed(3), voiceKey, visual, onScreenText: p.on });
     t += v.durationS + GAP;

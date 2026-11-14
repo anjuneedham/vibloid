@@ -20,7 +20,14 @@ async function renderSegment(seg: Segment, dur: number, w: number, h: number, fp
   const storage = getStorage();
   const frames = Math.max(2, Math.round(dur * fps));
   const enc = ["-an", "-c:v", "libx264", "-preset", preview ? "ultrafast" : "veryfast", "-crf", preview ? "30" : "21", "-pix_fmt", "yuv420p", "-r", String(fps), ...BITEXACT];
-  if (seg.visual.type === "clip") {
+  if (seg.visual.type === "video" || seg.visual.type === "chart") {
+    // Stock video / chart animation: loop if shorter than the beat, then trim, reframe to the target size.
+    await run("ffmpeg", ["-y", "-stream_loop", "-1", "-i", storage.localPath(seg.visual.key), "-t", dur.toFixed(3), "-vf", `${fit(w, h)},fps=${fps}`, ...enc, out]);
+  } else if (seg.visual.type === "ai_image") {
+    // AI still brought to life: stronger push-in plus a slow sideways drift (parallax feel).
+    const zp = `zoompan=z='min(1.0+0.0016*on,1.32)':x='(iw-iw/zoom)*on/${frames}':y='ih/2-(ih/zoom/2)':d=${frames}:s=${w}x${h}:fps=${fps}`;
+    await run("ffmpeg", ["-y", "-loop", "1", "-i", storage.localPath(seg.visual.key), "-vf", `${fit(w * 2, h * 2)},${zp}`, "-frames:v", String(frames), ...enc, out]);
+  } else if (seg.visual.type === "clip") {
     const c = seg.visual.clip!;
     await run("ffmpeg", ["-y", "-ss", String(c.start), "-i", storage.localPath(seg.visual.key), "-t", dur.toFixed(3), "-vf", `${fit(w, h)},fps=${fps},tpad=stop_mode=clone:stop_duration=${dur.toFixed(2)}`, "-t", dur.toFixed(3), ...enc, out]);
   } else {

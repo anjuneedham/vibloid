@@ -1,0 +1,13 @@
+# Local/VPS run. Database is your Neon project (set DATABASE_URL in .env.local); media persists in the "media" volume.
+services:
+  vibloid:
+    build: .
+    ports: ["3000:3000"]
+    env_file: .env.local
+    environment:
+      STORAGE_DIR: /data
+    volumes:
+      - media:/data
+    restart: unless-stopped
+volumes:
+  media:

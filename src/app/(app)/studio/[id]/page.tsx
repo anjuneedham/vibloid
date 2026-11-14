@@ -55,6 +55,7 @@ export default function Project({ params }: { params: Promise<{ id: string }> })
           <button className="sec" disabled={!script || d.blockers.length > 0} onClick={() => run("render_project", { kind: "preview" })}>2. Preview render</button>
           <button className="sec" disabled={!script || d.blockers.length > 0} onClick={() => run("render_project", { kind: "final" })}>3. Final render</button>
           <button className="sec" disabled={!final} onClick={() => run("package_project")}>4. Title, thumbnails, SEO</button>
+          <button disabled={!script} onClick={async () => { await api(`/api/projects/${id}/produce`, { method: "POST" }); setMsg("Pipeline queued: runs to “ready for review”"); jobs.reload(); }}>Run everything</button>
           <a className="btn" href="/queue" style={{ marginLeft: "auto" }}>5. Review &amp; approve →</a>
         </div>
         {d.blockers.length > 0 && <div style={{ marginTop: 10 }}>{d.blockers.map((b: string) => <div key={b} className="err">⛔ {b}</div>)}</div>}

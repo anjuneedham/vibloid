@@ -117,7 +117,12 @@ export class GoogleYouTubeClient implements YouTubeClient {
 }
 
 let client: YouTubeClient | undefined;
-export function getYouTubeClient(): YouTubeClient {
+const perChannel = new Map<string, YouTubeClient>();
+export function getYouTubeClient(channelId?: string | null): YouTubeClient {
+  if (channelId && !client && process.env.YOUTUBE_PROVIDER !== "mock") {
+    if (!perChannel.has(channelId)) perChannel.set(channelId, wrapProvider("youtube", new GoogleYouTubeClient(channelId), {}, { upload: { retries: 0 } }));
+    return perChannel.get(channelId)!;
+  }
   // upload() is not idempotent (a retry after a lost response could create a duplicate video), so it never auto-retries; it has its own resume logic.
   return (client ??= process.env.YOUTUBE_PROVIDER === "mock" ? new MockYouTubeClient() : wrapProvider("youtube", new GoogleYouTubeClient(), {}, { upload: { retries: 0 } }));
 }

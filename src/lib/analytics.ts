@@ -8,7 +8,7 @@ import { pacificDay } from "./youtube";
 import { httpError } from "./resilience";
 
 export type VideoStats = { views: number; avgViewDurationS: number | null; ctr: number | null; subsGained: number; estMinutesWatched: number | null; retention: number[] | null };
-export interface AnalyticsClient { fetchVideoStats(videoId: string, day: string): Promise<VideoStats> }
+export interface AnalyticsClient { fetchVideoStats(videoId: string, day: string, channelId?: string | null): Promise<VideoStats> }
 
 /** Deterministic fake numbers for dev/tests. */
 export class MockAnalyticsClient implements AnalyticsClient {
@@ -21,13 +21,15 @@ export class MockAnalyticsClient implements AnalyticsClient {
 
 /** YouTube Analytics API. Not exercised by the test suite (needs live credentials). The CTR metric name is best-effort and tolerated to fail. */
 export class GoogleAnalyticsClient implements AnalyticsClient {
-  constructor(private token: () => Promise<string>) {}
+  constructor(private token: (channelId?: string | null) => Promise<string>) {}
+  private channelId: string | null | undefined;
   private async report(params: Record<string, string>) {
-    const res = await fetch("https://youtubeanalytics.googleapis.com/v2/reports?" + new URLSearchParams({ ids: "channel==MINE", ...params }), { headers: { Authorization: `Bearer ${await this.token()}` } });
+    const res = await fetch("https://youtubeanalytics.googleapis.com/v2/reports?" + new URLSearchParams({ ids: "channel==MINE", ...params }), { headers: { Authorization: `Bearer ${await this.token(this.channelId)}` } });
     if (!res.ok) throw await httpError(res, "analytics");
     return (await res.json()) as any;
   }
-  async fetchVideoStats(videoId: string, day: string): Promise<VideoStats> {
+  async fetchVideoStats(videoId: string, day: string, channelId?: string | null): Promise<VideoStats> {
+    this.channelId = channelId;
     const base = { startDate: day, endDate: day, filters: `video==${videoId}` };
     const core = (await this.report({ ...base, metrics: "views,averageViewDuration,subscribersGained,estimatedMinutesWatched" })).rows?.[0] ?? [0, null, 0, null];
     let ctr: number | null = null;
@@ -41,10 +43,10 @@ export class GoogleAnalyticsClient implements AnalyticsClient {
 export async function pullAnalytics(client: AnalyticsClient, now = new Date()) {
   const db = getPool();
   const day = pacificDay(new Date(now.getTime() - 24 * 3600_000)); // yesterday: complete data
-  const vids = (await db.query("select distinct project_id, youtube_video_id from publish_queue where youtube_video_id is not null and status in ('scheduled','published','uploaded_private')")).rows;
+  const vids = (await db.query("select distinct q.project_id, q.youtube_video_id, p.channel_id from publish_queue q join projects p on p.id=q.project_id where q.youtube_video_id is not null and q.status in ('scheduled','published','uploaded_private')")).rows;
   let n = 0;
   for (const v of vids) {
-    const s = await client.fetchVideoStats(v.youtube_video_id, day);
+    const s = await client.fetchVideoStats(v.youtube_video_id, day, v.channel_id);
     await db.query(
       `insert into analytics_snapshots (youtube_video_id,project_id,snapshot_date,views,avg_view_duration_s,ctr,subs_gained,retention,estimated_minutes_watched) values ($1,$2,$3,$4,$5,$6,$7,$8,$9)
        on conflict (youtube_video_id, snapshot_date) do update set views=excluded.views, avg_view_duration_s=excluded.avg_view_duration_s, ctr=excluded.ctr, subs_gained=excluded.subs_gained, retention=excluded.retention, estimated_minutes_watched=excluded.estimated_minutes_watched`,

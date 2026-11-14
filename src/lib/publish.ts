@@ -2,9 +2,10 @@ import { getPool } from "./db";
 import { getStorage } from "./storage";
 import { renderBlockers } from "./scripts";
 import { assertRenderable, type Rights } from "./rights";
-import { DISCLAIMER } from "./packaging";
+import { DISCLAIMER, TRADING_RISK } from "./packaging";
 import { QUOTA_COST, QuotaError, reserveQuota, getYouTubeClient, type YouTubeClient } from "./youtube";
 import { enqueue } from "./queue";
+import { channelForProject } from "./channels";
 
 export type Checklist = { rights_ok: boolean; facts_resolved: boolean; disclaimer_present: boolean; no_unlicensed_audio: boolean; preview_watched: boolean };
 
@@ -16,7 +17,7 @@ export async function computeChecklist(projectId: string): Promise<{ auto: Omit<
   const pk = (await db.query("select * from packaging where project_id=$1", [projectId])).rows[0];
   const problems: string[] = [];
   let facts = false, rights = false;
-  if (s) { const b = renderBlockers(s.body, s.fact_check_items); facts = b.length === 0; if (!facts) problems.push(...b); } else problems.push("no script");
+  if (s) { const b = renderBlockers(s.body, s.fact_check_items, await channelForProject(projectId)); facts = b.length === 0; if (!facts) problems.push(...b); } else problems.push("no script");
   try {
     const refs = s ? (s.body.beats as any[]).map((b) => b.clip_ref).filter(Boolean) : [];
     const ids = [...new Set([...(p?.clip_ids ?? []), ...refs])];
@@ -25,7 +26,11 @@ export async function computeChecklist(projectId: string): Promise<{ auto: Omit<
   } catch (e) { problems.push((e as Error).message); }
   const disclaimer = !!pk?.description?.includes(DISCLAIMER);
   if (!disclaimer) problems.push("description is missing the financial disclaimer");
-  const music = (await db.query("select license from assets where project_id=$1 and kind in ('music','image','thumbnail')", [projectId])).rows;
+  const ch = await channelForProject(projectId);
+  if (ch?.niche === "trading" && !pk?.description?.includes(TRADING_RISK)) problems.push("description is missing the trading risk warning");
+  const footer = ch?.disclosure?.description_footer;
+  if (footer && !pk?.description?.includes(footer)) problems.push("description is missing this channel's required disclosure (own-product / sponsorship)");
+  const music = (await db.query("select license from assets where project_id=$1 and kind in ('music','image','video','thumbnail')", [projectId])).rows;
   const unlicensed = music.filter((a) => !a.license?.license || /unknown/i.test(a.license.license));
   if (!music.length || unlicensed.length) problems.push("an audio/image asset has no license on record");
   if (!pk?.chosen_title) problems.push("no title passed the promise-delivery check");
@@ -54,13 +59,15 @@ export async function approveProject(projectId: string, o: { approvedBy: string;
 }
 
 /** The ONLY path to YouTube. Re-verifies approval from the database every time. */
-export async function uploadApproved(queueId: string, client: YouTubeClient = getYouTubeClient()) {
+export async function uploadApproved(queueId: string, clientOverride?: YouTubeClient) {
   const db = getPool();
   const q = (await db.query("select * from publish_queue where id=$1", [queueId])).rows[0];
   if (!q) throw new Error("queue item not found");
   if (!q.approved_at || !q.approved_by) throw new Error("refusing to upload: item is not approved");
   if (q.youtube_video_id) return q; // already uploaded; idempotent
   if (!["approved", "uploading"].includes(q.status)) throw new Error(`refusing to upload: item is not approved (status ${q.status})`);
+  const projRow = (await db.query("select channel_id from projects where id=$1", [q.project_id])).rows[0];
+  const client = clientOverride ?? getYouTubeClient(projRow?.channel_id);
   const checklist = q.checklist as Checklist;
   if (!Object.values(checklist).every(Boolean)) throw new Error("refusing to upload: checklist incomplete");
   const { problems } = await computeChecklist(q.project_id);

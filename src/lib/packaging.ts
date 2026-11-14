@@ -8,9 +8,11 @@ import { getStorage } from "./storage";
 import { renderThumbnail, type ThumbLayout } from "./thumbnail";
 import { scriptText, type ScriptBody } from "./scripts";
 import { logCost } from "./queue";
+import { channelForProject } from "./channels";
 import type { Timeline } from "./timeline";
 
 export const DISCLAIMER = "This video is for educational and entertainment purposes only and is not financial, investment, tax or legal advice. Investing involves risk, including loss of principal. Past performance does not guarantee future results. Do your own research or speak to a licensed professional.";
+export const TRADING_RISK = "Trading and investing involve substantial risk of loss and are not suitable for everyone. Examples are educational and not a recommendation to buy or sell anything. Past results do not predict future results. You can lose more than you put in.";
 export const AI_DISCLOSURE = "Narration and some visuals in this video are AI-generated or AI-assisted.";
 
 const PackOut = z.object({
@@ -100,10 +102,11 @@ export async function buildPackaging(projectId: string, opts: { llm?: LLM; image
     concepts.push({ ...c, text: r.text, key, contrast: r.contrast });
   }
 
-  const credits = (await db.query("select license from assets where project_id=$1 and kind in ('image','thumbnail') and license->>'source' not in ('generated')", [projectId])).rows
+  const credits = (await db.query("select license from assets where project_id=$1 and kind in ('image','video','thumbnail') and license->>'source' not in ('generated')", [projectId])).rows
     .map((r) => r.license).filter((l) => l.author).map((l) => `Image: ${l.author} (${l.source})`);
   const attributions = [...new Set((await db.query("select distinct s.attribution, s.url from clips c join sources s on s.id=c.source_id where c.id = any($1) and s.attribution is not null", [p.clip_ids])).rows.map((r) => `Clip source: ${r.attribution}${r.url ? " - " + r.url : ""}`))];
-  const description = [pack.data.description.trim(), buildChapters(tl), [...attributions, ...[...new Set(credits)]].join("\n"), AI_DISCLOSURE, DISCLAIMER].filter(Boolean).join("\n\n");
+  const ch = await channelForProject(projectId);
+  const description = [pack.data.description.trim(), buildChapters(tl), [...attributions, ...[...new Set(credits)]].join("\n"), ch?.disclosure?.description_footer, AI_DISCLOSURE, DISCLAIMER, ch?.niche === "trading" ? TRADING_RISK : ""].filter(Boolean).join("\n\n");
 
   await db.query(
     `insert into packaging (project_id,titles,chosen_title,description,tags,thumbnail_concepts,promise_check) values ($1,$2,$3,$4,$5,$6,$7)

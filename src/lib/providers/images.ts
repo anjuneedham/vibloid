@@ -4,7 +4,7 @@ import { run } from "../media";
 import { httpError, wrapProvider } from "../resilience";
 
 export type ImageLicense = { source: string; license: string; author?: string; url?: string };
-export type ImageResult = { license: ImageLicense };
+export type ImageResult = { license: ImageLicense; costUsd?: number };
 export interface ImageProvider {
   /** Writes an image to outPath and returns its license metadata. */
   fetch(query: string, outPath: string, o: { orientation: "portrait" | "landscape" }): Promise<ImageResult>;
@@ -34,6 +34,35 @@ export class PexelsImageProvider implements ImageProvider {
     fs.writeFileSync(outPath, Buffer.from(await img.arrayBuffer()));
     return { license: { source: "pexels", license: "Pexels License", author: p.photographer, url: p.url } };
   }
+}
+
+/**
+ * AI-generated stills (OpenAI Images API). The renderer animates them with parallax/zoom, which is how "AI clips" are made today:
+ * OpenAI's Sora video API was shut down in Sept 2026, so there is no OpenAI text-to-video to call.
+ * Prompts are suffixed to avoid text, logos and real people's likenesses.
+ */
+export class OpenAIImageGenProvider implements ImageProvider {
+  async fetch(query: string, outPath: string, o: { orientation: "portrait" | "landscape" }): Promise<ImageResult> {
+    const key = process.env.OPENAI_API_KEY;
+    if (!key) throw new Error("OPENAI_API_KEY not set");
+    const style = process.env.AI_IMAGE_STYLE ?? "cinematic, dark moody lighting, high contrast, shallow depth of field, no text, no logos, no recognizable real people";
+    const res = await fetch("https://api.openai.com/v1/images/generations", {
+      method: "POST", headers: { Authorization: `Bearer ${key}`, "content-type": "application/json" },
+      body: JSON.stringify({ model: process.env.OPENAI_IMAGE_MODEL ?? "gpt-image-1", prompt: `${query}. ${style}`, size: o.orientation === "portrait" ? "1024x1536" : "1536x1024", n: 1 }),
+    });
+    if (!res.ok) throw await httpError(res, "OpenAI image");
+    const j: any = await res.json();
+    const b64 = j.data?.[0]?.b64_json;
+    if (!b64) throw new Error("OpenAI image response had no image data");
+    fs.writeFileSync(outPath, Buffer.from(b64, "base64"));
+    return { license: { source: "openai-generated", license: "AI-generated (use per OpenAI terms)" }, costUsd: aiImageCostUsd() };
+  }
+}
+/** Estimate per generated image; set OPENAI_IMAGE_USD_EACH from current pricing for your model/size. */
+export const aiImageCostUsd = () => Number(process.env.OPENAI_IMAGE_USD_EACH ?? 0.07);
+
+export function getAIImageProvider(): ImageProvider {
+  return process.env.AI_IMAGE_PROVIDER === "openai" ? wrapProvider("openai-image", new OpenAIImageGenProvider()) : new MockImageProvider();
 }
 
 export function getImageProvider(): ImageProvider {

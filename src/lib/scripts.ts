@@ -5,6 +5,7 @@ import { getPool } from "./db";
 import { getLLM, type LLM } from "./llm";
 import { logCost } from "./queue";
 import { winnersContext } from "./analytics";
+import { channelForProject } from "./channels";
 
 export const STYLES = {
   seven_habits: "Listicle: '7 money habits ...' style; each beat is one habit with a concrete example and number.",
@@ -14,7 +15,13 @@ export const STYLES = {
 } as const;
 export type Style = keyof typeof STYLES;
 
-const Beat = z.object({ narration: z.string().min(1), on_screen_text: z.string().max(60).optional(), visual_query: z.string().min(1), clip_ref: z.string().optional() });
+export const VISUAL_TYPES = ["stock_video", "image", "chart", "ai_image", "ai_clip"] as const;
+const Beat = z.object({
+  narration: z.string().min(1), on_screen_text: z.string().max(60).optional(), visual_query: z.string().min(1), clip_ref: z.string().optional(),
+  visual_type: z.enum(VISUAL_TYPES).optional(),
+  chart: z.object({ dataset: z.string(), kind: z.enum(["line", "candles", "bars", "counter"]).default("line"), title: z.string().max(80).optional() }).optional(),
+  ai_prompt: z.string().max(400).optional(),
+});
 export const ScriptBody = z.object({
   hook: z.string().min(1), promise: z.string().min(1), beats: z.array(Beat).min(3).max(12), cta: z.string(),
   claims: z.array(z.object({ text: z.string(), needs_source: z.boolean() })).default([]),
@@ -27,6 +34,13 @@ const BANNED: [RegExp, string][] = [
   [/guaranteed (returns?|profits?|income)/i, "guaranteed returns"], [/risk[- ]free/i, "risk-free claim"], [/can'?t lose/i, "'can't lose' claim"],
   [/get rich quick/i, "get-rich-quick language"], [/\b(you will|you'll) (definitely|certainly) (be|become) (rich|a millionaire)/i, "promise of becoming rich"],
   [/\b100% (return|profit|success)/i, "100% return/success claim"], [/\bpassive income (while you sleep|on autopilot)\b/i, "autopilot-income hype"],
+  // Trading-specific: performance and copy-trading claims
+  [/\b\d{2,3}\s?% win rate\b/i, "win-rate claim"], [/\b(never|always|rarely) (lose|lost|losing|loses)\b/i, "never-lose claim"],
+  [/\b(copy|follow|mirror) my (trades?|positions?|picks?|signals?)\b/i, "copy-trading call to action"],
+  [/\b(10x|100x|1000x) your (account|money|portfolio)\b/i, "multiplier claim"], [/\bquit your (9[- ]?to[- ]?5|job)\b/i, "quit-your-job hype"],
+  [/\b(sure thing|can'?t fail|free money|easy money|insider (tip|info))\b/i, "sure-thing / free-money claim"],
+  [/\bI (made|earned|turned|profited|banked) \$?[\d,]+/i, "personal earnings claim (not allowed in scripts)"],
+  [/\bprofit(s)? (every|each) (single )?(day|week|trade)\b/i, "consistent-profit claim"],
 ];
 
 export function scriptText(b: ScriptBody) {
@@ -34,30 +48,35 @@ export function scriptText(b: ScriptBody) {
 }
 export const wordCount = (b: ScriptBody) => scriptText(b).split(/\s+/).filter(Boolean).length;
 
-export function lintScript(b: ScriptBody): string[] {
+/** Ownership wording required when a channel promotes the creator's own product. */
+const OWNERSHIP = /\b(my (own )?app|I (built|made|created|own|run|founded)|our app|(my|our) (product|tool))\b/i;
+
+export function lintScript(b: ScriptBody, channel?: { kind?: string } | null): string[] {
   const t = scriptText(b);
-  return BANNED.filter(([re]) => re.test(t)).map(([, label]) => label);
+  const out = BANNED.filter(([re]) => re.test(t)).map(([, label]) => label);
+  if (channel?.kind === "brand" && !OWNERSHIP.test(t)) out.push("missing spoken ownership disclosure (say that this is your own app)");
+  return out;
 }
 
 const MARKER = /\[CITATION NEEDED\]/g;
 
 /** Build the fact-check list from model claims + any leftover markers + policy violations. */
-export function buildFactItems(b: ScriptBody): FactItem[] {
+export function buildFactItems(b: ScriptBody, channel?: { kind?: string } | null): FactItem[] {
   const items: FactItem[] = [];
   b.claims.filter((c) => c.needs_source).forEach((c, i) => items.push({ id: `claim-${i}`, kind: "claim", text: c.text, resolved: false }));
   const markers = (scriptText(b).match(MARKER) ?? []).length;
   if (markers > items.length) for (let i = items.length; i < markers; i++) items.push({ id: `marker-${i}`, kind: "marker", text: "Unresolved [CITATION NEEDED] marker", resolved: false });
-  lintScript(b).forEach((v, i) => items.push({ id: `policy-${i}`, kind: "policy", text: `Policy: ${v}. Rewrite the line.`, resolved: false }));
+  lintScript(b, channel).forEach((v, i) => items.push({ id: `policy-${i}`, kind: "policy", text: `Policy: ${v}. Rewrite the line.`, resolved: false }));
   return items;
 }
 
 /** Anything that stops a render. */
-export function renderBlockers(b: ScriptBody, items: FactItem[]): string[] {
+export function renderBlockers(b: ScriptBody, items: FactItem[], channel?: { kind?: string } | null): string[] {
   const out: string[] = [];
   const open = items.filter((i) => !i.resolved);
   if (open.length) out.push(`${open.length} unresolved fact-check item(s)`);
   if ((scriptText(b).match(MARKER) ?? []).length) out.push("[CITATION NEEDED] markers remain in the script");
-  lintScript(b).forEach((v) => out.push(`policy violation: ${v}`));
+  lintScript(b, channel).forEach((v) => out.push(`policy violation: ${v}`));
   return out;
 }
 
@@ -74,7 +93,7 @@ async function nextVersion(projectId: string) {
 
 export async function saveScript(projectId: string, body: ScriptBody, items?: FactItem[]) {
   const v = await nextVersion(projectId);
-  const facts = items ?? buildFactItems(body);
+  const facts = items ?? buildFactItems(body, await channelForProject(projectId));
   const r = await getPool().query("insert into scripts (project_id,version,body,fact_check_items) values ($1,$2,$3,$4) returning *", [projectId, v, JSON.stringify(body), JSON.stringify(facts)]);
   await getPool().query("update projects set status='scripted' where id=$1 and status in ('draft','scripted')", [projectId]);
   return r.rows[0];
@@ -92,7 +111,16 @@ export async function generateScript(projectId: string, opts: { style: Style; ll
   const length = p.format === "short" ? "SHORT (about 150 words, under 60 seconds)" : "LONG-FORM (1200-1800 words)";
   const user = `Topic: ${p.topic ?? p.title}\nFormat: ${length}\nStyle: ${STYLES[opts.style]}\n${clipTxt ? `\nClips you may reference as evidence/quotes (inside your own commentary):\n${clipTxt}\n` : ""}${p.brief?.hook_idea ? `\nHook idea from the weekly plan: ${p.brief.hook_idea}\n` : ""}${opts.feedback ? `\nRevision feedback: ${opts.feedback}\n` : ""}`;
   const winners = await winnersContext();
-  const system = fs.readFileSync(path.resolve("prompts/script.md"), "utf8") + (winners ? `\n\n${winners}` : "");
+  const channel = await channelForProject(projectId);
+  const datasets = (await db.query("select name, kind, source, as_of from datasets order by created_at desc limit 40")).rows;
+  const read = (f: string) => fs.readFileSync(path.resolve(f), "utf8");
+  const addenda = [
+    read("prompts/visuals.md") + `\nAVAILABLE DATASETS:\n${datasets.length ? datasets.map((d: any) => `- "${d.name}" (${d.kind}; source: ${d.source}${d.as_of ? `; as of ${d.as_of}` : ""})`).join("\n") : "(none: do not use charts)"}`,
+    channel?.niche === "trading" ? read("prompts/trading.md") : "",
+    channel?.kind === "brand" ? read("prompts/brand.md").replaceAll("{{APP}}", channel.voice?.app?.name ?? "the app").replaceAll("{{BLURB}}", channel.voice?.app?.blurb ? `(${channel.voice.app.blurb})` : "") : "",
+    winners,
+  ].filter(Boolean);
+  const system = read("prompts/script.md") + "\n\n" + addenda.join("\n\n");
   const { data, usage } = await (opts.llm ?? getLLM()).json({ system, user, schema: ScriptBody, maxTokens: p.format === "short" ? 2500 : 8000 });
   await logCost({ jobId: opts.jobId, projectId, provider: "anthropic", unit: "tokens", quantity: usage.inputTokens + usage.outputTokens, costUsd: usage.costUsd });
   return saveScript(projectId, data);
@@ -121,7 +149,7 @@ export async function resolveFactItem(scriptId: string, itemId: string, input: {
 /** Edit narration text => new version; fact items are rebuilt but previously resolved claims stay resolved. */
 export async function editScript(projectId: string, body: ScriptBody) {
   const prev = (await getPool().query("select fact_check_items from scripts where project_id=$1 order by version desc limit 1", [projectId])).rows[0];
-  const fresh = buildFactItems(body);
+  const fresh = buildFactItems(body, await channelForProject(projectId));
   const resolved = new Map<string, FactItem>((prev?.fact_check_items ?? []).filter((i: FactItem) => i.resolved && i.kind !== "policy").map((i: FactItem) => [i.text, i]));
   const merged = fresh.map((i) => (resolved.has(i.text) ? resolved.get(i.text)! : i));
   return saveScript(projectId, body, merged);

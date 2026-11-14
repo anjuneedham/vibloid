@@ -20,18 +20,29 @@ export class ScriptedLLM implements LLM {
       });
       return { clips: [c(0, total * 0.5, "Income is not wealth", 88), c(total * 0.52, total, "Discipline beats motivation", 79)] };
     }
+    if (system.includes("plan a batch of videos")) {
+      const nA = Number(user.match(/ATTENTION_COUNT: (\d+)/)?.[1] ?? 4), nB = Number(user.match(/BRAND_COUNT: (\d+)/)?.[1] ?? 2);
+      const styles = ["explained_simply", "myth_vs_reality", "seven_habits", "story_motivation"];
+      const stamp = Date.now().toString(36);
+      return {
+        attention: Array.from({ length: nA }, (_, i) => ({ topic: `Why beginners misjudge drawdowns, take ${i + 1} ${stamp}`, hook_idea: "Most beginners misread this one chart.", style: styles[i % 4], hypothesis: "Curiosity hooks hold beginners.", dataset: null })),
+        brand: Array.from({ length: nB }, (_, i) => ({ topic: `The trade review habit that fixes repeat mistakes, take ${i + 1} ${stamp}`, hook_idea: "Your losing trades are teaching you something.", style: "explained_simply", dataset: null })),
+      };
+    }
     if (system.includes("ORIGINAL scripts")) {
+      const own = system.includes("OWN app");
+      const dataset = system.match(/AVAILABLE DATASETS:\n- "([^"]+)"/)?.[1];
       const clipRef = user.match(/clip_ref ([0-9a-f-]{36})/)?.[1];
       return {
         hook: "Stop confusing income with wealth right now.",
         promise: "Here are four habits that quietly build real wealth over time.",
         beats: [
           { narration: "Habit one: pay yourself first. Inflation has averaged about three percent a year in the US [CITATION NEEDED].", visual_query: "piggy bank", on_screen_text: "PAY YOURSELF FIRST" },
-          { narration: "Habit two: automate your savings so discipline never depends on motivation.", visual_query: "phone banking app", ...(clipRef ? { clip_ref: clipRef } : {}) },
+          { narration: "Habit two: automate your savings so discipline never depends on motivation.", visual_query: "phone banking app", ...(clipRef ? { clip_ref: clipRef } : dataset ? { visual_type: "chart", chart: { dataset, kind: "line", title: "What the data shows" } } : {}) },
           { narration: "Habit three: buy assets that produce cash flow instead of liabilities that only look rich.", visual_query: "city buildings" },
           { narration: "Habit four: stay invested through the noise, because time in the market does the heavy lifting.", visual_query: "growth chart" },
         ],
-        cta: "Follow for one money idea every day.",
+        cta: own ? "I built Trade Notes, so I'm biased, but it is made to log your trades. Follow for more." : "Follow for one money idea every day.",
         claims: [{ text: "US inflation has averaged about 3% per year", needs_source: true }],
       };
     }

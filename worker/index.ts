@@ -3,7 +3,11 @@ import { claimJob, completeJob, failJob, reapStale, enqueue, type Handler } from
 import { scheduleRecurringJobs } from "../src/lib/analytics";
 import { closePool } from "../src/lib/db";
 import { logger, captureError } from "../src/lib/log";
+import { assertBudget } from "../src/lib/budget";
 import { handlers } from "./handlers";
+
+// Jobs that never spend money are allowed to run even when the monthly cap is reached.
+const FREE_JOBS = new Set(["upload_video", "pull_analytics"]);
 
 const id = `${os.hostname()}-${process.pid}`;
 let stop = false;
@@ -31,6 +35,7 @@ async function main() {
     const t0 = Date.now();
     logger.info("job start", { job: job.id, type: job.type, attempt: job.attempts });
     try {
+      if (!FREE_JOBS.has(job.type)) await assertBudget();
       const result = await (handlers[job.type] as Handler)(job);
       await completeJob(job.id, result);
       logger.info("job done", { job: job.id, type: job.type, ms: Date.now() - t0 });
