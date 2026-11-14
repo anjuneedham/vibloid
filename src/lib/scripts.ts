@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getPool } from "./db";
 import { getLLM, type LLM } from "./llm";
 import { logCost } from "./queue";
+import { winnersContext } from "./analytics";
 
 export const STYLES = {
   seven_habits: "Listicle: '7 money habits ...' style; each beat is one habit with a concrete example and number.",
@@ -89,8 +90,9 @@ export async function generateScript(projectId: string, opts: { style: Style; ll
     return `- clip_ref ${c.id}: "${text}"`;
   }).join("\n");
   const length = p.format === "short" ? "SHORT (about 150 words, under 60 seconds)" : "LONG-FORM (1200-1800 words)";
-  const user = `Topic: ${p.topic ?? p.title}\nFormat: ${length}\nStyle: ${STYLES[opts.style]}\n${clipTxt ? `\nClips you may reference as evidence/quotes (inside your own commentary):\n${clipTxt}\n` : ""}${opts.feedback ? `\nRevision feedback: ${opts.feedback}\n` : ""}`;
-  const system = fs.readFileSync(path.resolve("prompts/script.md"), "utf8");
+  const user = `Topic: ${p.topic ?? p.title}\nFormat: ${length}\nStyle: ${STYLES[opts.style]}\n${clipTxt ? `\nClips you may reference as evidence/quotes (inside your own commentary):\n${clipTxt}\n` : ""}${p.brief?.hook_idea ? `\nHook idea from the weekly plan: ${p.brief.hook_idea}\n` : ""}${opts.feedback ? `\nRevision feedback: ${opts.feedback}\n` : ""}`;
+  const winners = await winnersContext();
+  const system = fs.readFileSync(path.resolve("prompts/script.md"), "utf8") + (winners ? `\n\n${winners}` : "");
   const { data, usage } = await (opts.llm ?? getLLM()).json({ system, user, schema: ScriptBody, maxTokens: p.format === "short" ? 2500 : 8000 });
   await logCost({ jobId: opts.jobId, projectId, provider: "anthropic", unit: "tokens", quantity: usage.inputTokens + usage.outputTokens, costUsd: usage.costUsd });
   return saveScript(projectId, data);

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getPool } from "./db";
 import { getLLM, type LLM } from "./llm";
 import { logCost } from "./queue";
+import { winnersContext } from "./analytics";
 import type { Word } from "./providers/transcript";
 
 export const ClipCandidate = z.object({
@@ -74,7 +75,8 @@ export async function selectClips(sourceId: string, format: "short" | "long", op
   if (!t) throw new Error("no transcript for source");
   const words: Word[] = t.words;
   const rejected = (await db.query("select start_s,end_s,hook_text,reject_feedback from clips where source_id=$1 and status='rejected' order by created_at desc limit 8", [sourceId])).rows;
-  const system = fs.readFileSync(path.resolve("prompts/clip-select.md"), "utf8");
+  const winners = await winnersContext();
+  const system = fs.readFileSync(path.resolve("prompts/clip-select.md"), "utf8") + (winners ? `\n\n${winners}` : "");
   let user = `Format: ${format} (${LIMITS[format].min}-${LIMITS[format].max} seconds)\n\nTRANSCRIPT:\n${transcriptForPrompt(words)}`;
   if (rejected.length) user += `\n\nThe user REJECTED these earlier clips; avoid similar ones:\n` + rejected.map((r) => `- ${r.start_s}-${r.end_s} "${r.hook_text}" ${r.reject_feedback ? "(" + r.reject_feedback + ")" : ""}`).join("\n");
   if (opts.feedback) user += `\n\nUser feedback for this run: ${opts.feedback}`;

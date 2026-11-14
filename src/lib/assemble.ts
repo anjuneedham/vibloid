@@ -6,7 +6,7 @@ import { getStorage } from "./storage";
 import { assertProjectRenderable } from "./gates";
 import { getTTSProvider, type TTSProvider } from "./providers/tts";
 import { getImageProvider, type ImageProvider } from "./providers/images";
-import { buildAss } from "./captions";
+import { buildAss, hexToAss } from "./captions";
 import { DIMS, type Segment, type Timeline } from "./timeline";
 import { logCost } from "./queue";
 import { run } from "./media";
@@ -69,8 +69,9 @@ export async function assembleProject(projectId: string, o: { tts?: TTSProvider;
     t += v.durationS + GAP;
   }
 
+  const brand = (await db.query("select brand from channels where id = $1 or ($1 is null and true) order by created_at limit 1", [project.channel_id ?? null])).rows[0]?.brand ?? {};
   const capKey = `projects/${projectId}/captions.ass`;
-  await storage.putFile(capKey, Buffer.from(buildAss(allWords, { width, height, overlays: segments.filter((x) => x.onScreenText).map((x) => ({ text: x.onScreenText!, start: x.start, end: x.end })) })));
+  await storage.putFile(capKey, Buffer.from(buildAss(allWords, { width, height, font: brand.font, highlight: brand.accent ? hexToAss(brand.accent) : undefined, overlays: segments.filter((x) => x.onScreenText).map((x) => ({ text: x.onScreenText!, start: x.start, end: x.end })) })));
   await db.query("insert into assets (project_id,kind,storage_key,meta) values ($1,'caption',$2,$3)", [projectId, capKey, JSON.stringify({ words: allWords.length })]);
   const music = await ensureMusic(projectId);
   await db.query("insert into assets (project_id,kind,storage_key,license) values ($1,'music',$2,$3)", [projectId, music.key, JSON.stringify(music.license)]);

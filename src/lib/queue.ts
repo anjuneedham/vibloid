@@ -34,8 +34,17 @@ export async function completeJob(id: string, result: unknown = {}) {
   await getPool().query(`update jobs set state='done', result=$2, finished_at=now(), locked_by=null where id=$1`, [id, JSON.stringify(result)]);
 }
 
+/** Throw from a handler to postpone a job without it counting as a failed attempt (e.g. API quota windows). */
+export class DeferError extends Error {
+  constructor(public until: Date, message = "deferred") { super(message); }
+}
+
 /** Retry with exponential backoff; dead-letter after max_attempts. */
 export async function failJob(job: Job, err: unknown) {
+  if (err instanceof DeferError) {
+    await getPool().query(`update jobs set state='queued', locked_by=null, attempts=greatest(attempts-1,0), error=$2, run_after=$3 where id=$1`, [job.id, err.message, err.until]);
+    return;
+  }
   const msg = err instanceof Error ? err.message : String(err);
   const dead = job.attempts >= job.max_attempts;
   const backoffS = Math.min(3600, 2 ** job.attempts * 5);

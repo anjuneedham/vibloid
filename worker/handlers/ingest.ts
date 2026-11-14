@@ -5,7 +5,7 @@ import { getPool } from "../../src/lib/db";
 import { getStorage } from "../../src/lib/storage";
 import { canDownload, type Rights } from "../../src/lib/rights";
 import { downloadSource } from "../../src/lib/download";
-import { normalizeVideo, extractAudio, probeDuration } from "../../src/lib/media";
+import { normalizeVideo, extractAudio, probeDuration, run } from "../../src/lib/media";
 import { getTranscriptProvider, type TranscriptProvider } from "../../src/lib/providers/transcript";
 import { logCost, type Job } from "../../src/lib/queue";
 
@@ -40,6 +40,8 @@ export async function ingestSource(job: Job, provider: TranscriptProvider = getT
     await normalizeVideo(raw, norm);
     const wav = path.join(tmp, "audio.wav");
     await extractAudio(norm, wav);
+    // Waveform strip for the clip trimmer UI (best effort; the UI works without it).
+    await run("ffmpeg", ["-y", "-i", wav, "-filter_complex", "showwavespic=s=1600x180:colors=0xf5c542", "-frames:v", "1", storage.localPath(`sources/${id}/waveform.png`)]).catch(() => {});
     const dur = await probeDuration(norm);
     const t = await provider.transcribe(wav, dur);
     await db.query(

@@ -5,6 +5,8 @@ import { generateScriptJob } from "./generateScript";
 import { assembleJob } from "./assemble";
 import { renderJob } from "./render";
 import { packagingJob } from "./packaging";
+import { uploadJob } from "./upload";
+import { pullAnalyticsJob, weeklyReportJob } from "./analytics";
 
 export const handlers: Record<string, Handler> = {
   ingest_source: (job) => ingestSource(job),
@@ -13,4 +15,7 @@ export const handlers: Record<string, Handler> = {
   assemble_project: assembleJob,
   render_project: renderJob,
   package_project: packagingJob,
+  upload_video: uploadJob,
+  pull_analytics: pullAnalyticsJob,
+  weekly_report: weeklyReportJob,
 };

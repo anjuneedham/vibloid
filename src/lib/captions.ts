@@ -5,6 +5,8 @@ const cs = (t: number) => {
   const h = Math.floor(total / 360000), m = Math.floor((total % 360000) / 6000), s = Math.floor((total % 6000) / 100), c = total % 100;
   return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${String(c).padStart(2, "0")}`;
 };
+/** "#RRGGBB" -> ASS "&H00BBGGRR&" */
+export const hexToAss = (hex: string) => `&H00${hex.slice(5, 7)}${hex.slice(3, 5)}${hex.slice(1, 3)}&`.toUpperCase();
 const esc = (w: string) => w.replace(/[{}\\]/g, "");
 
 export type CaptionOpts = { width: number; height: number; highlight?: string; font?: string; overlays?: { text: string; start: number; end: number }[] };
