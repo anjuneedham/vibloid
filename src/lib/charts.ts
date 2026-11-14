@@ -36,7 +36,8 @@ export function drawChartFrame(ctx: SKRSContext2D, W: number, H: number, ds: Dat
   const hi = Math.max(...(ds.kind === "ohlc" ? (ds.points as OhlcPoint[]).map((q) => q.h) : vals));
   const pad = (hi - lo) * 0.08 || 1;
   const Y = (v: number) => y1 - ((v - (lo - pad)) / (hi - lo + 2 * pad)) * (y1 - y0);
-  const X = (i: number) => x0 + (n === 1 ? 0 : (i / (n - 1)) * (x1 - x0));
+  // Bars sit in equal slots (inset from the edges); lines and candles span the full width.
+  const X = (i: number) => (spec.kind === "bars" ? x0 + ((i + 0.5) / n) * (x1 - x0) : x0 + (n === 1 ? 0 : (i / (n - 1)) * (x1 - x0)));
   const shown = Math.max(1, Math.min(n, Math.ceil(ease(p) * n)));
   const cur = vals[shown - 1];
   const pct = ((cur - vals[0]) / Math.abs(vals[0] || 1)) * 100;
