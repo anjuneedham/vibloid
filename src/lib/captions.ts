@@ -9,7 +9,7 @@ const cs = (t: number) => {
 export const hexToAss = (hex: string) => `&H00${hex.slice(5, 7)}${hex.slice(3, 5)}${hex.slice(1, 3)}&`.toUpperCase();
 const esc = (w: string) => w.replace(/[{}\\]/g, "");
 
-export type CaptionOpts = { width: number; height: number; highlight?: string; font?: string; overlays?: { text: string; start: number; end: number }[]; preset?: "andrew" };
+export type CaptionOpts = { width: number; height: number; highlight?: string; font?: string; overlays?: { text: string; start: number; end: number }[]; preset?: "andrew" | "bold" };
 
 /** Group into chunks of <=3 words / <=20 chars. */
 export function chunkWords(words: Word[]): Word[][] {
@@ -36,7 +36,8 @@ export function buildAss(words: Word[], o: CaptionOpts): string {
   const andrew = o.preset === "andrew";
   const size = andrew ? Math.round((58 * o.width) / 1080) : portrait ? Math.round(o.width / 11) : Math.round(o.height / 14);
   const pad = Math.round((16 * o.width) / 1080);
-  const marginV = andrew ? Math.round(o.height * 0.3) + pad : portrait ? Math.round(o.height * 0.22) : Math.round(o.height * 0.08);
+  const safe = o.preset === "bold"; // the classic big-caption look, but with the box bottom at 70% of the frame (clear of TikTok/Shorts UI)
+  const marginV = andrew ? Math.round(o.height * 0.3) + pad : safe ? Math.round(o.height * 0.3) : portrait ? Math.round(o.height * 0.22) : Math.round(o.height * 0.08);
   const hl = andrew ? "&H001EB0F2&" : o.highlight ?? "&H0000D7FF&"; // andrew: amber #F2B01E; default: gold (BGR)
   const base = andrew ? "&H00FAF7F5&" : "&H00FFFFFF&"; // andrew: #F5F7FA
   const cased = (s: string) => (andrew ? s : s.toUpperCase());

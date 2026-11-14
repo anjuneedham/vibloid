@@ -1,0 +1,41 @@
+{
+  "slug": "money-first-100",
+  "title": "Your first extra 100 dollars starts with five messages",
+  "channel": { "name": "Money Moves (test)", "kind": "attention", "niche": "money" },
+  "style": { "preset": "bold", "accent": "#2ee59d", "bg": "#0A0E14" },
+  "body": {
+    "hook": "You do not need a big idea to earn your first extra hundred dollars.",
+    "promise": "You need five conversations.",
+    "beats": [
+      {
+        "narration": "Pick one thing you can already do. Edit videos. Fix resumes. Clean garages. Something people pay for.",
+        "visual_query": "pick a skill", "visual_type": "scene",
+        "scene": { "kind": "checklist", "title": "Pick ONE skill", "items": ["Edit videos", "Fix resumes", "Clean garages"] }
+      },
+      {
+        "narration": "Write one sentence. I help this person do this thing for this price. Then message five people today.",
+        "visual_query": "one sentence", "visual_type": "scene",
+        "scene": { "kind": "typing", "label": "Your one sentence", "text": "I help small shops edit their videos for $50 each.", "caption": "Then message 5 people today" }
+      },
+      {
+        "narration": "Most will ignore you. That is normal. You are hunting for your first yes, and your first honest feedback.",
+        "visual_query": "messages", "visual_type": "scene",
+        "scene": { "kind": "dots", "total": 5, "label": "messages sent today", "caption": "Most won't reply. You need one." }
+      }
+    ],
+    "cta": "No guarantee it works first try, but it is the fastest way to learn what people will pay for. Not financial advice.",
+    "claims": [],
+    "scenes": {
+      "hook": { "kind": "kinetic", "lines": [{ "text": "YOU DON'T NEED" }, { "text": "A BIG IDEA" }, { "text": "TO EARN YOUR" }, { "text": "FIRST EXTRA $100", "color": "amber" }] },
+      "promise": { "kind": "kinetic", "lines": [{ "text": "5 CONVERSATIONS", "color": "amber" }], "sub": "That is the whole step." },
+      "cta": { "kind": "endcard", "title": "DO IT TODAY", "tagline": "Message five people before you sleep.", "small": "Not financial advice." }
+    }
+  },
+  "post": {
+    "ytTitle": "Your first extra $100 starts with 5 messages",
+    "ytDesc": "A simple step you can do today: pick one skill, write one sentence, message five people. No guarantees, it is just the fastest way to learn what people will pay for.",
+    "tiktok": "You don't need a big idea to earn your first extra $100. You need 5 conversations. Do this today. Not financial advice.",
+    "tags": ["side hustle", "make money", "money tips", "motivation", "first customer"],
+    "hashtags": ["#sidehustle", "#moneytips", "#motivation", "#makemoney"]
+  }
+}

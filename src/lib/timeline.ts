@@ -9,6 +9,6 @@ export type Timeline = {
   version: 1; projectId: string; format: "short" | "long"; width: number; height: number; fps: number; duration: number;
   segments: Segment[]; captionsKey: string;
   /** Optional channel look: caption preset, dip transitions between scenes, loudness target, encode quality, hold on the last frame. */
-  style?: { captions?: "andrew"; dipColor?: string; dipS?: number; lufs?: number; tp?: number; crf?: number; endHoldS?: number }; music: { key: string; license: ImageLicense; volume: number };
+  style?: { captions?: "andrew" | "bold"; highlight?: string; dipColor?: string; dipS?: number; lufs?: number; tp?: number; crf?: number; endHoldS?: number }; music: { key: string; license: ImageLicense; volume: number };
 };
 export const DIMS = { short: { width: 1080, height: 1920 }, long: { width: 1920, height: 1080 } } as const;

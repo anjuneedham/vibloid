@@ -14,7 +14,8 @@
     "worker": "tsx worker/index.ts",
     "scan:secrets": "tsx scripts/scan-secrets.ts",
     "seed": "tsx scripts/seed.ts",
-    "e2e": "tsx e2e/run.ts"
+    "e2e": "tsx e2e/run.ts",
+    "short": "tsx scripts/make-short.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

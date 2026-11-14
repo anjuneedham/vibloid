@@ -122,7 +122,7 @@ export async function assembleProject(projectId: string, o: { tts?: TTSProvider;
   const hold = o.style?.endHoldS ?? 0;
   const brand = (await db.query("select brand from channels where id = $1 or ($1 is null and true) order by created_at limit 1", [project.channel_id ?? null])).rows[0]?.brand ?? {};
   const capKey = `projects/${projectId}/captions.ass`;
-  await storage.putFile(capKey, Buffer.from(buildAss(allWords, { width, height, preset: o.style?.captions, font: o.style?.captions ? undefined : brand.font, highlight: brand.accent && !o.style?.captions ? hexToAss(brand.accent) : undefined, overlays: segments.filter((x) => x.onScreenText).map((x) => ({ text: x.onScreenText!, start: x.start, end: x.end })) })));
+  await storage.putFile(capKey, Buffer.from(buildAss(allWords, { width, height, preset: o.style?.captions, font: o.style?.captions ? undefined : brand.font, highlight: o.style?.highlight ? hexToAss(o.style.highlight) : brand.accent && !o.style?.captions ? hexToAss(brand.accent) : undefined, overlays: segments.filter((x) => x.onScreenText).map((x) => ({ text: x.onScreenText!, start: x.start, end: x.end })) })));
   await db.query("insert into assets (project_id,kind,storage_key,meta) values ($1,'caption',$2,$3)", [projectId, capKey, JSON.stringify({ words: allWords.length })]);
   // Plain-text caption files for platforms that accept uploads (YouTube: Subtitles). TikTok uses the burned-in captions.
   for (const [ext, content] of [["srt", buildSrt(allWords)], ["vtt", buildVtt(allWords)]] as const) {

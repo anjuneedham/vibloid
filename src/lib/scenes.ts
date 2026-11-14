@@ -10,13 +10,19 @@ export const PAL = {
 const FONT = "Inter, 'DejaVu Sans', sans-serif";
 export const SAMPLE_LABEL = "SAMPLE DATA · NOT REAL TRADES";
 
-export type Scene =
+/** Per-scene look override, so each channel can have its own colors. */
+export type Theme = { accent?: string; bg?: string };
+export type Scene = (
   | { kind: "kinetic"; lines: { text: string; color?: "amber" | "text" | "loss" | "win" }[]; sub?: string; badge?: boolean }
   | { kind: "chips"; items: { t: string; k: "win" | "loss" }[]; caption?: string }
   | { kind: "sum"; won: number; lost: number; trades: number }
   | { kind: "kpis"; cards: { label: string; value: string; hint?: string; tone?: "win" | "loss" | "neutral"; flag?: boolean }[]; note?: string; title?: string }
   | { kind: "progress"; have: number; need: number; caption?: string }
-  | { kind: "endcard"; title: string; tagline: string; small?: string };
+  | { kind: "endcard"; title: string; tagline: string; small?: string }
+  | { kind: "typing"; text: string; label?: string; caption?: string }
+  | { kind: "checklist"; items: string[]; title?: string }
+  | { kind: "dots"; total: number; label: string; caption?: string }
+) & { theme?: Theme };
 
 const clamp = (x: number, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const seg = (t: number, a: number, b: number) => clamp((t - a) / (b - a));      // progress of t within [a,b]
@@ -46,6 +52,14 @@ const col = (n?: string) => (n === "amber" ? PAL.amber : n === "loss" ? PAL.loss
 
 /** Draw one frame. t = seconds into the scene, dur = scene length. Exported for tests. */
 export function drawScene(c: SKRSContext2D, W: number, H: number, t: number, dur: number, s: Scene) {
+  if (!s.theme) return drawSceneInner(c, W, H, t, dur, s);
+  const saved = { ...PAL };                       // temporary palette override (scenes render one at a time)
+  if (s.theme.accent) PAL.amber = s.theme.accent;
+  if (s.theme.bg) PAL.bg = s.theme.bg;
+  try { drawSceneInner(c, W, H, t, dur, s); } finally { Object.assign(PAL, saved); }
+}
+
+function drawSceneInner(c: SKRSContext2D, W: number, H: number, t: number, dur: number, s: Scene) {
   bg(c, W, H);
   const p = clamp(t / Math.max(0.5, dur));
   switch (s.kind) {
@@ -138,6 +152,50 @@ export function drawScene(c: SKRSContext2D, W: number, H: number, t: number, dur
       const a = seg(t, dur * 0.55, dur * 0.8); c.save(); c.globalAlpha = a;
       text(c, `${s.need - s.have} more to go`, W / 2, H * 0.52, Math.round(W / 18), PAL.mute, 600);
       if (s.caption) text(c, s.caption, W / 2, H * 0.6, Math.round(W / 26), PAL.amber, 700, "center", W * 0.84); c.restore();
+      break;
+    }
+    case "typing": {
+      const x = W * 0.07, w = W * 0.86, y = H * 0.26, h = H * 0.26, a = outCubic(seg(t, 0, 0.35));
+      c.save(); c.globalAlpha = a;
+      if (s.label) text(c, s.label.toUpperCase(), x, y - 22, Math.round(W / 30), PAL.mute, 700, "left");
+      rr(c, x, y, w, h, 26); c.fillStyle = PAL.panel; c.fill(); c.lineWidth = 4; c.strokeStyle = PAL.amber; c.stroke(); c.restore();
+      const n = Math.round(s.text.length * outCubic(seg(t, 0.35, dur * 0.7))), shown = s.text.slice(0, n);
+      // wrap the typed text
+      const fs = Math.round(W / 17); c.font = `700 ${fs}px ${FONT}`; const lines: string[] = []; let cur = "";
+      for (const word of shown.split(" ")) { const tr = cur ? cur + " " + word : word; if (c.measureText(tr).width > w - 80 && cur) { lines.push(cur); cur = word; } else cur = tr; }
+      lines.push(cur);
+      lines.forEach((ln, i) => text(c, ln, x + 40, y + 20 + fs * 1.35 * (i + 1), fs, PAL.text, 700, "left"));
+      if (Math.floor(t * 2.5) % 2 === 0 && n < s.text.length) { const last = lines[lines.length - 1]; c.font = `700 ${fs}px ${FONT}`; const cx = x + 40 + c.measureText(last).width + 6; c.fillStyle = PAL.amber; c.fillRect(cx, y + 20 + fs * 1.35 * lines.length - fs * 0.85, 6, fs * 0.95); }
+      if (s.caption) { c.save(); c.globalAlpha = seg(t, dur * 0.7, dur * 0.92); text(c, s.caption, W / 2, y + h + H * 0.07, Math.round(W / 20), PAL.amber, 700, "center", W * 0.86); c.restore(); }
+      break;
+    }
+    case "checklist": {
+      if (s.title) text(c, s.title.toUpperCase(), W / 2, H * 0.2, Math.round(W / 13), PAL.text, 800, "center", W * 0.9);
+      const rowH = H * 0.1, y0 = H * 0.28, x = W * 0.1;
+      s.items.forEach((it, i) => {
+        const a = seg(t, 0.2 + i * (dur * 0.22), 0.55 + i * (dur * 0.22)), e = outBack(a), tick = seg(t, 0.5 + i * (dur * 0.22), 0.8 + i * (dur * 0.22));
+        if (a <= 0) return;
+        const y = y0 + i * (rowH + 18);
+        c.save(); c.globalAlpha = clamp(a * 2); rr(c, x, y + (1 - e) * 20, W * 0.8, rowH, 20); c.fillStyle = PAL.panel; c.fill();
+        c.lineWidth = 3; c.strokeStyle = tick > 0.5 ? PAL.amber : "#26324a"; c.stroke();
+        const bs = rowH * 0.5, bx = x + 28, by = y + (1 - e) * 20 + (rowH - bs) / 2;
+        rr(c, bx, by, bs, bs, 10); c.lineWidth = 4; c.strokeStyle = tick > 0 ? PAL.amber : PAL.mute; c.stroke();
+        if (tick > 0) { c.beginPath(); c.moveTo(bx + bs * 0.2, by + bs * 0.55); c.lineTo(bx + bs * 0.2 + bs * 0.22 * tick, by + bs * 0.55 + bs * 0.22 * tick); if (tick > 0.5) c.lineTo(bx + bs * 0.42 + bs * 0.45 * (tick - 0.5) * 2, by + bs * 0.77 - bs * 0.5 * (tick - 0.5) * 2); c.lineWidth = 6; c.lineCap = "round"; c.strokeStyle = PAL.amber; c.stroke(); }
+        text(c, it, bx + bs + 28, y + (1 - e) * 20 + rowH * 0.64, Math.round(W / 17), PAL.text, 700, "left", W * 0.8 - bs - 90); c.restore();
+      });
+      break;
+    }
+    case "dots": {
+      const n = s.total, r = Math.min(W * 0.065, (W * 0.8) / (n * 2.6)), gap = r * 2.6, x0 = W / 2 - ((n - 1) * gap) / 2, y = H * 0.36;
+      const filled = Math.min(n, Math.floor(seg(t, 0.2, dur * 0.65) * (n + 0.999)));
+      for (let i = 0; i < n; i++) {
+        const a = seg(t, 0.2 + (i / n) * dur * 0.65, 0.2 + (i / n) * dur * 0.65 + 0.3), on = i < filled;
+        c.beginPath(); c.arc(x0 + i * gap, y, r * (on ? 0.8 + 0.2 * outBack(a) : 0.8), 0, Math.PI * 2);
+        if (on) { c.fillStyle = PAL.amber; c.fill(); } else { c.lineWidth = 5; c.strokeStyle = "#26324a"; c.stroke(); }
+      }
+      text(c, `${filled}/${n}`, W / 2, H * 0.5, Math.round(W / 6), PAL.text, 800);
+      text(c, s.label, W / 2, H * 0.5 + W * 0.09, Math.round(W / 22), PAL.mute, 600, "center", W * 0.86);
+      if (s.caption) { c.save(); c.globalAlpha = seg(t, dur * 0.6, dur * 0.85); text(c, s.caption, W / 2, H * 0.6, Math.round(W / 20), PAL.amber, 700, "center", W * 0.86); c.restore(); }
       break;
     }
     case "endcard": {
