@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { run } from "../media";
+import { run, probeDuration } from "../media";
+import { OpenAITranscriptProvider } from "./transcript";
 import type { Word } from "./transcript";
 import { httpError, wrapProvider } from "../resilience";
 
@@ -60,6 +61,62 @@ export class ElevenLabsTTSProvider implements TTSProvider {
   }
 }
 
+
+const OPENAI_MAX_CHARS = 4000; // the speech endpoint rejects inputs over 4096 characters
+
+/** Split on sentence boundaries into chunks no longer than max. */
+export function chunkText(text: string, max = OPENAI_MAX_CHARS): string[] {
+  const out: string[] = [];
+  let cur = "";
+  for (const sentence of text.match(/[^.!?]+[.!?]*\s*/g) ?? [text]) {
+    if (cur && (cur + sentence).length > max) { out.push(cur.trim()); cur = ""; }
+    cur += sentence;
+    while (cur.length > max) { out.push(cur.slice(0, max)); cur = cur.slice(max); } // pathological: one huge sentence
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out;
+}
+
+/**
+ * OpenAI text-to-speech. The API returns audio only (no word timings), so we align by transcribing the
+ * generated audio with Whisper, which costs a little extra (~$0.006/min) but gives caption-accurate timings.
+ * Model, voice and speaking style are configurable: OPENAI_TTS_MODEL, OPENAI_TTS_VOICE, OPENAI_TTS_INSTRUCTIONS
+ * (instructions are only sent to gpt-4o-* models, which accept them).
+ */
+export class OpenAITTSProvider implements TTSProvider {
+  async synthesize(text: string, outPath: string, opts: { voice?: string } = {}): Promise<TTSResult> {
+    const key = process.env.OPENAI_API_KEY;
+    if (!key) throw new Error("OPENAI_API_KEY not set");
+    const model = process.env.OPENAI_TTS_MODEL ?? "gpt-4o-mini-tts";
+    const voice = opts.voice ?? process.env.OPENAI_TTS_VOICE ?? "onyx";
+    const instructions = process.env.OPENAI_TTS_INSTRUCTIONS ?? "Speak like a confident, warm documentary narrator. Natural pacing, clear emphasis on key numbers, no hype.";
+    const parts: string[] = [];
+    const chunks = chunkText(text);
+    for (let i = 0; i < chunks.length; i++) {
+      const res = await fetch("https://api.openai.com/v1/audio/speech", {
+        method: "POST", headers: { Authorization: `Bearer ${key}`, "content-type": "application/json" },
+        body: JSON.stringify({ model, voice, input: chunks[i], response_format: "wav", ...(model.startsWith("gpt-4o") ? { instructions } : {}) }),
+      });
+      if (!res.ok) throw await httpError(res, "OpenAI TTS");
+      const p = `${outPath}.part${i}.wav`;
+      fs.writeFileSync(p, Buffer.from(await res.arrayBuffer()));
+      parts.push(p);
+    }
+    if (parts.length === 1) fs.renameSync(parts[0], outPath);
+    else {
+      const list = `${outPath}.concat.txt`;
+      fs.writeFileSync(list, parts.map((p) => `file '${p}'`).join("\n"));
+      await run("ffmpeg", ["-y", "-f", "concat", "-safe", "0", "-i", list, "-c", "copy", outPath]);
+      [...parts, list].forEach((p) => fs.rmSync(p, { force: true }));
+    }
+    const durationS = await probeDuration(outPath);
+    const aligned = await new OpenAITranscriptProvider().transcribe(outPath, durationS);
+    const rate = Number(process.env.OPENAI_TTS_USD_PER_1K_CHARS ?? 0.015); // estimate; check current pricing for your model
+    return { audioPath: outPath, durationS, words: aligned.words, chars: text.length, costUsd: (text.length / 1000) * rate + aligned.costUsd, provider: `openai:${model}` };
+  }
+}
+
 export function getTTSProvider(): TTSProvider {
+  if (process.env.TTS_PROVIDER === "openai") return wrapProvider("openai-tts", new OpenAITTSProvider());
   return process.env.TTS_PROVIDER === "elevenlabs" ? wrapProvider("elevenlabs", new ElevenLabsTTSProvider()) : new MockTTSProvider();
 }

@@ -10,7 +10,7 @@ export async function GET(req: Request) {
     channel: ch,
     providers: {
       llm: { name: "anthropic", configured: has("ANTHROPIC_API_KEY") },
-      tts: { name: process.env.TTS_PROVIDER ?? "mock", configured: (process.env.TTS_PROVIDER ?? "mock") === "mock" || has("ELEVENLABS_API_KEY") },
+      tts: { name: process.env.TTS_PROVIDER ?? "mock", configured: (process.env.TTS_PROVIDER ?? "mock") === "mock" || (process.env.TTS_PROVIDER === "openai" ? has("OPENAI_API_KEY") : has("ELEVENLABS_API_KEY")) },
       images: { name: process.env.IMAGE_PROVIDER ?? "mock", configured: (process.env.IMAGE_PROVIDER ?? "mock") === "mock" || has("PEXELS_API_KEY") },
       transcript: { name: process.env.TRANSCRIPT_PROVIDER ?? "mock", configured: (process.env.TRANSCRIPT_PROVIDER ?? "mock") === "mock" || has("OPENAI_API_KEY") },
       youtube: { name: "youtube", configured: has("YOUTUBE_CLIENT_ID") && has("YOUTUBE_CLIENT_SECRET") },
