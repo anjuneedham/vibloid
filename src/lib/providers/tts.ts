@@ -1,4 +1,6 @@
 import fs from "node:fs";
+import { spawn, type ChildProcess } from "node:child_process";
+import crypto from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import { run, probeDuration } from "../media";
@@ -116,7 +118,71 @@ export class OpenAITTSProvider implements TTSProvider {
   }
 }
 
+/**
+ * Long-lived Python worker (tools/kokoro_tts.py) so the Kokoro and Whisper models load once, not per sentence.
+ * One request at a time is fine: the models are CPU-bound anyway.
+ */
+export class KokoroWorker {
+  private proc?: ChildProcess;
+  private buf = "";
+  private pending = new Map<string, { res: (v: any) => void; rej: (e: Error) => void; timer: NodeJS.Timeout }>();
+
+  private ensure(): ChildProcess {
+    if (this.proc && this.proc.exitCode === null && !this.proc.killed) return this.proc;
+    const py = process.env.KOKORO_PYTHON ?? path.resolve(".venv-tts/bin/python");
+    const script = path.resolve("tools/kokoro_tts.py");
+    if (!fs.existsSync(py)) throw new Error(`Kokoro python not found at ${py}. Run scripts/setup-kokoro.sh (or set KOKORO_PYTHON).`);
+    const p = spawn(py, [script], { stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, KOKORO_MODEL_DIR: process.env.KOKORO_MODEL_DIR ?? path.resolve("models/kokoro") } });
+    p.stdout!.on("data", (d: Buffer) => {
+      this.buf += d.toString();
+      let i: number;
+      while ((i = this.buf.indexOf("\n")) >= 0) {
+        const line = this.buf.slice(0, i).trim(); this.buf = this.buf.slice(i + 1);
+        if (!line) continue;
+        try { const m = JSON.parse(line); const w = this.pending.get(m.id); if (w) { clearTimeout(w.timer); this.pending.delete(m.id); m.ok ? w.res(m) : w.rej(new Error(`kokoro: ${m.error}`)); } } catch { /* not protocol output */ }
+      }
+    });
+    p.stderr!.on("data", (d: Buffer) => { if (process.env.KOKORO_VERBOSE) process.stderr.write(`[kokoro] ${d}`); });
+    p.on("close", () => { this.proc = undefined; this.pending.forEach((w) => { clearTimeout(w.timer); w.rej(new Error("kokoro worker exited")); }); this.pending.clear(); });
+    p.on("error", (e) => { this.pending.forEach((w) => { clearTimeout(w.timer); w.rej(e); }); this.pending.clear(); });
+    this.proc = p;
+    return p;
+  }
+
+  request(req: Record<string, unknown>, timeoutMs = 10 * 60_000): Promise<any> {
+    const p = this.ensure();
+    const id = crypto.randomUUID();
+    return new Promise((res, rej) => {
+      const timer = setTimeout(() => { this.pending.delete(id); rej(new Error("kokoro request timed out")); this.close(); }, timeoutMs);
+      this.pending.set(id, { res, rej, timer });
+      p.stdin!.write(JSON.stringify({ id, ...req }) + "\n");
+    });
+  }
+  close() { this.proc?.kill("SIGTERM"); this.proc = undefined; }
+}
+export const kokoroWorker = new KokoroWorker();
+process.on("exit", () => kokoroWorker.close());
+
+export function kokoroAvailable(): boolean {
+  const py = process.env.KOKORO_PYTHON ?? path.resolve(".venv-tts/bin/python");
+  const dir = process.env.KOKORO_MODEL_DIR ?? path.resolve("models/kokoro");
+  return fs.existsSync(py) && fs.existsSync(path.join(dir, "kokoro-v1.0.onnx")) && fs.existsSync(path.join(dir, "voices-v1.0.bin"));
+}
+
+/**
+ * Free local voice: Kokoro (Apache-2.0/MIT per its model card; verify) for speech, Whisper (local) for word timings.
+ * Timings are mapped onto your exact script words, so captions use your spelling and numbers.
+ * Voice: KOKORO_VOICE (default am_michael), speed: KOKORO_SPEED.
+ */
+export class KokoroTTSProvider implements TTSProvider {
+  async synthesize(text: string, outPath: string, opts: { voice?: string } = {}): Promise<TTSResult> {
+    const r = await kokoroWorker.request({ text, out: outPath, voice: opts.voice ?? process.env.KOKORO_VOICE, speed: process.env.KOKORO_SPEED ? Number(process.env.KOKORO_SPEED) : undefined });
+    return { audioPath: outPath, durationS: r.duration, words: r.words, chars: text.length, costUsd: 0, provider: "kokoro" };
+  }
+}
+
 export function getTTSProvider(): TTSProvider {
+  if (process.env.TTS_PROVIDER === "kokoro") return new KokoroTTSProvider();
   if (process.env.TTS_PROVIDER === "openai") return wrapProvider("openai-tts", new OpenAITTSProvider());
   return process.env.TTS_PROVIDER === "elevenlabs" ? wrapProvider("elevenlabs", new ElevenLabsTTSProvider()) : new MockTTSProvider();
 }

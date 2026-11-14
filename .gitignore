@@ -6,3 +6,6 @@ storage/
 *.log
 *.tsbuildinfo
 next-env.d.ts
+.venv-tts
+models/
+output/

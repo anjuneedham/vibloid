@@ -2,6 +2,7 @@ import { requireOwner } from "@/lib/auth";
 import { getPool } from "@/lib/db";
 import { listChannels } from "@/lib/channels";
 import { monthlyBudget, monthSpend, perVideoBudget } from "@/lib/budget";
+import { kokoroAvailable } from "@/lib/providers/tts";
 
 const has = (k: string) => !!process.env[k];
 const p = (k: string, d: string) => process.env[k] ?? d;
@@ -14,7 +15,7 @@ export async function GET(req: Request) {
     budget: { monthly: monthlyBudget(), perVideo: perVideoBudget(), spent: spend, stopped: spend >= monthlyBudget() },
     providers: {
       llm: { name: p("LLM_PROVIDER", "anthropic"), configured: p("LLM_PROVIDER", "anthropic") === "mock" || has("ANTHROPIC_API_KEY") },
-      tts: { name: p("TTS_PROVIDER", "mock"), configured: p("TTS_PROVIDER", "mock") === "mock" || (p("TTS_PROVIDER", "") === "openai" ? has("OPENAI_API_KEY") : has("ELEVENLABS_API_KEY")) },
+      tts: { name: p("TTS_PROVIDER", "mock"), configured: p("TTS_PROVIDER", "mock") === "mock" || (p("TTS_PROVIDER", "") === "kokoro" ? kokoroAvailable() : p("TTS_PROVIDER", "") === "openai" ? has("OPENAI_API_KEY") : has("ELEVENLABS_API_KEY")) },
       images: { name: p("IMAGE_PROVIDER", "mock"), configured: p("IMAGE_PROVIDER", "mock") === "mock" || has("PEXELS_API_KEY") },
       stock_video: { name: p("VIDEO_PROVIDER", "off (stills only)"), configured: !process.env.VIDEO_PROVIDER || process.env.VIDEO_PROVIDER === "mock" || has("PEXELS_API_KEY") },
       ai_images: { name: p("AI_IMAGE_PROVIDER", "mock"), configured: p("AI_IMAGE_PROVIDER", "mock") === "mock" || has("OPENAI_API_KEY") },
