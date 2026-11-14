@@ -124,7 +124,7 @@ export function drawScene(c: SKRSContext2D, W: number, H: number, t: number, dur
         c.save(); c.globalAlpha = clamp(a * 2); c.translate(cx + cw / 2, cy + ch / 2); c.scale(0.8 + 0.2 * ee, 0.8 + 0.2 * ee); c.translate(-(cx + cw / 2), -(cy + ch / 2));
         rr(c, cx, cy, cw, ch, 18); c.fillStyle = PAL.appPanel; c.fill(); c.lineWidth = 2; c.strokeStyle = PAL.appBorder; c.stroke();
         text(c, k.label, cx + 26, cy + ch * 0.27, Math.round(W / 34), PAL.appMute, 500, "left");
-        text(c, k.value, cx + 26, cy + ch * 0.62, Math.round(W / 13), tone(k.tone), 700, "left");
+        text(c, k.value, cx + 26, cy + ch * 0.62, Math.round(W / 15), tone(k.tone), 700, "left", cw - 40);
         if (k.hint) text(c, k.hint, cx + 26, cy + ch * 0.88, Math.round(W / 46), PAL.appMute, 500, "left", cw - 40);
         c.restore();
       });
@@ -160,7 +160,8 @@ export async function renderSceneVideo(o: { scene: Scene; width: number; height:
   let err = ""; ff.stderr.on("data", (d) => (err += d));
   const done = new Promise<void>((res, rej) => { ff.on("close", (code) => (code === 0 ? res() : rej(new Error("ffmpeg scene encode failed: " + err.slice(-400))))); ff.on("error", rej); });
   for (let f = 0; f < frames; f++) {
-    drawScene(ctx, w, h, f / fps, o.durationS, o.scene);
+    ctx.setTransform(w / o.width, 0, 0, h / o.height, 0, 0);
+    drawScene(ctx, o.width, o.height, f / fps, o.durationS, o.scene);
     if (!ff.stdin.write(canvas.data())) await new Promise((r) => ff.stdin.once("drain", r));
   }
   ff.stdin.end();
