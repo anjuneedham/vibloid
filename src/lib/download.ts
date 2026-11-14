@@ -3,7 +3,7 @@ import dns from "node:dns";
 import net from "node:net";
 import { pipeline } from "node:stream/promises";
 import { Readable, Transform } from "node:stream";
-import { Agent } from "undici";
+import { Agent, fetch as undiciFetch } from "undici";
 import { run } from "./media";
 
 const YT = /^https?:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//i;
@@ -13,7 +13,11 @@ export function isPrivateIp(ip: string): boolean {
   if (net.isIPv6(ip)) {
     const v = ip.toLowerCase();
     if (v === "::1" || v === "::") return true;
-    if (v.startsWith("::ffff:")) return isPrivateIp(v.slice(7)); // IPv4-mapped
+    if (v.startsWith("::ffff:")) { // IPv4-mapped; URL parsing turns ::ffff:127.0.0.1 into the hex form ::ffff:7f00:1
+      const rest = v.slice(7);
+      const hex = rest.match(/^([0-9a-f]{1,4}):([0-9a-f]{1,4})$/);
+      return isPrivateIp(hex ? [parseInt(hex[1], 16) >> 8, parseInt(hex[1], 16) & 255, parseInt(hex[2], 16) >> 8, parseInt(hex[2], 16) & 255].join(".") : rest);
+    }
     return /^(fc|fd|fe[89ab]|ff)/.test(v);
   }
   const p = ip.split(".").map(Number);
@@ -63,7 +67,8 @@ export async function downloadSource(url: string, dest: string): Promise<{ title
     }
     return {};
   }
-  const res = await fetch(u, { dispatcher: agent(), signal: AbortSignal.timeout(30 * 60_000) } as any);
+  // Use undici's own fetch so the custom Agent (with the private-IP-refusing DNS lookup) is honored; mixing it with Node's bundled fetch fails.
+  const res = await undiciFetch(u, { dispatcher: agent(), signal: AbortSignal.timeout(30 * 60_000) });
   if (!res.ok || !res.body) throw new Error(`download failed: HTTP ${res.status}`);
   const max = Number(process.env.MAX_DOWNLOAD_BYTES ?? 4e9);
   if (Number(res.headers.get("content-length") ?? 0) > max) throw new Error("file too large");

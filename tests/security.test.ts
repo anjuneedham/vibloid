@@ -13,6 +13,15 @@ describe("SSRF protection", () => {
   it.each(["8.8.8.8", "1.1.1.1", "93.184.216.34", "172.32.0.1", "2606:4700:4700::1111"])("%s is public", (ip) => {
     expect(isPrivateIp(ip)).toBe(false);
   });
+  it("catches IPv4-mapped IPv6 in the normalized hex form the URL parser produces", () => {
+    process.env.ALLOW_PRIVATE_URLS = "0";
+    expect(new URL("http://[::ffff:127.0.0.1]/").hostname).toBe("[::ffff:7f00:1]");
+    expect(isPrivateIp("::ffff:7f00:1")).toBe(true);
+    expect(isPrivateIp("::ffff:a9fe:a9fe")).toBe(true); // 169.254.169.254
+    expect(isPrivateIp("::ffff:808:808")).toBe(false); // 8.8.8.8
+    expect(() => assertSafeUrl("http://[::ffff:127.0.0.1]/")).toThrow(/private/);
+    expect(() => assertSafeUrl("http://[::ffff:169.254.169.254]/")).toThrow(/private/);
+  });
   it("rejects bad schemes and literal private hosts at intake", () => {
     process.env.ALLOW_PRIVATE_URLS = "0";
     expect(() => assertSafeUrl("file:///etc/passwd")).toThrow(/http/);
