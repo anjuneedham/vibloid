@@ -26,7 +26,7 @@ const env = {
 const procs: ChildProcess[] = [];
 const step = (m: string) => console.log(`\n▶ ${m}`);
 function start(name: string, cmd: string, args: string[]) {
-  const p = spawn(cmd, args, { env, stdio: ["ignore", "pipe", "pipe"] });
+  const p = spawn(cmd, args, { env, stdio: ["ignore", "pipe", "pipe"], detached: true }); // own process group so cleanup kills the whole tree
   p.stdout!.on("data", (d: Buffer) => process.env.E2E_VERBOSE && process.stdout.write(`[${name}] ${d}`));
   p.stderr!.on("data", (d: Buffer) => process.env.E2E_VERBOSE && process.stderr.write(`[${name}] ${d}`));
   procs.push(p);
@@ -45,7 +45,7 @@ async function until<T>(what: string, fn: () => Promise<T | false | null | undef
 async function main() {
   step("database");
   const admin = new pg.Client({ connectionString: ADMIN }); await admin.connect();
-  await admin.query(`drop database if exists ${DB}`); await admin.query(`create database ${DB}`); await admin.end();
+  await admin.query(`drop database if exists ${DB} with (force)`); await admin.query(`create database ${DB}`); await admin.end();
   execSync("pnpm db:migrate", { env, stdio: "inherit" });
 
   step("sample video (60s, own)");
@@ -92,7 +92,7 @@ async function main() {
     step("studio: create project with the accepted clip, script is drafted");
     await page.goto(`${BASE}/studio`);
     await page.fill("label:has-text('Title') input", "4 wealth habits");
-    await page.getByText("Income is not wealth").locator("xpath=ancestor::label//input").check();
+    await page.getByText("Income is not wealth").locator("xpath=ancestor-or-self::label//input").check();
     await page.getByRole("button", { name: /Create and draft/ }).click();
     await page.waitForURL(/\/studio\/[0-9a-f-]{36}/);
     await page.getByText("Script v1").waitFor({ timeout: 90_000 });
@@ -147,6 +147,6 @@ async function main() {
 
 main().then(() => cleanup(0), (e) => { console.error(e); cleanup(1); });
 function cleanup(code: number) {
-  procs.forEach((p) => p.kill("SIGTERM"));
+  procs.forEach((p) => { try { process.kill(-p.pid!, "SIGTERM"); } catch { /* already gone */ } });
   setTimeout(() => { fs.rmSync(storage, { recursive: true, force: true }); process.exit(code); }, 800);
 }
