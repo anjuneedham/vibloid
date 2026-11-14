@@ -50,7 +50,7 @@ console.log(`coin seed ${seed}: ${after10}% heads after 10 flips, ${after300}% a
 if (after10 !== 70 || after300 < 48 || after300 > 52) throw new Error(`simulation does not match the narration: ${after10}% / ${after300}%`);
 await createDataset({ name: "Fair coin flips (simulation)", kind: "series", points: share, source: `Simulation: 300 fair coin flips (seed ${seed})` });
 
-const STYLE = { captions: "andrew" as const, dipColor: "#0A0F1A", dipS: 0.22, lufs: -14.8, tp: -2.5, crf: 20, // loudnorm single-pass lands ~1.2 dB under its target after AAC; calibrated so the MEASURED result is ~-16 LUFS / peak <= -1.5 dB
+const STYLE = { captions: "andrew" as const, dipColor: "#0A0F1A", dipS: 0.22, lufs: -16, tp: -1.8, crf: 20, // spec: -16 LUFS, true peak <= -1.5 dB
     endHoldS: 2 };
 const endcard = { kind: "endcard", title: "TradeNotes", tagline: "Know your trades. Understand your patterns. Improve your process.", small: "Not financial advice." };
 
