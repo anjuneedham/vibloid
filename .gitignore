@@ -9,3 +9,4 @@ next-env.d.ts
 .venv-tts
 models/
 output/
+out/
