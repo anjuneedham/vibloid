@@ -1,0 +1,66 @@
+{
+  "slug": "tradenotes-01-stuck-not-why",
+  "title": "Your trading results are stuck, but it's not why you think",
+  "channel": { "name": "Andrew Builds (TradeNotes)", "kind": "brand", "niche": "trading", "appName": "TradeNotes", "appBlurb": "a trading journal and performance analytics app" },
+  "style": { "preset": "andrew", "accent": "#F2B01E", "bg": "#0A0F1A" },
+  "body": {
+    "hook": "Your trading results are stuck. But it's not why you think.",
+    "promise": "Three things hide in every plateau. The third, almost nobody writes down.",
+    "beats": [
+      {
+        "narration": "Number one: the result. Everybody tracks it. But profit and loss only says what happened, never why.",
+        "visual_query": "sample results only", "visual_type": "scene",
+        "scene": { "kind": "chips", "caption": "#1 The result: what happened, never why",
+          "items": [
+            { "t": "+$40", "k": "win" }, { "t": "-$25", "k": "loss" }, { "t": "+$15", "k": "win" }, { "t": "-$60", "k": "loss" }, { "t": "+$30", "k": "win" },
+            { "t": "-$35", "k": "loss" }, { "t": "+$20", "k": "win" }, { "t": "-$45", "k": "loss" }, { "t": "+$50", "k": "win" }, { "t": "-$10", "k": "loss" }
+          ] }
+      },
+      {
+        "narration": "Number two: the plan. Your setup, your risk, your exit, written before the trade. Still, one piece is missing.",
+        "visual_query": "plan written before the trade", "visual_type": "scene",
+        "scene": { "kind": "typing", "label": "#2 Before the trade", "text": "Setup: pullback. Risk: 1R. Stop: below the low. Exit: target or stop.", "caption": "One piece is still missing..." }
+      },
+      {
+        "narration": "Number three: what you actually did. You moved the stop. You sized up after a loss. Almost nobody logs that.",
+        "visual_query": "what you actually did", "visual_type": "scene",
+        "scene": { "kind": "checklist", "title": "#3 What you actually did", "items": ["Moved the stop", "Sized up after a loss", "Took an unplanned trade"] }
+      },
+      {
+        "narration": "Here is the part that surprised me. Line all three up, and a plateau can stop looking like bad luck. It looks like one habit, repeated.",
+        "visual_query": "plan versus actual counts", "visual_type": "scene",
+        "scene": { "kind": "kpis", "title": "Plan vs. actual", "note": "45 SAMPLE trades. 23 broke the plan. Illustration only, not real results.",
+          "cards": [
+            { "label": "Followed the plan", "value": "22 trades", "hint": "Plan and action match." },
+            { "label": "Moved the stop", "value": "14 trades", "tone": "loss", "hint": "The same habit, again and again." },
+            { "label": "Sized up after a loss", "value": "5 trades", "hint": "Logged in the action column." },
+            { "label": "Not in the plan", "value": "4 trades", "hint": "Logged in the action column." }
+          ] }
+      },
+      {
+        "narration": "I built TradeNotes, my own trading journal, so I'm biased. It keeps plan, action, and result side by side.",
+        "visual_query": "three columns per trade", "visual_type": "scene",
+        "scene": { "kind": "checklist", "title": "One row per trade", "items": ["The plan", "What you did", "The result"] }
+      },
+      {
+        "narration": "So maybe you are not stuck on effort. You are stuck on measurement. No journal removes the risk of loss. It shows you your own behavior.",
+        "visual_query": "payoff: measurement, not effort", "visual_type": "scene",
+        "scene": { "kind": "kinetic", "lines": [{ "text": "NOT EFFORT." }, { "text": "MEASUREMENT.", "color": "amber" }], "sub": "You can't fix a habit you never recorded." }
+      }
+    ],
+    "cta": "Tonight, add one line to your last trade: what did I actually do? Follow for part two. Not financial advice.",
+    "claims": [],
+    "scenes": {
+      "hook": { "kind": "kinetic", "lines": [{ "text": "YOUR RESULTS" }, { "text": "ARE STUCK.", "color": "loss" }, { "text": "BUT NOT WHY" }, { "text": "YOU THINK.", "color": "amber" }] },
+      "promise": { "kind": "kinetic", "lines": [{ "text": "3 THINGS HIDE", "color": "amber" }, { "text": "IN EVERY" }, { "text": "PLATEAU" }], "sub": "Almost nobody writes down #3." },
+      "cta": { "kind": "endcard", "title": "TradeNotes", "tagline": "Journal the plan, the action and the result. Next: the plan-versus-actual gap.", "small": "Education only. Not financial advice." }
+    }
+  },
+  "post": {
+    "ytTitle": "Your trading is stuck. It's not why you think.",
+    "ytDesc": "Most trading journals record one thing: the result. This short walks through the three things worth writing down for every trade (the plan, what you actually did, and the result) and why a plateau can be a measurement problem rather than an effort problem. The numbers on screen are SAMPLE data, not real trades. A journal does not improve results by itself and cannot remove the risk of loss; it gives you evidence about your own behavior. I built TradeNotes, so I'm biased. Part 1 of 5. Educational content only, not financial advice.",
+    "tiktok": "Your trading results are stuck, but not for the reason you think. Three things hide in every plateau, and almost nobody writes down the third. Sample data, education only, not financial advice. I built TradeNotes.",
+    "tags": ["trading journal", "trading plateau", "trading psychology", "trade review", "plan vs actual", "trading discipline", "risk management", "TradeNotes"],
+    "hashtags": ["#tradingjournal", "#tradingpsychology", "#daytrading", "#tradereview"]
+  }
+}
