@@ -34,7 +34,7 @@ type Spec = {
   style?: { preset?: "andrew" | "bold"; accent?: string; bg?: string };
   body: unknown;
   datasets?: { name: string; source: string; kind?: "ohlc" | "series"; csv?: string; points?: any[]; as_of?: string }[];
-  post: { ytTitle: string; ytDesc: string; tiktok: string; tags: string[]; hashtags: string[] };
+  post: { ytTitle: string; ytDesc: string; tiktok: string; tags: string[]; hashtags: string[]; tiktokHashtags?: string[]; pinnedComment?: string; checklist?: string[] };
 };
 
 const files = process.argv.slice(2);
@@ -70,7 +70,7 @@ for (const file of files) {
   const blockers = renderBlockers(script.body, script.fact_check_items, channel);
   if (blockers.length) throw new Error(`${spec.slug} is blocked by the platform's own checks: ${blockers.join("; ")}`);
 
-  const style = { captions: spec.style?.preset ?? ("bold" as const), highlight: accent, dipColor: bg ?? "#0A0F1A", dipS: 0.22, lufs: -16, tp: -1.8, crf: 20, endHoldS: 2 };
+  const style = { captions: spec.style?.preset ?? ("bold" as const), highlight: accent, dipColor: bg ?? "#0A0F1A", dipS: 0.22, lufs: -16, tp: -2.4, crf: 20, endHoldS: 2 };
   const t0 = Date.now();
   const tl = await assembleProject(project.id, { style });
   const r = await renderProject(project.id, "final");
@@ -109,10 +109,10 @@ ${spec.post.hashtags.join(" ")} #shorts
 **Tags:** ${spec.post.tags.join(", ")}
 
 ## TikTok
-**Caption:** ${spec.post.tiktok} ${spec.post.hashtags.slice(0, 3).join(" ")}
-
+**Caption:** ${spec.post.tiktok} ${(spec.post.tiktokHashtags ?? spec.post.hashtags.slice(0, 3)).join(" ")}
+${spec.post.pinnedComment ? `\n## Pinned comment (both platforms; put the link here)\n${spec.post.pinnedComment}\n` : ""}
 ## Before you post
-- [ ] You approve every claim in the script. Nothing here promises income; keep it that way if you edit.
+${(spec.post.checklist ?? []).map((c) => `- [ ] ${c}\n`).join("")}- [ ] You approve every claim in the script. Nothing here promises income; keep it that way if you edit.
 - [ ] TikTok: turn on the **AI-generated content** label (synthetic voice). ${channel.kind === "brand" ? "Also set commercial content disclosure -> Your brand." : "No brand/paid-promotion toggle needed unless you add a sponsor or your own product."}
 - [ ] YouTube: audience "No, it's not made for kids"; consider the altered/synthetic content disclosure for the AI voice (check the current wording).
 - [ ] Log this test (hook, format, posting time) so the analytics loop can tell you what held attention.

@@ -50,14 +50,21 @@ export function buildAss(words: Word[], o: CaptionOpts): string {
     capStyle +
     `[Events]\nFormat: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text\n`;
   const lines: string[] = [];
+  const evs: { start: number; end: number; text: string }[] = [];
   for (const chunk of chunkWords(words)) {
     chunk.forEach((w, i) => {
       const start = w.start;
       const end = chunk[i + 1]?.start ?? w.end;
       const text = chunk.map((x, j) => (j === i ? `{\\c${hl}}${esc(cased(x.w))}{\\c${base}}` : esc(cased(x.w)))).join(" ");
-      lines.push(`Dialogue: 0,${cs(start)},${cs(Math.max(end, start + 0.05))},Cap,,0,0,0,,${text}`);
+      evs.push({ start, end: Math.max(end, start + 0.05), text });
     });
   }
+  // Two caption events must never be on screen together (libass would stack them as a doubled line for a frame or two):
+  // each event ends no later than the next one starts, and events left with no length are dropped.
+  evs.forEach((e, i) => {
+    const end = Math.min(e.end, evs[i + 1]?.start ?? e.end);
+    if (cs(end) !== cs(e.start)) lines.push(`Dialogue: 0,${cs(e.start)},${cs(end)},Cap,,0,0,0,,${e.text}`);
+  });
   for (const ov of o.overlays ?? []) lines.push(`Dialogue: 1,${cs(ov.start)},${cs(ov.end)},Top,,0,0,0,,${esc(ov.text.toUpperCase())}`);
   return head + lines.join("\n") + "\n";
 }

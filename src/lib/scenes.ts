@@ -22,6 +22,10 @@ export type Scene = (
   | { kind: "typing"; text: string; label?: string; caption?: string }
   | { kind: "checklist"; items: string[]; title?: string }
   | { kind: "dots"; total: number; label: string; caption?: string }
+  // Comparison table. `highlight` = row index to emphasise; `still` skips the entry animation (for a second beat on the same table).
+  | { kind: "table"; columns: string[]; rows: string[][]; highlight?: number; title?: string; label?: string; caption?: string; still?: boolean }
+  // Code-drawn picture of a calculator: inputs, then results, then where to find it. Values come from the spec (nothing is computed here).
+  | { kind: "calc"; title: string; fields: { label: string; value: string }[]; results: { label: string; value: string }[]; url?: string; small?: string; label?: string }
 ) & { theme?: Theme };
 
 const clamp = (x: number, a = 0, b = 1) => Math.max(a, Math.min(b, x));
@@ -40,8 +44,8 @@ function text(c: SKRSContext2D, s: string, x: number, y: number, size: number, c
   c.fillStyle = color; c.textAlign = align; c.fillText(s, x, y);
 }
 /** Always-on label for anything that looks like app data. Placed in the top safe zone. */
-function badge(c: SKRSContext2D, W: number, H: number, a = 1) {
-  const s = SAMPLE_LABEL, size = Math.round(W / 36);
+function badge(c: SKRSContext2D, W: number, H: number, a = 1, label: string = SAMPLE_LABEL) {
+  const s = label, size = Math.round(W / 36);
   c.save(); c.globalAlpha = a; c.font = `700 ${size}px ${FONT}`;
   const w = c.measureText(s).width + size * 2, h = size * 2.2, x = (W - w) / 2, y = H * 0.085;
   rr(c, x, y, w, h, h / 2); c.fillStyle = "rgba(242,176,30,.12)"; c.fill(); c.lineWidth = 3; c.strokeStyle = PAL.amber; c.stroke();
@@ -162,8 +166,11 @@ function drawSceneInner(c: SKRSContext2D, W: number, H: number, t: number, dur: 
       const n = Math.round(s.text.length * outCubic(seg(t, 0.35, dur * 0.7))), shown = s.text.slice(0, n);
       // wrap the typed text
       const fs = Math.round(W / 17); c.font = `700 ${fs}px ${FONT}`; const lines: string[] = []; let cur = "";
-      for (const word of shown.split(" ")) { const tr = cur ? cur + " " + word : word; if (c.measureText(tr).width > w - 80 && cur) { lines.push(cur); cur = word; } else cur = tr; }
-      lines.push(cur);
+      for (const para of shown.split("\n")) { // "\n" in the text forces a line break
+        cur = "";
+        for (const word of para.split(" ")) { const tr = cur ? cur + " " + word : word; if (c.measureText(tr).width > w - 80 && cur) { lines.push(cur); cur = word; } else cur = tr; }
+        lines.push(cur);
+      }
       lines.forEach((ln, i) => text(c, ln, x + 40, y + 20 + fs * 1.35 * (i + 1), fs, PAL.text, 700, "left"));
       if (Math.floor(t * 2.5) % 2 === 0 && n < s.text.length) { const last = lines[lines.length - 1]; c.font = `700 ${fs}px ${FONT}`; const cx = x + 40 + c.measureText(last).width + 6; c.fillStyle = PAL.amber; c.fillRect(cx, y + 20 + fs * 1.35 * lines.length - fs * 0.85, 6, fs * 0.95); }
       if (s.caption) { c.save(); c.globalAlpha = seg(t, dur * 0.7, dur * 0.92); text(c, s.caption, W / 2, y + h + H * 0.07, Math.round(W / 20), PAL.amber, 700, "center", W * 0.86); c.restore(); }
@@ -196,6 +203,51 @@ function drawSceneInner(c: SKRSContext2D, W: number, H: number, t: number, dur: 
       text(c, `${filled}/${n}`, W / 2, H * 0.5, Math.round(W / 6), PAL.text, 800);
       text(c, s.label, W / 2, H * 0.5 + W * 0.09, Math.round(W / 22), PAL.mute, 600, "center", W * 0.86);
       if (s.caption) { c.save(); c.globalAlpha = seg(t, dur * 0.6, dur * 0.85); text(c, s.caption, W / 2, H * 0.6, Math.round(W / 20), PAL.amber, 700, "center", W * 0.86); c.restore(); }
+      break;
+    }
+    case "table": {
+      if (s.label) badge(c, W, H, 1, s.label.toUpperCase());
+      const x = W * 0.05, w = W * 0.9, n = s.columns.length, cw = w / n, yh = H * 0.235, rowH = H * 0.088, gap = 16, y0 = H * 0.252;
+      const intro = s.still ? 1 : outCubic(seg(t, 0, 0.4));
+      c.save(); c.globalAlpha = intro;
+      if (s.title) text(c, s.title, W / 2, H * 0.185, Math.round(W / 24), PAL.text, 700, "center", w);
+      s.columns.forEach((h, j) => text(c, h.toUpperCase(), x + cw * (j + 0.5), yh, Math.round(W / 38), PAL.mute, 700, "center", cw - 14));
+      c.restore();
+      const hlA = s.highlight === undefined ? 0 : s.still ? outCubic(seg(t, 0.1, 0.6)) : outCubic(seg(t, dur * 0.45, dur * 0.45 + 0.5));
+      s.rows.forEach((row, i) => {
+        const a = s.still ? 1 : seg(t, 0.3 + i * 0.3, 0.7 + i * 0.3), e = outCubic(a), y = y0 + i * (rowH + gap) + (1 - e) * 24, hl = i === s.highlight ? hlA : 0;
+        if (a <= 0) return;
+        c.save(); c.globalAlpha = clamp(a * 2) * (s.highlight === undefined || i === s.highlight ? 1 : 1 - 0.45 * hlA);
+        rr(c, x, y, w, rowH, 20); c.fillStyle = PAL.panel; c.fill();
+        if (hl > 0) { c.save(); c.globalAlpha *= hl; c.fillStyle = "rgba(242,176,30,.10)"; c.fill(); c.lineWidth = 5; c.strokeStyle = PAL.amber; c.stroke(); c.restore(); }
+        row.forEach((v, j) => text(c, v, x + cw * (j + 0.5), y + rowH * 0.62, Math.round(W / 17), j === 0 ? PAL.amber : PAL.text, j === 0 ? 800 : 700, "center", cw - 18));
+        c.restore();
+      });
+      if (s.caption) { c.save(); c.globalAlpha = seg(t, dur * 0.5, dur * 0.7); text(c, s.caption, W / 2, y0 + s.rows.length * (rowH + gap) + H * 0.035, Math.round(W / 24), PAL.amber, 700, "center", w); c.restore(); }
+      break;
+    }
+    case "calc": {
+      if (s.label) badge(c, W, H, 1, s.label.toUpperCase());
+      const x = W * 0.07, w = W * 0.86, y = H * 0.15, pad = 36, cols = 2, fw = (w - pad * 3) / cols, fh = H * 0.062, fgap = 14;
+      const fr = Math.ceil(s.fields.length / cols), top = y + 96, resTop = top + fr * (fh + fgap) + 18, rl = Math.round(W / 27) * 1.7, h = resTop - y + s.results.length * rl + 26;
+      const e = outCubic(seg(t, 0, 0.4));
+      c.save(); c.globalAlpha = e; rr(c, x, y + (1 - e) * 30, w, h, 26); c.fillStyle = PAL.appBg; c.fill(); c.lineWidth = 3; c.strokeStyle = PAL.appBorder; c.stroke();
+      text(c, s.title, x + pad, y + 62 + (1 - e) * 30, Math.round(W / 27), PAL.appFg, 700, "left", w - pad * 2); c.restore();
+      s.fields.forEach((f, i) => {
+        const a = outCubic(seg(t, 0.3 + i * 0.12, 0.6 + i * 0.12)), fx = x + pad + (i % cols) * (fw + pad), fy = top + Math.floor(i / cols) * (fh + fgap);
+        c.save(); c.globalAlpha = a; rr(c, fx, fy, fw, fh, 14); c.fillStyle = PAL.appPanel; c.fill(); c.lineWidth = 2; c.strokeStyle = PAL.appBorder; c.stroke();
+        text(c, f.label, fx + 20, fy + fh * 0.36, Math.round(W / 46), PAL.appMute, 500, "left", fw - 40);
+        text(c, f.value, fx + 20, fy + fh * 0.8, Math.round(W / 28), PAL.appFg, 700, "left", fw - 40); c.restore();
+      });
+      const r0 = 0.5 + s.fields.length * 0.12;
+      s.results.forEach((r, i) => {
+        const a = outCubic(seg(t, r0 + i * 0.25, r0 + 0.35 + i * 0.25)), ry = resTop + rl * (i + 0.7);
+        c.save(); c.globalAlpha = a; text(c, r.label, x + pad, ry, Math.round(W / 30), PAL.appMute, 500, "left", w * 0.3);
+        text(c, r.value, x + pad + w * 0.3, ry, Math.round(W / 27), PAL.amber, 700, "left", w * 0.7 - pad * 2); c.restore();
+      });
+      const u = seg(t, r0 + s.results.length * 0.25, r0 + s.results.length * 0.25 + 0.5);
+      if (s.url) { c.save(); c.globalAlpha = u; text(c, s.url, W / 2, y + h + H * 0.048, Math.round(W / 15), PAL.text, 800, "center", w); c.restore(); }
+      if (s.small) text(c, s.small, W / 2, y + h + H * 0.075, Math.round(W / 34), PAL.mute, 500, "center", w);
       break;
     }
     case "endcard": {

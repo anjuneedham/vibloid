@@ -18,6 +18,9 @@ const SCENES: Scene[] = [
   { kind: "kpis", note: "Based on 10 closed trades.", cards: [{ label: "Win rate", value: "70%" }, { label: "Net P&L", value: "-$100.00", tone: "loss" }] },
   { kind: "progress", have: 10, need: 30, caption: "too early" },
   { kind: "endcard", title: "TradeNotes", tagline: "One. Two. Three.", small: "Not financial advice." },
+  { kind: "table", title: "t", label: "Hypothetical example", columns: ["Risk", "Target"], rows: [["1%", "10R"], ["0.5%", "20R"]], highlight: 1, caption: "c" },
+  { kind: "table", columns: ["Risk", "Target"], rows: [["1%", "10R"]], still: true },
+  { kind: "calc", title: "Challenge in R", label: "Hypothetical example", fields: [{ label: "Risk per trade (%)", value: "1" }], results: [{ label: "Target =", value: "10R" }], url: "example.dev", small: "Not financial advice." },
 ];
 
 describe("animated scenes", () => {
@@ -37,6 +40,25 @@ describe("animated scenes", () => {
       for (let i = 0; i < px.length; i += 4) if (px[i] > 200 && px[i + 1] > 140 && px[i + 2] < 90) amber++;
       expect(amber, `${s.kind} is missing the SAMPLE DATA badge`).toBeGreaterThan(20);
     }
+  });
+
+  it("table and calc scenes show their example label when one is set", () => {
+    const W = 540, H = 960;
+    for (const s of SCENES.filter((x) => (x.kind === "table" || x.kind === "calc") && x.label)) {
+      const c = createCanvas(W, H), ctx = c.getContext("2d") as any;
+      drawScene(ctx, W, H, 2.5, 3, s);
+      const px = ctx.getImageData(W * 0.3, H * 0.085, W * 0.4, H * 0.05).data;
+      let amber = 0;
+      for (let i = 0; i < px.length; i += 4) if (px[i] > 200 && px[i + 1] > 140 && px[i + 2] < 90) amber++;
+      expect(amber, `${s.kind} is missing its label`).toBeGreaterThan(20);
+    }
+  });
+
+  it("caption events never overlap, even when word timings collide", () => {
+    const clash = [{ w: "Trading", start: 1, end: 1.4 }, { w: "involves", start: 1.01, end: 1.5 }, { w: "risk.", start: 1.5, end: 1.9 }, { w: "Next", start: 1.8, end: 2.2 }];
+    const ev = [...buildAss(clash, { width: 1080, height: 1920, preset: "andrew" }).matchAll(/^Dialogue: 0,([\d:.]+),([\d:.]+),/gm)].map((m) => [m[1], m[2]]);
+    expect(ev.length).toBeGreaterThan(1);
+    for (let i = 1; i < ev.length; i++) expect(ev[i - 1][1] <= ev[i][0], `${ev[i - 1]} overlaps ${ev[i]}`).toBe(true);
   });
 
   it("long text shrinks to fit instead of overflowing the frame", () => {

@@ -1,0 +1,227 @@
+{
+  "slug": "tn-rmultiple-a",
+  "title": "Prop firm challenge math in R (hook A: maths shock)",
+  "channel": {
+    "name": "Andrew Builds (TradeNotes)",
+    "kind": "brand",
+    "niche": "trading",
+    "appName": "TradeNotes",
+    "appBlurb": "a trading journal and performance analytics app"
+  },
+  "style": {
+    "preset": "andrew",
+    "accent": "#F2B01E",
+    "bg": "#0A0F1A"
+  },
+  "body": {
+    "hook": "A five percent daily loss limit. At one percent risk, that's just five losses.",
+    "promise": "Try measuring your trades in R.",
+    "beats": [
+      {
+        "narration": "One R is what you planned to lose on the trade. Risk two hundred, make five hundred, and that's plus two point five R.",
+        "visual_query": "r multiple",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "typing",
+          "label": "Hypothetical example",
+          "text": "1R = planned risk\n$500 ÷ $200 = +2.5R",
+          "caption": "Hypothetical example"
+        }
+      },
+      {
+        "narration": "Say a challenge has a ten percent target, ten percent max loss and a five percent daily limit. At one percent risk, that's ten R to win, ten losses to fail.",
+        "visual_query": "challenge in R",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "table",
+          "label": "Hypothetical example",
+          "title": "10% target · 10% max loss · 5% daily limit",
+          "columns": [
+            "Risk / trade",
+            "Target",
+            "Losses to fail",
+            "Losses per day"
+          ],
+          "rows": [
+            [
+              "2%",
+              "5R",
+              "5",
+              "2.5"
+            ],
+            [
+              "1%",
+              "10R",
+              "10",
+              "5"
+            ],
+            [
+              "0.5%",
+              "20R",
+              "20",
+              "10"
+            ]
+          ],
+          "highlight": 1
+        }
+      },
+      {
+        "narration": "Drop to half a percent and it's twenty R to win, but twenty losses to fail. Rules differ between firms, so check yours. Trading involves risk of loss.",
+        "visual_query": "challenge in R",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "table",
+          "label": "Hypothetical example",
+          "title": "10% target · 10% max loss · 5% daily limit",
+          "columns": [
+            "Risk / trade",
+            "Target",
+            "Losses to fail",
+            "Losses per day"
+          ],
+          "rows": [
+            [
+              "2%",
+              "5R",
+              "5",
+              "2.5"
+            ],
+            [
+              "1%",
+              "10R",
+              "10",
+              "5"
+            ],
+            [
+              "0.5%",
+              "20R",
+              "20",
+              "10"
+            ]
+          ],
+          "highlight": 2,
+          "still": true,
+          "caption": "Check your firm's rules"
+        }
+      }
+    ],
+    "cta": "I built TradeNotes, so I'm biased, but there's a free R-multiple and challenge calculator. Link in my pinned comment. Not financial advice.",
+    "claims": [],
+    "scenes": {
+      "hook": {
+        "kind": "kinetic",
+        "lines": [
+          {
+            "text": "5% DAILY LIMIT"
+          },
+          {
+            "text": "= 5 LOSSES",
+            "color": "amber"
+          }
+        ],
+        "sub": "At 1% risk per trade. Hypothetical example."
+      },
+      "promise": {
+        "kind": "kinetic",
+        "lines": [
+          {
+            "text": "MEASURE IT"
+          },
+          {
+            "text": "IN R",
+            "color": "amber"
+          }
+        ],
+        "sub": "1R = what you planned to lose"
+      },
+      "cta": {
+        "kind": "calc",
+        "label": "Hypothetical example",
+        "title": "Your prop firm challenge in R",
+        "fields": [
+          {
+            "label": "Account size ($)",
+            "value": "100,000"
+          },
+          {
+            "label": "Risk per trade (%)",
+            "value": "1"
+          },
+          {
+            "label": "Profit target (%)",
+            "value": "10"
+          },
+          {
+            "label": "Max total loss (%)",
+            "value": "10"
+          },
+          {
+            "label": "Daily loss limit (%)",
+            "value": "5"
+          }
+        ],
+        "results": [
+          {
+            "label": "1R =",
+            "value": "$1,000"
+          },
+          {
+            "label": "Target =",
+            "value": "10R"
+          },
+          {
+            "label": "Max loss =",
+            "value": "10 losing trades in a row"
+          },
+          {
+            "label": "Daily limit =",
+            "value": "5 losses in one day"
+          }
+        ],
+        "url": "tradenotes.dev",
+        "small": "Not financial advice."
+      }
+    }
+  },
+  "post": {
+    "ytTitle": "Prop firm challenge math in 40 seconds (R-multiple)",
+    "ytDesc": "A 5% daily loss limit sounds big. Measured in R, it can be just five losing trades. Here's how to work out your challenge in R before you pay for one.\nFree calculator: https://tradenotes.dev/learn/r-multiple-prop-firm-challenge?src=tt-v3a\nI built TradeNotes, so I'm biased. It's a trading journal with a free plan.\nExamples are hypothetical.",
+    "tiktok": "Your prop firm's loss limit, measured in R. Free calculator in the pinned comment. Hypothetical numbers, not advice.",
+    "tags": [
+      "prop firm",
+      "prop firm challenge",
+      "r multiple",
+      "risk management trading",
+      "trading journal",
+      "daily drawdown",
+      "forex",
+      "futures"
+    ],
+    "hashtags": [
+      "#propfirm",
+      "#forex",
+      "#futures",
+      "#tradingjournal",
+      "#rmultiple",
+      "#daytrading"
+    ],
+    "tiktokHashtags": [
+      "#propfirm",
+      "#forex",
+      "#futures",
+      "#tradingjournal",
+      "#rmultiple",
+      "#daytrading"
+    ],
+    "pinnedComment": "Free R-multiple + prop firm challenge calculator: https://tradenotes.dev/learn/r-multiple-prop-firm-challenge?src=tt-v3a\n(Hypothetical example numbers. Not financial advice.)",
+    "checklist": [
+      "Watch the full video with sound. Voice clear, text readable at phone size, nothing cut off at the edges",
+      "\"Hypothetical example\" visible on screen",
+      "\"I built TradeNotes, so I'm biased\" is spoken",
+      "\"Not financial advice\" and one risk-of-loss sentence are in the video",
+      "Every number matches the article (re-check against the live page)",
+      "The link has the right `?src=tt-v3a` tag and opens the article",
+      "Pinned comment posted within 1 minute of posting"
+    ]
+  }
+}
