@@ -8,7 +8,7 @@
     "promise": "Three things hide in every plateau. The third, almost nobody writes down.",
     "beats": [
       {
-        "narration": "Number one: the result. Everybody tracks it. But profit and loss only says what happened, never why.",
+        "narration": "Number one: the result. But profit and loss only says what happened, never why.",
         "visual_query": "sample results only", "visual_type": "scene",
         "scene": { "kind": "chips", "caption": "#1 The result: what happened, never why",
           "items": [
@@ -17,17 +17,17 @@
           ] }
       },
       {
-        "narration": "Number two: the plan. Your setup, your risk, your exit, written before the trade. Still, one piece is missing.",
+        "narration": "Number two: the plan. Setup, risk, exit, written before the trade. Still, one piece is missing.",
         "visual_query": "plan written before the trade", "visual_type": "scene",
         "scene": { "kind": "typing", "label": "#2 Before the trade", "text": "Setup: pullback. Risk: 1R. Stop: below the low. Exit: target or stop.", "caption": "One piece is still missing..." }
       },
       {
-        "narration": "Number three: what you actually did. You moved the stop. You sized up after a loss. Almost nobody logs that.",
+        "narration": "Number three: what you actually did. Moved the stop. Sized up after a loss. Almost nobody logs that.",
         "visual_query": "what you actually did", "visual_type": "scene",
         "scene": { "kind": "checklist", "title": "#3 What you actually did", "items": ["Moved the stop", "Sized up after a loss", "Took an unplanned trade"] }
       },
       {
-        "narration": "Here is the part that surprised me. Line all three up, and a plateau can stop looking like bad luck. It looks like one habit, repeated.",
+        "narration": "Here is what surprised me. Line up all three, and a plateau can stop looking like bad luck. It looks like one habit, repeated.",
         "visual_query": "plan versus actual counts", "visual_type": "scene",
         "scene": { "kind": "kpis", "title": "Plan vs. actual", "note": "45 SAMPLE trades. 23 broke the plan. Illustration only, not real results.",
           "cards": [
@@ -38,17 +38,17 @@
           ] }
       },
       {
-        "narration": "I built TradeNotes, my own trading journal, so I'm biased. It keeps plan, action, and result side by side.",
+        "narration": "I built TradeNotes, my own trading journal, so I'm biased. It keeps all three side by side.",
         "visual_query": "three columns per trade", "visual_type": "scene",
         "scene": { "kind": "checklist", "title": "One row per trade", "items": ["The plan", "What you did", "The result"] }
       },
       {
-        "narration": "So maybe you are not stuck on effort. You are stuck on measurement. No journal removes the risk of loss. It shows you your own behavior.",
+        "narration": "So maybe you are not stuck on effort. You are stuck on measurement. No journal removes the risk of loss. It shows your own behavior.",
         "visual_query": "payoff: measurement, not effort", "visual_type": "scene",
         "scene": { "kind": "kinetic", "lines": [{ "text": "NOT EFFORT." }, { "text": "MEASUREMENT.", "color": "amber" }], "sub": "You can't fix a habit you never recorded." }
       }
     ],
-    "cta": "Tonight, add one line to your last trade: what did I actually do? Follow for part two. Not financial advice.",
+    "cta": "Tonight, log one thing on your last trade: what you actually did. Not financial advice.",
     "claims": [],
     "scenes": {
       "hook": { "kind": "kinetic", "lines": [{ "text": "YOUR RESULTS" }, { "text": "ARE STUCK.", "color": "loss" }, { "text": "BUT NOT WHY" }, { "text": "YOU THINK.", "color": "amber" }] },

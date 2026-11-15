@@ -1,0 +1,66 @@
+{
+  "slug": "tradenotes-04-one-tag",
+  "title": "One tag in your journal can expose your worst habit",
+  "channel": { "name": "Andrew Builds (TradeNotes)", "kind": "brand", "niche": "trading", "appName": "TradeNotes", "appBlurb": "a trading journal and performance analytics app" },
+  "style": { "preset": "andrew", "accent": "#F2B01E", "bg": "#0A0F1A" },
+  "body": {
+    "hook": "One tag in your journal can expose your worst habit.",
+    "promise": "Watch these sample trades. The pattern is not in the wins or the losses.",
+    "beats": [
+      {
+        "narration": "At first, it looks random. Wins, losses, nothing stands out. So where is it hiding?",
+        "visual_query": "sample trades", "visual_type": "scene",
+        "scene": { "kind": "chips", "caption": "Looks random. It is not.",
+          "items": [
+            { "t": "+$40", "k": "win" }, { "t": "-$25", "k": "loss" }, { "t": "-$60", "k": "loss" }, { "t": "-$45", "k": "loss" }, { "t": "+$30", "k": "win" },
+            { "t": "+$50", "k": "win" }, { "t": "-$35", "k": "loss" }, { "t": "-$40", "k": "loss" }, { "t": "+$20", "k": "win" }, { "t": "+$35", "k": "win" }
+          ] }
+      },
+      {
+        "narration": "Add one tag to every trade. Was it taken right after a loss? Yes or no. Then split.",
+        "visual_query": "add a tag", "visual_type": "scene",
+        "scene": { "kind": "typing", "label": "New tag", "text": "after-loss: yes / no", "caption": "Same trades. One extra column." }
+      },
+      {
+        "narration": "In this sample, the trades taken right after a loss do most of the damage. Same setup. But that is not the twist.",
+        "visual_query": "the split", "visual_type": "scene",
+        "scene": { "kind": "kpis", "title": "Split by tag", "note": "10 SAMPLE trades, not real results. Illustration only.",
+          "cards": [
+            { "label": "After a loss", "value": "-$95", "tone": "loss", "hint": "5 trades." },
+            { "label": "All other trades", "value": "+$65", "tone": "win", "hint": "5 trades." },
+            { "label": "Net", "value": "-$30", "hint": "All the P&L alone shows." },
+            { "label": "Trades", "value": "10", "hint": "Tagged after-loss: 5." }
+          ] }
+      },
+      {
+        "narration": "Here is the twist. The tag never says why. It shows which trades to reread in your own journal.",
+        "visual_query": "twist", "visual_type": "scene",
+        "scene": { "kind": "kinetic", "lines": [{ "text": "NOT WHY." }, { "text": "WHERE TO", "color": "amber" }, { "text": "LOOK.", "color": "amber" }], "sub": "A question for your own data.", "badge": true }
+      },
+      {
+        "narration": "I built TradeNotes, my own trading journal, so I'm biased. It lets you tag trades and split results by tag.",
+        "visual_query": "app", "visual_type": "scene",
+        "scene": { "kind": "checklist", "title": "Tags to try", "items": ["After a loss", "Time of day", "Planned or not"] }
+      },
+      {
+        "narration": "So the habit was never in the results. It was in what came right before the trade. And every trade still carries risk of loss.",
+        "visual_query": "payoff", "visual_type": "scene",
+        "scene": { "kind": "kinetic", "lines": [{ "text": "LOOK BEFORE" }, { "text": "THE TRADE,", "color": "amber" }, { "text": "NOT AFTER." }] }
+      }
+    ],
+    "cta": "Pick one tag, and log it on your next twenty trades. Not financial advice.",
+    "claims": [],
+    "scenes": {
+      "hook": { "kind": "kinetic", "lines": [{ "text": "ONE TAG", "color": "amber" }, { "text": "CAN EXPOSE" }, { "text": "YOUR WORST" }, { "text": "HABIT.", "color": "loss" }] },
+      "promise": { "kind": "kinetic", "lines": [{ "text": "NOT IN" }, { "text": "THE WINS." }, { "text": "NOT IN THE", "color": "amber" }, { "text": "LOSSES.", "color": "amber" }], "sub": "Sample trades, not real results.", "badge": true },
+      "cta": { "kind": "endcard", "title": "TradeNotes", "tagline": "Pick one tag. Log it on your next twenty trades.", "small": "Education only. Not financial advice." }
+    }
+  },
+  "post": {
+    "ytTitle": "One journal tag that can expose your worst trading habit",
+    "ytDesc": "Ten SAMPLE trades (not real trades) look random until you add one tag: was the trade taken right after a loss? This short shows how a tag turns a P&L into a question about your own behavior. A tag does not explain why, it shows where to look, and a handful of trades proves nothing, so check it in your own journal. Trading carries risk of loss. I built TradeNotes, so I'm biased. Part 4 of 5. Educational content only, not financial advice.",
+    "tiktok": "One tag in your journal can expose your worst habit. The pattern is not in the wins or the losses. Sample data, education only, not financial advice. I built TradeNotes.",
+    "tags": ["trading journal", "revenge trading", "trading psychology", "trade tags", "trade review", "TradeNotes"],
+    "hashtags": ["#tradingjournal", "#tradingpsychology", "#revengetrading", "#daytrading"]
+  }
+}
