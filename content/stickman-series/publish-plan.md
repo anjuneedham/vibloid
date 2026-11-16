@@ -1,6 +1,6 @@
 # Stickman vs. The Prop Challenge: publish plan
 
-Replace `[TRADENOTES LINK]` with your real link. Replace `[PART 2 URL]` and `[PART 3 URL]` after those videos are live.
+Part 2 and Part 3 links are placeholders (`[PART 2 URL]`, `[PART 3 URL]`) until you post those videos. TradeNotes link: https://tradenotes.dev (verified live).
 Every description carries the disclaimer and ownership disclosure. Nothing here promises results.
 
 ## Posting order and timing
@@ -12,10 +12,7 @@ Every description carries the disclaimer and ownership disclosure. Nothing here 
 
 1. Upload all three as Private first. Check captions and audio.
 2. Publish 1, then 2, then 3, in that order, with the gaps above.
-3. When 3 is live, go back and post and pin these comments:
-   - Video 1: `Part 2 -> [PART 2 URL]`
-   - Video 2: `Part 3 (the checklist worth saving) -> [PART 3 URL]`
-   - Video 3: `Save this and run it Friday: 1) Log every trade with its stop 2) Tag every mistake honestly 3) Friday: filter by tag + check the red days, write ONE rule. What's your one rule?`
+3. When 3 is live, post and pin the comments from the "Pinned comments" section below.
 4. Do not post any "this works" claims in replies.
 
 ---
@@ -37,7 +34,7 @@ The takeaway: your stop defines 1R. If a loss is bigger than -1R, the problem is
 
 Part 2 is on my page. Tap it.
 
-I built TradeNotes, a trading journal, so I'm biased. It logs entry/stop/exit and works out your R-multiple: [TRADENOTES LINK]
+I built TradeNotes, a trading journal, so I'm biased. It logs entry/stop/exit and works out your R-multiple: https://tradenotes.dev
 
 Disclaimer: Fictional dramatization for entertainment and education. Not financial advice. Trading involves risk of loss and results vary. I make no claims about profits or passing any challenge.
 
@@ -59,7 +56,7 @@ The takeaway: tag every losing trade honestly (revenge, FOMO, moved stop), then 
 
 Part 3 is on my page. Tap it.
 
-I built TradeNotes, a trading journal, so I'm biased. You can tag trades with a mistake and filter your journal by that tag: [TRADENOTES LINK]
+I built TradeNotes, a trading journal, so I'm biased. You can tag trades with a mistake and filter your journal by that tag: https://tradenotes.dev
 
 Disclaimer: Fictional dramatization for entertainment and education. Not financial advice. Trading involves risk of loss and results vary.
 
@@ -85,7 +82,7 @@ Mine: one revenge tag and I'm done for the day.
 
 Nobody can promise you'll pass a challenge. A habit like this just makes your pattern hard to ignore.
 
-I built TradeNotes, so I'm biased. It has trade logging with R-multiples, mistake tags, journal filters, and a calendar view of daily P&L colour. Try it: [TRADENOTES LINK]
+I built TradeNotes, so I'm biased. It has trade logging with R-multiples, mistake tags, journal filters, and a calendar view of daily P&L colour. Try it: https://tradenotes.dev
 
 Disclaimer: Fictional dramatization for entertainment and education. Not financial advice. Trading involves risk of loss and results vary. No guarantee of any outcome.
 
@@ -129,3 +126,38 @@ Fictional stickman dramatization. Not financial advice. Results vary.
 - `captions/video1.srt`, `video2.srt`, `video3.srt` are for YouTube (Studio -> Subtitles -> Upload file). Word-synced captions are also burned into the videos, so only upload the SRT if you want YouTube's CC track.
 - `captions/word_timings.json` has the per-word timing.
 - TikTok: the burned-in captions are the ones to use. Turn off TikTok auto-captions so they don't double up.
+
+
+---
+
+# Pinned comments (copy and pin after all three are live)
+
+## Pin on Video 1
+```
+Part 2 -> [PART 2 URL]
+Try the journal I built (I'm biased): https://tradenotes.dev
+Fictional dramatization. Not financial advice.
+```
+
+## Pin on Video 2
+```
+Part 3 (the checklist worth saving) -> [PART 3 URL]
+Mistake tags + journal filters: https://tradenotes.dev
+Fictional dramatization. Not financial advice.
+```
+
+## Pin on Video 3
+```
+Save this and run it Friday:
+1) Log every trade with its stop
+2) Tag every mistake honestly
+3) Friday: filter by tag, check the red days, write ONE rule
+What's your one rule? 👇
+https://tradenotes.dev
+Not financial advice. Results vary.
+```
+
+## Profile bio link (YouTube and TikTok)
+```
+https://tradenotes.dev
+```
