@@ -1,0 +1,282 @@
+{
+  "series_title": "Stickman vs. The Prop Challenge",
+  "premise": "A fictional, self-deprecating stickman prop-firm trader keeps blowing challenges to revenge trades. Across 3 shorts he discovers the real lesson is a habit (log with stops, tag mistakes honestly, review weekly), with TradeNotes as the tool that organizes it. No outcome promises; comedic dramatization.",
+  "videos": [
+    {
+      "n": 1,
+      "working_title": "One Revenge Trade Ended My Challenge",
+      "on_screen_title_card": "ONE trade. Whole challenge.",
+      "hook_text_overlay": "Blew my prop challenge in ONE trade",
+      "saveable_takeaway": "Your stop defines 1R. If a loss is bigger than -1R, the problem isn't the market.",
+      "feature_mentioned": "Manual trade logging (entry/stop/exit) with automatic R-multiple",
+      "word_count": 89,
+      "est_seconds": 31.8,
+      "beats": [
+        {
+          "start": 0,
+          "end": 2.5,
+          "vo": "I blew my prop challenge with one trade. Again.",
+          "scene": "Stickman at desk, chart behind him; one giant red candle drops and flattens him like a cartoon anvil. Text overlay: 'BLEW MY CHALLENGE IN ONE TRADE'. Fast punch-in.",
+          "caption_emphasis": [
+            "one trade"
+          ],
+          "sfx": "anvil thud"
+        },
+        {
+          "start": 2.5,
+          "end": 7.3,
+          "vo": "Green all morning. Then one red trade, and I wanted that money back. Immediately.",
+          "scene": "Stickman sipping coffee, smug, green P&L ticker. Small red tick appears; his eye twitches, coffee cup cracks. Whip-zoom to his face.",
+          "caption_emphasis": [
+            "wanted it back"
+          ],
+          "sfx": "record scratch"
+        },
+        {
+          "start": 7.3,
+          "end": 10.4,
+          "vo": "Doubled size. Moved my stop. [sighs] Daily loss limit: breached.",
+          "scene": "Stickman slams a 'SIZE x2' button, drags his stop line further away with both arms; a red 'DAILY LIMIT BREACHED' stamp hits the screen. Camera shake.",
+          "caption_emphasis": [
+            "moved my stop",
+            "breached"
+          ],
+          "sfx": "alarm buzzer"
+        },
+        {
+          "start": 10.4,
+          "end": 15.6,
+          "vo": "So, like a genius, I paid for a reset and did the exact same thing.",
+          "scene": "Stickman feeds coins into a 'RESET' vending machine, gets a fresh account, immediately repeats the same slam/drag motions in sped-up replay. Small caption: 'fictional dramatization'.",
+          "caption_emphasis": [
+            "exact same thing"
+          ],
+          "sfx": "coin clink, rewind"
+        },
+        {
+          "start": 15.6,
+          "end": 21.1,
+          "vo": "Then I started logging every trade in TradeNotes: entry, stop, exit. It works out the R-multiple.",
+          "scene": "Stickman at a clean screen typing entry/stop/exit fields into a TradeNotes-style trade form; an 'R' badge pops up next to the row.",
+          "caption_emphasis": [
+            "entry, stop, exit",
+            "R-multiple"
+          ],
+          "sfx": "keyboard clacks, pop"
+        },
+        {
+          "start": 21.1,
+          "end": 25.2,
+          "vo": "My stop said minus one R. My revenge trade? Minus four R.",
+          "scene": "Split screen: neat '-1R' label vs a huge wobbling '-4R' that squishes the stickman. Slow push-in on '-4R'.",
+          "caption_emphasis": [
+            "minus four R"
+          ],
+          "sfx": "bass drop"
+        },
+        {
+          "start": 25.2,
+          "end": 30.0,
+          "vo": "But logging wasn't the real needle mover. It was something way dumber. Part two.",
+          "scene": "Stickman holds a lightbulb that flickers off; he looks at camera, shrugs; '?' and 'PART 2' card slides in.",
+          "caption_emphasis": [
+            "way dumber",
+            "Part two"
+          ],
+          "sfx": "whoosh"
+        }
+      ],
+      "full_vo_text": "I blew my prop challenge with one trade. Again. Green all morning. Then one red trade, and I wanted that money back. Immediately. Doubled size. Moved my stop. [sighs] Daily loss limit: breached. So, like a genius, I paid for a reset and did the exact same thing. Then I started logging every trade in TradeNotes: entry, stop, exit. It works out the R-multiple. My stop said minus one R. My revenge trade? Minus four R. But logging wasn't the real needle mover. It was something way dumber. Part two.",
+      "open_loop_or_cta": "Part 2: the real needle mover was embarrassingly dumber.",
+      "loop_end": "...and that's how I blew my challenge with one trade."
+    },
+    {
+      "n": 2,
+      "working_title": "I Tagged My Bad Trades. I Was the Problem.",
+      "on_screen_title_card": "The tag that exposed me",
+      "hook_text_overlay": "Tagged my bad trades. Found the problem: me",
+      "saveable_takeaway": "Tag every losing trade honestly (revenge, FOMO, moved stop), then filter by tag. The pattern shows up fast.",
+      "feature_mentioned": "Mistake tags on trades + filtering the journal by mistake tag",
+      "word_count": 79,
+      "est_seconds": 28.2,
+      "beats": [
+        {
+          "start": 0,
+          "end": 2.5,
+          "vo": "Tagged my bad trades. The problem? Me.",
+          "scene": "Stickman pins a red tag labelled 'PROBLEM' on a chart, it boomerangs back and sticks to his forehead. Overlay: 'TAGGED MY BAD TRADES'.",
+          "caption_emphasis": [
+            "The problem? Me."
+          ],
+          "sfx": "boing"
+        },
+        {
+          "start": 2.5,
+          "end": 7.1,
+          "vo": "Logging trades was step one. The real needle mover was tagging them.",
+          "scene": "Stickman holds a logbook, then swaps it for a label gun like it's a weapon upgrade. Quick tilt-up.",
+          "caption_emphasis": [
+            "tagging"
+          ],
+          "sfx": "power-up chime"
+        },
+        {
+          "start": 7.1,
+          "end": 11.7,
+          "vo": "Every bad trade got an honest tag. Revenge trade. Moved stop. FOMO.",
+          "scene": "Label gun fires tags onto trade rows: 'REVENGE', 'MOVED STOP', 'FOMO', each with a tiny cartoon of stickman's crime.",
+          "caption_emphasis": [
+            "Revenge",
+            "Moved stop",
+            "FOMO"
+          ],
+          "sfx": "label gun clicks x3"
+        },
+        {
+          "start": 11.7,
+          "end": 16.3,
+          "vo": "Then I filtered my journal by mistake tag in TradeNotes. [laughs] Oh no.",
+          "scene": "TradeNotes-style journal list; stickman clicks a 'Revenge trade' filter; list collapses to a wall of red rows. His jaw hits the floor.",
+          "caption_emphasis": [
+            "filtered",
+            "Oh no"
+          ],
+          "sfx": "jaw drop clang"
+        },
+        {
+          "start": 16.3,
+          "end": 22.0,
+          "vo": "My worst losses weren't bad luck. They were trades I knew were bad while clicking.",
+          "scene": "Flashback: stickman with angry eyebrows mashing BUY while a tiny angel stickman on his shoulder holds a 'NO' sign.",
+          "caption_emphasis": [
+            "knew were bad"
+          ],
+          "sfx": "button mash"
+        },
+        {
+          "start": 22.0,
+          "end": 25.4,
+          "vo": "Not the market. Not the firm. Me. Mad. Clicking.",
+          "scene": "Three spotlights: market (empty), firm building (empty), stickman (caught mid-click, steam from ears).",
+          "caption_emphasis": [
+            "Me"
+          ],
+          "sfx": "spotlight clunks"
+        },
+        {
+          "start": 25.4,
+          "end": 30.0,
+          "vo": "So how do you stop the idiot before he clicks? Part three.",
+          "scene": "Stickman's hand hovers over BUY in slow motion; freeze frame; 'PART 3' card slams in.",
+          "caption_emphasis": [
+            "before he clicks",
+            "Part three"
+          ],
+          "sfx": "freeze-frame zip"
+        }
+      ],
+      "full_vo_text": "Tagged my bad trades. The problem? Me. Logging trades was step one. The real needle mover was tagging them. Every bad trade got an honest tag. Revenge trade. Moved stop. FOMO. Then I filtered my journal by mistake tag in TradeNotes. [laughs] Oh no. My worst losses weren't bad luck. They were trades I knew were bad while clicking. Not the market. Not the firm. Me. Mad. Clicking. So how do you stop the idiot before he clicks? Part three.",
+      "open_loop_or_cta": "Part 3: how do you stop the idiot BEFORE he clicks? The 3-step habit.",
+      "loop_end": "...and the tags told me who the problem was."
+    },
+    {
+      "n": 3,
+      "working_title": "The 3-Step Habit That Ended My One-More-Trade Spiral",
+      "on_screen_title_card": "Save this 3-step checklist",
+      "hook_text_overlay": "The 3-step habit that ended my 'one more trade'",
+      "saveable_takeaway": "1) Log every trade with its stop. 2) Tag every mistake honestly. 3) Friday: filter by tag, check red days, write one rule.",
+      "feature_mentioned": "Calendar month view with daily P&L colour; mistake-tag filter; trade logging",
+      "word_count": 86,
+      "est_seconds": 30.7,
+      "beats": [
+        {
+          "start": 0,
+          "end": 2.5,
+          "vo": "Three steps that ended my one-more-trade spiral.",
+          "scene": "Stickman chained to a slot machine labelled 'ONE MORE TRADE'; he snips the chain with giant scissors. Overlay: '3-STEP HABIT'. Fast zoom.",
+          "caption_emphasis": [
+            "three steps"
+          ],
+          "sfx": "chain snap"
+        },
+        {
+          "start": 2.5,
+          "end": 6.3,
+          "vo": "One: log every trade with its stop. No stop, no trade.",
+          "scene": "Checklist card '1' flips in; stickman bouncer blocks a trade with no stop line from entering a club.",
+          "caption_emphasis": [
+            "log",
+            "No stop, no trade"
+          ],
+          "sfx": "door slam"
+        },
+        {
+          "start": 6.3,
+          "end": 9.1,
+          "vo": "Two: tag every mistake. Revenge. FOMO. Moved stop.",
+          "scene": "Card '2'; stickman slaps tags onto his own trades, one tag sticks to his butt.",
+          "caption_emphasis": [
+            "tag every mistake"
+          ],
+          "sfx": "slap x3"
+        },
+        {
+          "start": 9.1,
+          "end": 14.0,
+          "vo": "Three: every Friday, filter by tag and check the calendar view for red days.",
+          "scene": "Card '3'; TradeNotes-style calendar month view with red and green day tiles; stickman circles the red cluster with a marker.",
+          "caption_emphasis": [
+            "Friday",
+            "calendar"
+          ],
+          "sfx": "marker squeak"
+        },
+        {
+          "start": 14.0,
+          "end": 18.5,
+          "vo": "Then write one rule. Mine: one revenge tag, I'm done for the day.",
+          "scene": "Stickman writes a sticky note 'REVENGE TAG = DONE', slaps it on monitor, then shuts laptop and walks away whistling.",
+          "caption_emphasis": [
+            "one rule",
+            "done for the day"
+          ],
+          "sfx": "laptop close"
+        },
+        {
+          "start": 18.5,
+          "end": 23.0,
+          "vo": "Nobody can promise you'll pass. It just makes your pattern hard to ignore.",
+          "scene": "Stickman holds a mirror; reflection shows the angry clicking version of himself, who waves awkwardly.",
+          "caption_emphasis": [
+            "hard to ignore"
+          ],
+          "sfx": "mirror ding"
+        },
+        {
+          "start": 23.0,
+          "end": 27.5,
+          "vo": "I built TradeNotes, so I'm biased. Link's in bio. Save this for Friday.",
+          "scene": "Stickman wears a tiny 'I MADE THIS' badge, shrugs; 'Link in bio' arrow; bookmark icon bounces. Small on-screen disclaimer: 'Not financial advice. Results vary.'",
+          "caption_emphasis": [
+            "biased",
+            "Save this"
+          ],
+          "sfx": "bookmark pop"
+        },
+        {
+          "start": 27.5,
+          "end": 30.0,
+          "vo": "Because Friday-you forgets. Back to step one.",
+          "scene": "Calendar flips to Friday; stickman scratches head, confused; camera whip-pans back to the slot machine from the hook.",
+          "caption_emphasis": [
+            "Friday-you forgets"
+          ],
+          "sfx": "rewind whoosh"
+        }
+      ],
+      "full_vo_text": "Three steps that ended my one-more-trade spiral. One: log every trade with its stop. No stop, no trade. Two: tag every mistake. Revenge. FOMO. Moved stop. Three: every Friday, filter by tag and check the calendar view for red days. Then write one rule. Mine: one revenge tag, I'm done for the day. Nobody can promise you'll pass. It just makes your pattern hard to ignore. I built TradeNotes, so I'm biased. Link's in bio. Save this for Friday. Because Friday-you forgets. Back to step one.",
+      "open_loop_or_cta": "CTA: link in bio to try TradeNotes; save for Friday review. Ownership disclosed.",
+      "loop_end": "Friday-you forgets. Back to step one."
+    }
+  ]
+}

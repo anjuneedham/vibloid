@@ -1,0 +1,96 @@
+1
+00:00:00,000 --> 00:00:00,920
+Three steps that ended
+
+2
+00:00:00,920 --> 00:00:02,510
+my one-more-trade spiral.
+
+3
+00:00:02,780 --> 00:00:03,700
+One, log every trade
+
+4
+00:00:03,700 --> 00:00:04,510
+with its stop,
+
+5
+00:00:04,540 --> 00:00:05,760
+no stop, no trade.
+
+6
+00:00:05,760 --> 00:00:07,130
+Two, tag every mistake.
+
+7
+00:00:07,400 --> 00:00:08,950
+Revenge, FOMO, moved stop.
+
+8
+00:00:09,000 --> 00:00:10,110
+Three, every Friday,
+
+9
+00:00:10,140 --> 00:00:10,960
+filter by tag and
+
+10
+00:00:10,960 --> 00:00:12,040
+check the calendar view
+
+11
+00:00:12,040 --> 00:00:13,000
+for red days.
+
+12
+00:00:13,000 --> 00:00:13,920
+Then write one rule.
+
+13
+00:00:13,920 --> 00:00:15,000
+Mine, one revenge tag.
+
+14
+00:00:15,000 --> 00:00:15,520
+I'm done for the
+
+15
+00:00:15,520 --> 00:00:16,440
+day. Nobody can promise
+
+16
+00:00:16,440 --> 00:00:17,150
+you'll pass.
+
+17
+00:00:17,160 --> 00:00:17,740
+It just makes your
+
+18
+00:00:17,740 --> 00:00:18,820
+pattern hard to ignore.
+
+19
+00:00:18,820 --> 00:00:19,640
+I built TradeNotes,
+
+20
+00:00:19,640 --> 00:00:20,450
+so I'm biased.
+
+21
+00:00:20,620 --> 00:00:21,350
+Link's in bio.
+
+22
+00:00:21,440 --> 00:00:22,340
+Save this for Friday.
+
+23
+00:00:22,340 --> 00:00:23,950
+Because Friday-you forgets.
+
+24
+00:00:23,960 --> 00:00:24,600
+Back to step one.
+
