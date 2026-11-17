@@ -80,7 +80,7 @@ function chrome(c: Ctx, src?: string) {
   c.fillStyle = C.gold; c.fillRect(80, 100, 64, 3);
   if (src) txt(c, src, W - 80, H - 64, { size: 22, color: C.mute, align: "right" });
 }
-const label = (c: Ctx, s: string, x: number, y: number, o: Parameters<typeof txt>[5] = {}) => txt(c, s, x, y, { size: 30, color: C.mute, ...o });
+const label = (c: Ctx, s: string, x: number, y: number, o: Parameters<typeof txt>[4] = {}) => txt(c, s, x, y, { size: 30, color: C.mute, ...o });
 
 /** Horizontal bars growing from a baseline. items revealed one after another. */
 function hbars(c: Ctx, t: number, items: { label: string; value: number; shown?: string; color?: string; sub?: string }[], o: { x: number; y: number; w: number; rowH?: number; max?: number; delay?: number; diverge?: boolean; labelW?: number }) {
