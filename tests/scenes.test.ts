@@ -18,6 +18,9 @@ const SCENES: Scene[] = [
   { kind: "kpis", note: "Based on 10 closed trades.", cards: [{ label: "Win rate", value: "70%" }, { label: "Net P&L", value: "-$100.00", tone: "loss" }] },
   { kind: "progress", have: 10, need: 30, caption: "too early" },
   { kind: "endcard", title: "TradeNotes", tagline: "One. Two. Three.", small: "Not financial advice." },
+  { kind: "james", say: "Ten trades is a small sample.", pose: "write" },
+  { kind: "james", say: "Hi, I am James.", pose: "wave" },
+  { kind: "james", say: "Hmm.", pose: "think" },
 ];
 
 describe("animated scenes", () => {
