@@ -1,0 +1,124 @@
+{
+  "slug": "leo-3-the-stop",
+  "title": "Leo's trade, page 3: the price goes the wrong way",
+  "channel": {
+    "name": "James's Notes",
+    "kind": "attention",
+    "niche": "trading"
+  },
+  "style": {
+    "preset": "bold",
+    "accent": "#3b82f6",
+    "bg": "#0b0f14",
+    "tp": -2.4
+  },
+  "body": {
+    "hook": "Page three of five. Leo bought twenty five shares at one hundred, and the price starts to slip.",
+    "promise": "Ninety nine. Then ninety eight.",
+    "beats": [
+      {
+        "narration": "Part of him wants to move the stop lower. His plan says no.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "james",
+          "say": "The plan says no.",
+          "pose": "think",
+          "label": "Leo's plan"
+        }
+      },
+      {
+        "narration": "The stop is hit. He loses fifty dollars, exactly what he planned.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "chips",
+          "items": [
+            {
+              "t": "-$50",
+              "k": "loss"
+            }
+          ],
+          "caption": "Exactly the planned loss"
+        }
+      },
+      {
+        "narration": "His made-up account is now four thousand nine hundred fifty.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "kpis",
+          "title": "Hypothetical",
+          "cards": [
+            {
+              "label": "Account now",
+              "value": "$4,950",
+              "tone": "neutral"
+            },
+            {
+              "label": "Loss",
+              "value": "-$50",
+              "tone": "loss",
+              "hint": "1% of $5,000"
+            }
+          ],
+          "note": "Made-up numbers."
+        }
+      }
+    ],
+    "cta": "Tomorrow's page: what Leo writes down. That's today's page from my notes. See you tomorrow. — James",
+    "claims": [],
+    "scenes": {
+      "hook": {
+        "kind": "kinetic",
+        "lines": [
+          {
+            "text": "PAGE 3"
+          },
+          {
+            "text": "OF 5",
+            "color": "amber"
+          }
+        ],
+        "sub": "Leo's made-up trade",
+        "badge": true
+      },
+      "promise": {
+        "kind": "chips",
+        "items": [
+          {
+            "t": "$99",
+            "k": "loss"
+          },
+          {
+            "t": "$98",
+            "k": "loss"
+          }
+        ],
+        "caption": "Price slips toward the stop"
+      },
+      "cta": {
+        "kind": "endcard",
+        "title": "Page 3 of 5",
+        "tagline": "Tomorrow: what Leo writes down.",
+        "small": "Educational only. Not financial advice."
+      }
+    }
+  },
+  "post": {
+    "ytTitle": "Leo's trade, page 3: the stop gets hit (made-up example)",
+    "ytDesc": "Page 3 of 5. James walks through a made-up trade, one small step a day. Everything here is a made-up example for learning.",
+    "tiktok": "Page 3 of 5: Leo's made-up trade. Educational only. Not financial advice.",
+    "tags": [
+      "trading journal",
+      "risk management",
+      "learn to trade",
+      "james"
+    ],
+    "hashtags": [
+      "#tradingjournal",
+      "#riskmanagement",
+      "#learntotrade"
+    ]
+  }
+}

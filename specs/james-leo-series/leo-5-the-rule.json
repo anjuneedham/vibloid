@@ -1,0 +1,121 @@
+{
+  "slug": "leo-5-the-rule",
+  "title": "Leo's trade, page 5: the one rule he changes",
+  "channel": {
+    "name": "James's Notes",
+    "kind": "attention",
+    "niche": "trading"
+  },
+  "style": {
+    "preset": "bold",
+    "accent": "#3b82f6",
+    "bg": "#0b0f14",
+    "tp": -2.4
+  },
+  "body": {
+    "hook": "Page five of five. Reading his notes, Leo spots a pattern.",
+    "promise": "The urge to trade again came within minutes of the stop.",
+    "beats": [
+      {
+        "narration": "So he adds one rule. After any stop, wait fifteen minutes before looking for another trade.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "checklist",
+          "title": "Leo's new rule",
+          "items": [
+            "After a stop",
+            "Wait 15 minutes",
+            "Then look again"
+          ]
+        }
+      },
+      {
+        "narration": "He will check that rule against his journal next week. It might help, or it might not.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "typing",
+          "label": "Next week",
+          "text": "Did the rule help? Check the journal.",
+          "caption": "Test it. Don't assume it."
+        }
+      },
+      {
+        "narration": "Trading carries a real risk of loss.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "kinetic",
+          "lines": [
+            {
+              "text": "ONE RULE"
+            },
+            {
+              "text": "WRITTEN DOWN",
+              "color": "amber"
+            }
+          ]
+        }
+      }
+    ],
+    "cta": "That's today's page from my notes. See you tomorrow. — James",
+    "claims": [],
+    "scenes": {
+      "hook": {
+        "kind": "kinetic",
+        "lines": [
+          {
+            "text": "PAGE 5"
+          },
+          {
+            "text": "OF 5",
+            "color": "amber"
+          }
+        ],
+        "sub": "Leo's made-up trade",
+        "badge": true
+      },
+      "promise": {
+        "kind": "james",
+        "say": "The urge came fast.",
+        "pose": "think",
+        "label": "Leo's notes"
+      },
+      "cta": {
+        "kind": "endcard",
+        "title": "Page 5 of 5",
+        "tagline": "Five pages. One made-up trade.",
+        "small": "Educational only. Not financial advice."
+      }
+    }
+  },
+  "post": {
+    "ytTitle": "Leo's trade, page 5: one rule from the journal (made-up example)",
+    "ytDesc": "Page 5 of 5. James walks through a made-up trade, one small step a day. Everything here is a made-up example for learning.",
+    "tiktok": "Page 5 of 5: Leo's made-up trade. Educational only. Not financial advice.",
+    "tags": [
+      "trading journal",
+      "risk management",
+      "learn to trade",
+      "james"
+    ],
+    "hashtags": [
+      "#tradingjournal",
+      "#riskmanagement",
+      "#learntotrade"
+    ]
+  },
+  "audio": {
+    "blocks": [
+      {
+        "text": "Page five of five. Reading his notes, Leo spots a pattern. The urge to trade again came within minutes of the stop. So he adds one rule. After any stop, wait fifteen minutes before looking for another trade.",
+        "file": "assets/james-audio/leo-5-the-rule.b1.mp3"
+      },
+      {
+        "text": "He will check that rule against his journal next week. It might help, or it might not. Trading carries a real risk of loss. That's today's page from my notes. See you tomorrow. — James",
+        "file": "assets/james-audio/leo-5-the-rule.b2.mp3"
+      }
+    ]
+  }
+}

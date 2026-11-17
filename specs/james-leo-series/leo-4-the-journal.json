@@ -1,0 +1,121 @@
+{
+  "slug": "leo-4-the-journal",
+  "title": "Leo's trade, page 4: the journal entry",
+  "channel": {
+    "name": "James's Notes",
+    "kind": "attention",
+    "niche": "trading"
+  },
+  "style": {
+    "preset": "bold",
+    "accent": "#3b82f6",
+    "bg": "#0b0f14",
+    "tp": -2.4
+  },
+  "body": {
+    "hook": "Page four of five. That evening, Leo writes his journal entry.",
+    "promise": "Was the plan followed? Yes. Result? Minus fifty dollars.",
+    "beats": [
+      {
+        "narration": "Feeling at exit? Annoyed. He notes that following the plan and losing can both be true.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "typing",
+          "label": "Leo writes",
+          "text": "Followed the plan. Lost anyway.",
+          "caption": "Both can be true"
+        }
+      },
+      {
+        "narration": "A loss that follows the plan isn't a mistake. It's part of trading.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "james",
+          "say": "A planned loss is not a mistake.",
+          "pose": "write",
+          "label": "James"
+        }
+      },
+      {
+        "narration": "The journal keeps those two things apart.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "kinetic",
+          "lines": [
+            {
+              "text": "PLAN FOLLOWED"
+            },
+            {
+              "text": "AND LOST",
+              "color": "amber"
+            }
+          ]
+        }
+      }
+    ],
+    "cta": "Tomorrow's page: the one rule Leo changes. That's today's page from my notes. See you tomorrow. — James",
+    "claims": [],
+    "scenes": {
+      "hook": {
+        "kind": "kinetic",
+        "lines": [
+          {
+            "text": "PAGE 4"
+          },
+          {
+            "text": "OF 5",
+            "color": "amber"
+          }
+        ],
+        "sub": "Leo's made-up trade",
+        "badge": true
+      },
+      "promise": {
+        "kind": "checklist",
+        "title": "Leo's journal",
+        "items": [
+          "Plan followed? Yes",
+          "Result: -$50",
+          "Feeling: annoyed"
+        ]
+      },
+      "cta": {
+        "kind": "endcard",
+        "title": "Page 4 of 5",
+        "tagline": "Tomorrow: the one rule Leo changes.",
+        "small": "Educational only. Not financial advice."
+      }
+    }
+  },
+  "post": {
+    "ytTitle": "Leo's trade, page 4: the journal entry (made-up example)",
+    "ytDesc": "Page 4 of 5. James walks through a made-up trade, one small step a day. Everything here is a made-up example for learning.",
+    "tiktok": "Page 4 of 5: Leo's made-up trade. Educational only. Not financial advice.",
+    "tags": [
+      "trading journal",
+      "risk management",
+      "learn to trade",
+      "james"
+    ],
+    "hashtags": [
+      "#tradingjournal",
+      "#riskmanagement",
+      "#learntotrade"
+    ]
+  },
+  "audio": {
+    "blocks": [
+      {
+        "text": "Page four of five. That evening, Leo writes his journal entry. Was the plan followed? Yes. Result? Minus fifty dollars. Feeling at exit? Annoyed. He notes that following the plan and losing can both be true.",
+        "file": "assets/james-audio/leo-4-the-journal.b1.mp3"
+      },
+      {
+        "text": "A loss that follows the plan isn't a mistake. It's part of trading. The journal keeps those two things apart. Tomorrow's page: the one rule Leo changes. That's today's page from my notes. See you tomorrow. — James",
+        "file": "assets/james-audio/leo-4-the-journal.b2.mp3"
+      }
+    ]
+  }
+}

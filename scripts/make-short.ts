@@ -26,13 +26,16 @@ const { assembleProject } = await import("../src/lib/assemble");
 const { renderProject } = await import("../src/lib/render");
 const { DISCLAIMER, TRADING_RISK, AI_DISCLOSURE } = await import("../src/lib/packaging");
 const { kokoroWorker } = await import("../src/lib/providers/tts");
+const { PrerecordedTTSProvider } = await import("../src/lib/providers/prerecorded");
 const { run, probeDuration } = await import("../src/lib/media");
 
 type Spec = {
   slug: string; title: string;
   channel: { name: string; kind?: "attention" | "brand"; niche?: string; appName?: string; appBlurb?: string };
-  style?: { preset?: "andrew" | "bold"; accent?: string; bg?: string };
+  style?: { preset?: "andrew" | "bold"; accent?: string; bg?: string; tp?: number };
   body: unknown;
+  /** Optional pre-made voice (e.g. ElevenLabs blocks). Each block's text must be the script parts, in order, joined by spaces. */
+  audio?: { blocks: { text: string; file: string }[] };
   datasets?: { name: string; source: string; kind?: "ohlc" | "series"; csv?: string; points?: any[]; as_of?: string }[];
   post: { ytTitle: string; ytDesc: string; tiktok: string; tags: string[]; hashtags: string[] };
 };
@@ -70,9 +73,9 @@ for (const file of files) {
   const blockers = renderBlockers(script.body, script.fact_check_items, channel);
   if (blockers.length) throw new Error(`${spec.slug} is blocked by the platform's own checks: ${blockers.join("; ")}`);
 
-  const style = { captions: spec.style?.preset ?? ("bold" as const), highlight: accent, dipColor: bg ?? "#0A0F1A", dipS: 0.22, lufs: -16, tp: -1.8, crf: 20, endHoldS: 2 };
+  const style = { captions: spec.style?.preset ?? ("bold" as const), highlight: accent, dipColor: bg ?? "#0A0F1A", dipS: 0.22, lufs: -16, tp: spec.style?.tp ?? -1.8, crf: 20, endHoldS: 2 };
   const t0 = Date.now();
-  const tl = await assembleProject(project.id, { style });
+  const tl = await assembleProject(project.id, { style, ...(spec.audio ? { tts: new PrerecordedTTSProvider(spec.audio.blocks.map((b) => ({ text: b.text, file: path.resolve(b.file) }))) } : {}) });
   const r = await renderProject(project.id, "final");
   const dir = path.resolve("output/shorts", spec.slug);
   fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });

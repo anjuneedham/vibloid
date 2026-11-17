@@ -1,0 +1,124 @@
+{
+  "slug": "leo-1-the-plan",
+  "title": "Leo's trade, page 1: the plan before the click",
+  "channel": {
+    "name": "James's Notes",
+    "kind": "attention",
+    "niche": "trading"
+  },
+  "style": {
+    "preset": "bold",
+    "accent": "#3b82f6",
+    "bg": "#0b0f14",
+    "tp": -2.4
+  },
+  "body": {
+    "hook": "Page one of five. Meet Leo, a made-up trader with a made-up five thousand dollar account.",
+    "promise": "Before he clicks anything, he writes a plan.",
+    "beats": [
+      {
+        "narration": "Buy at one hundred. Stop at ninety eight. Target at one hundred four.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "checklist",
+          "title": "Leo's plan",
+          "items": [
+            "Buy at 100",
+            "Stop at 98",
+            "Target at 104"
+          ]
+        }
+      },
+      {
+        "narration": "If the stop is hit, he loses two dollars a share. Any trade can lose.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "kpis",
+          "title": "Hypothetical",
+          "cards": [
+            {
+              "label": "Account",
+              "value": "$5,000",
+              "tone": "neutral"
+            },
+            {
+              "label": "Risk per share",
+              "value": "$2",
+              "tone": "loss",
+              "hint": "entry 100, stop 98"
+            }
+          ],
+          "note": "Made-up numbers."
+        }
+      },
+      {
+        "narration": "He wrote it before the trade, not after.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "kinetic",
+          "lines": [
+            {
+              "text": "WRITE IT"
+            },
+            {
+              "text": "BEFORE",
+              "color": "amber"
+            },
+            {
+              "text": "THE TRADE"
+            }
+          ]
+        }
+      }
+    ],
+    "cta": "Tomorrow's page: how many shares is that? That's today's page from my notes. See you tomorrow. — James",
+    "claims": [],
+    "scenes": {
+      "hook": {
+        "kind": "kinetic",
+        "lines": [
+          {
+            "text": "PAGE 1"
+          },
+          {
+            "text": "OF 5",
+            "color": "amber"
+          }
+        ],
+        "sub": "Leo's made-up trade",
+        "badge": true
+      },
+      "promise": {
+        "kind": "james",
+        "say": "Plan first. Click second.",
+        "pose": "write",
+        "label": "Made-up scenario"
+      },
+      "cta": {
+        "kind": "endcard",
+        "title": "Page 1 of 5",
+        "tagline": "Tomorrow: how many shares?",
+        "small": "Educational only. Not financial advice."
+      }
+    }
+  },
+  "post": {
+    "ytTitle": "Leo's trade, page 1: write the plan first (made-up example)",
+    "ytDesc": "Page 1 of 5. James walks through a made-up trade, one small step a day. Everything here is a made-up example for learning.",
+    "tiktok": "Page 1 of 5: Leo's made-up trade. Educational only. Not financial advice.",
+    "tags": [
+      "trading journal",
+      "risk management",
+      "learn to trade",
+      "james"
+    ],
+    "hashtags": [
+      "#tradingjournal",
+      "#riskmanagement",
+      "#learntotrade"
+    ]
+  }
+}

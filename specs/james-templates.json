@@ -1,0 +1,2235 @@
+{
+  "version": 1,
+  "narrator": "James, the stickman who writes his notes. Calm, curious, friendly, slightly dry. First person. A learner, not a guru.",
+  "brand": "TradeNotes (trading journal app)",
+  "sign_off": "That's today's page from my notes. See you tomorrow. — James",
+  "rules": [
+    "Educational only. Explain concepts, habits, arithmetic and risk; never tell anyone what to trade.",
+    "No profit, income, win-rate or 'this works' claims, stated or implied. No income screenshots, no testimonials.",
+    "No signals or advice: no entries, exits, price targets, tickers to watch, or 'copy this'.",
+    "Every example with numbers is labelled hypothetical or made up, in the narration or on screen.",
+    "Every story is labelled made up in its first sentence. James is a cartoon character with no real earnings.",
+    "Risk of loss is acknowledged once per video, as one natural sentence inside a block, not as boilerplate.",
+    "Any real-world numeric fact (market history, statistics, study results) needs a named source or the literal tag [CITATION NEEDED]. Pure arithmetic on hypothetical inputs needs no source but must be checked.",
+    "Block two always ends with the sign-off line exactly: \"That's today's page from my notes. See you tomorrow. — James\"",
+    "The description carries the disclaimer and the newsletter mention; the narration does not hype the app.",
+    "Nothing publishes without human approval; a filled template is a draft."
+  ],
+  "block_format": {
+    "summary": "Each video is exactly two narration blocks for ElevenLabs. One block is one TTS generation. Block one is about fifteen seconds, about 38 words. Block two is about fifteen seconds, about 38 words including the sign-off.",
+    "block1": "Hook plus the beats marked block 1. Starts with the hook; no greeting, no 'hey guys'.",
+    "block2": "The beats marked block 2, then cta_pattern. The sign-off is about eleven words, so block two has roughly 27 words of content before it.",
+    "text_rules": [
+      "No stage directions, speaker labels, brackets, emoji, markdown or SSML inside the block text. [CITATION NEEDED] goes in the claims list, not in the spoken text.",
+      "Plain punctuation only: full stops, commas, question marks. Use full stops for pauses. No ellipses, no semicolons, no exclamation marks. The dash before James in the sign-off is the only dash.",
+      "Numbers, percents and currency are spelled for speech: 'two percent', 'one thousand dollars', 'three out of ten'. On-screen scene text may use digits.",
+      "Short spoken sentences. Target 36 to 40 words per block; over 42, cut a clause instead of speeding up.",
+      "Each block must make sense if generated and heard alone, since the two are synthesised separately and joined."
+    ],
+    "mapping": "Beats map to scenes one to one. Split the audio time of a block evenly across its beats unless a beat is the hook (give it a little more). The last beat is always the endcard and carries the sign-off audio."
+  },
+  "reuse_guide": [
+    "Pick by angle first, topic second: look at the last ten published specs and choose an angle that has not appeared in the last three, then a template within it that has not been used in the last ten.",
+    "The same topic can be retold through different templates (stop losses as a myth, a worked sum, a mistake, a journal column). Never reuse a topic and template pair, and leave at least two weeks before returning to a topic at all.",
+    "Fill every slot before writing narration. If a slot needs a real-world number and no source is supplied, either rewrite it as a hypothetical or mark [CITATION NEEDED] and flag the draft for review.",
+    "Vary the surface: rotate James poses, invented names, hypothetical account sizes, and whether the example ends in a win or a loss (losses at least half the time).",
+    "Write block one and block two separately, count the words, and read each aloud for rhythm. Check all arithmetic twice.",
+    "Five-part series variant: use t03 for all five parts with one fixed made-up character and scenario (numbers set in part one). Arc: plan, size, the trade goes against them, the review, the rule that changed. Each part recaps in one clause, teases the next, and stands alone. Parts may borrow the middle beats of another template (t07 for sizing, t19 for the review) while keeping the t03 hook and CTA. Close the week with t30.",
+    "Any template can be made a one-off or a series part; when serialising, keep the template's do_not list and add the t03 continuity rules.",
+    "Before handing off, run the rules list as a checklist: made-up label, hypothetical label, one risk sentence, no claims, sign-off exact."
+  ],
+  "angles": [
+    "story",
+    "myth_vs_reality",
+    "worked_example",
+    "mistake",
+    "checklist",
+    "question",
+    "comparison",
+    "journal_entry",
+    "psychology",
+    "risk_math",
+    "process",
+    "recap"
+  ],
+  "scene_kinds": [
+    "kinetic",
+    "chips",
+    "sum",
+    "kpis",
+    "progress",
+    "endcard",
+    "james",
+    "typing",
+    "checklist",
+    "dots"
+  ],
+  "templates": [
+    {
+      "id": "t01",
+      "name": "The Made-Up Trader",
+      "angle": "story",
+      "hook_pattern": "This is a made-up story about {character}, who {did_what} and wrote down {what_they_wrote}.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: introduce the invented character and label the story as made up in the first sentence."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Setup: the ordinary situation and the one decision the character faces."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Turn: what happened next, told without a money amount as the punchline; a loss is possible and shown as normal."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Note: the single line the character wrote in the journal afterwards."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "character": "Invented first name plus one humanising detail (job, habit). Never a real person.",
+        "did_what": "The one decision, in plain words (moved a stop, doubled size, skipped the plan).",
+        "what_they_wrote": "The journal line that carries the lesson, under twelve words.",
+        "takeaway": "Lesson as a short phrase for the endcard."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose pointing, label 'Made-up story', say = short version of hook"
+        },
+        {
+          "beat": 2,
+          "kind": "kinetic",
+          "use": "two or three lines stating the decision; no colour on money words"
+        },
+        {
+          "beat": 3,
+          "kind": "chips",
+          "use": "two to four chips showing the sequence of outcomes, caption 'hypothetical'"
+        },
+        {
+          "beat": 4,
+          "kind": "typing",
+          "use": "label 'Journal', text = {what_they_wrote}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "So {character} wrote: {what_they_wrote}. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not let the character end up rich or ruined; the ending is a note, not a result.",
+        "Do not drop the 'made-up' label or imply it happened to a real viewer or to James as a real person.",
+        "Do not use a specific ticker, price or date."
+      ]
+    },
+    {
+      "id": "t02",
+      "name": "A Page From Market History",
+      "angle": "story",
+      "hook_pattern": "In {year}, {event_short}. I copied one line about it into my notes.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the historical event in one checkable sentence, with its source named or [CITATION NEEDED]."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Context: what people believed just before it, in plain words."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "What it shows a beginner about risk, without predicting anything today."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "James's copied line: the general lesson, phrased as a note to himself."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "year": "Year of the event, spelled for speech in the narration.",
+        "event_short": "One documented market event. Must have a named source or [CITATION NEEDED].",
+        "belief_before": "The common assumption at the time, stated cautiously.",
+        "lesson": "Risk lesson that does not depend on the event repeating.",
+        "source": "Publication or dataset name shown on screen."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "year as the big line, event as sub, badge true"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose thinking, say = {belief_before}"
+        },
+        {
+          "beat": 3,
+          "kind": "kpis",
+          "use": "one or two cards only, each value sourced; note = {source}"
+        },
+        {
+          "beat": 4,
+          "kind": "typing",
+          "use": "label 'Copied into my notes', text = {lesson}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "History does not repeat on schedule, and losses were real for the people in it. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not state any figure without {source} or [CITATION NEEDED].",
+        "Do not draw a 'so this is coming again' conclusion or compare to the current market.",
+        "Do not retell famous events with invented quotes."
+      ]
+    },
+    {
+      "id": "t03",
+      "name": "Five Pages, One Scenario (Series)",
+      "angle": "story",
+      "hook_pattern": "Page {part_number} of five. {recurring_character} is still {recurring_situation}, and today the question is {todays_question}.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: part number, one-line recap of the recurring made-up scenario so a new viewer can follow."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Today's step: the single new decision or idea for this part."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Consequence inside the scenario, labelled hypothetical; risk of loss mentioned once."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Cliff note: the open question that the next part answers (part five closes instead of teasing)."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard showing 'Page {part_number} of 5'."
+        }
+      ],
+      "slots": {
+        "part_number": "One to five. Suggested arc: 1 plan, 2 size, 3 the trade goes against them, 4 the review, 5 what changed in the rules.",
+        "recurring_character": "Same invented name and detail in all five parts.",
+        "recurring_situation": "Same hypothetical account and setup in all five parts; fix the numbers in part one and never change them.",
+        "todays_question": "The one question this part answers.",
+        "next_question": "Teaser for the next part; in part five replace with the full-series takeaway."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "progress",
+          "use": "have = {part_number}, need = 5, caption = series title"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose writing, label 'Made-up scenario', say = today's step"
+        },
+        {
+          "beat": 3,
+          "kind": "kpis",
+          "use": "the scenario's fixed numbers as cards, title 'Hypothetical'"
+        },
+        {
+          "beat": 4,
+          "kind": "kinetic",
+          "use": "{next_question} as two lines, amber on the last"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard james:true, tagline 'Page {part_number} of 5', small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Tomorrow's page: {next_question}. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not change the scenario's numbers or character between parts.",
+        "Do not make any part depend on having seen the others; recap in one clause.",
+        "Do not end the series with the character making money as proof the lesson works."
+      ]
+    },
+    {
+      "id": "t04",
+      "name": "Myth vs My Notes",
+      "angle": "myth_vs_reality",
+      "hook_pattern": "I used to think {myth}. Then I wrote down what actually happens.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: state the myth as something James himself believed."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Why it sounds right: the reasonable-seeming logic behind it."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Reality: the plain mechanism that breaks the myth, no statistics unless sourced."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Replacement note: what James writes instead."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "myth": "A common beginner belief, phrased as a full sentence.",
+        "why_plausible": "One honest reason people believe it.",
+        "reality": "The mechanism or logic that contradicts it.",
+        "replacement": "A journal-style rule of thumb that is about process, not profit."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "myth in quotes, loss colour on the key word"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose shrug, say = {why_plausible}"
+        },
+        {
+          "beat": 3,
+          "kind": "kinetic",
+          "use": "reality in two lines, amber highlight"
+        },
+        {
+          "beat": 4,
+          "kind": "typing",
+          "use": "label 'My note', text = {replacement}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Crossed out. New line: {replacement}. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not replace the myth with an opposite promise ('do this instead and you will win').",
+        "Do not mock people who believe the myth; James believed it too.",
+        "Do not cite 'most traders' percentages without a source."
+      ]
+    },
+    {
+      "id": "t05",
+      "name": "What the Screenshot Leaves Out",
+      "angle": "myth_vs_reality",
+      "hook_pattern": "You have seen the post: {flashy_claim}. Here is what is not in the picture.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: describe a generic type of flashy post without naming an account."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "List what a single screenshot cannot show (size, losses before it, time, risk taken)."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Show the fuller hypothetical picture with the missing rows added."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Question James now asks whenever he sees one."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "flashy_claim": "A generic claim type, paraphrased; never a real handle or real screenshot.",
+        "missing_items": "Three things absent from the picture.",
+        "fuller_picture": "Hypothetical sequence of wins and losses around the highlighted one.",
+        "filter_question": "One question to ask of any such post."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "claim as text only, never a mock income screenshot"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "title 'Not in the picture', items = {missing_items}"
+        },
+        {
+          "beat": 3,
+          "kind": "chips",
+          "use": "{fuller_picture} with the single win among losses, caption 'hypothetical'"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose thinking, say = {filter_question}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "My note: one picture is not a record. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not render or imitate an income or profit screenshot, even as a parody.",
+        "Do not accuse a real person or brand of faking.",
+        "Do not imply TradeNotes users post better results."
+      ]
+    },
+    {
+      "id": "t06",
+      "name": "Half-True Saying",
+      "angle": "myth_vs_reality",
+      "hook_pattern": "Everyone repeats '{saying}'. I wrote down the half that gets left off.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: quote a well-known trading saying."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "The true half: where the saying is useful."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "The missing half: where it misleads a beginner."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The longer, less catchy version James keeps."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "saying": "A widely repeated trading proverb, quoted exactly and briefly.",
+        "true_half": "The situation where it helps.",
+        "missing_half": "The condition or cost the saying hides.",
+        "longer_version": "James's amended sentence."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "the saying, badge true"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose nodding, say = {true_half}"
+        },
+        {
+          "beat": 3,
+          "kind": "james",
+          "use": "pose shrug, say = {missing_half}"
+        },
+        {
+          "beat": 4,
+          "kind": "typing",
+          "use": "label 'The longer version', text = {longer_version}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Less catchy. More honest. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not attribute the saying to a named person unless sourced.",
+        "Do not turn the amended version into a trading rule with entries or exits.",
+        "Do not reuse a saying covered in the last thirty videos."
+      ]
+    },
+    {
+      "id": "t07",
+      "name": "Position Size on Paper",
+      "angle": "worked_example",
+      "hook_pattern": "Hypothetical: {account} account, {risk_pct} percent risk, stop {stop_distance} away. How big is the position? I did it on paper.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: state the made-up inputs and the question."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Step one: money at risk = account times risk percent."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Step two: size = money at risk divided by stop distance; say the answer."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "What the number does not do: it limits a planned loss, it does not make the trade good; gaps can exceed it."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "account": "Round hypothetical account size.",
+        "risk_pct": "Small illustrative percent; say it is an example, not a recommendation.",
+        "stop_distance": "Distance per unit in currency, chosen so the division is clean.",
+        "answer": "Resulting units; verify the arithmetic before writing."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kpis",
+          "use": "three cards with the inputs, title 'Hypothetical'"
+        },
+        {
+          "beat": 2,
+          "kind": "typing",
+          "use": "label 'Step 1', text = the multiplication written out"
+        },
+        {
+          "beat": 3,
+          "kind": "typing",
+          "use": "label 'Step 2', text = the division and {answer}"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose pointing, say = the limitation"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "The sum is easy. Sticking to it is the hard part. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not present the risk percent as the correct or recommended number.",
+        "Do not use a real ticker or current price.",
+        "Do not skip checking the arithmetic; a wrong sum destroys the video."
+      ]
+    },
+    {
+      "id": "t08",
+      "name": "One Trade, Plan to Page",
+      "angle": "worked_example",
+      "hook_pattern": "Here is one made-up trade, from the plan to the journal page. Watch which part I get wrong.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: promise a full walk-through and a mistake."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "The plan: reason, risk, exit condition, written before the trade."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "What happened: outcome plus the one place behaviour left the plan."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The journal row: outcome graded separately from process."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "plan": "Three short plan lines for a generic instrument ('a stock', 'a currency pair').",
+        "outcome": "Win or loss; vary across uses, losses at least half the time.",
+        "deviation": "The process slip (early exit, late entry, size creep).",
+        "grade": "Process grade and one-line reason."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose writing, label 'Hypothetical'"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "title 'The plan', items = {plan}"
+        },
+        {
+          "beat": 3,
+          "kind": "chips",
+          "use": "one chip for the outcome plus caption naming {deviation}"
+        },
+        {
+          "beat": 4,
+          "kind": "kpis",
+          "use": "two cards: 'Outcome' and 'Process', tones may disagree"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Two grades, one trade. I only control one of them. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not make the plan specific enough to be copied as a signal.",
+        "Do not always pair good process with a win.",
+        "Do not show a profit amount as the payoff of the story."
+      ]
+    },
+    {
+      "id": "t09",
+      "name": "Reading a Journal Week",
+      "angle": "worked_example",
+      "hook_pattern": "This is a made-up week from a journal: {trades} trades. The total is the least interesting number on it.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: show the invented week and dismiss the headline total."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Number one worth reading: {metric_a} and what it describes."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Number two: {metric_b}, and the pattern the two reveal together."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The one experiment the made-up trader could try next week; small samples can mislead."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "trades": "Small count, five to twelve.",
+        "metric_a": "A behavioural stat (trades outside plan, average loss vs average win, time of day).",
+        "metric_b": "A second stat that interacts with the first.",
+        "experiment": "A process change to test, not a strategy."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "sum",
+          "use": "won, lost, trades for the invented week"
+        },
+        {
+          "beat": 2,
+          "kind": "kpis",
+          "use": "single card for {metric_a}, flag true"
+        },
+        {
+          "beat": 3,
+          "kind": "kpis",
+          "use": "two cards side by side, note 'made-up data'"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose thinking, say = {experiment}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "One week proves nothing. It just tells me what to watch. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not present the week as James's or any user's real results.",
+        "Do not conclude a strategy 'works' or 'fails' from one week.",
+        "Do not make the sum scene's net figure the emotional focus."
+      ]
+    },
+    {
+      "id": "t10",
+      "name": "The Mistake With a Name",
+      "angle": "mistake",
+      "hook_pattern": "There is a beginner mistake called {mistake_name}. I have a whole page on it.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: name the mistake."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "What it looks like in the moment, in a hypothetical."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Why it is tempting: the feeling behind it."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The tripwire: one written rule or pause that catches it; it reduces the mistake, it does not remove risk."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "mistake_name": "Short label (averaging down, moving the stop, overtrading).",
+        "looks_like": "One concrete hypothetical moment.",
+        "temptation": "The emotion or logic that drives it.",
+        "tripwire": "A behavioural check written as an if-then."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "{mistake_name} as the big line, loss colour"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose worried, label 'Hypothetical', say = {looks_like}"
+        },
+        {
+          "beat": 3,
+          "kind": "kinetic",
+          "use": "{temptation} in two lines"
+        },
+        {
+          "beat": 4,
+          "kind": "typing",
+          "use": "label 'Tripwire', text = {tripwire}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "I still make it. I just catch it sooner. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not shame; James makes the mistake too.",
+        "Do not claim the tripwire prevents losses.",
+        "Do not cover two mistakes in one video."
+      ]
+    },
+    {
+      "id": "t11",
+      "name": "One Mistake Becomes Three",
+      "angle": "mistake",
+      "hook_pattern": "A bad trade is rarely one mistake. In my notes it is usually a chain. Here is one, made up.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the chain idea."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Link one: the small first slip."
+        },
+        {
+          "n": 3,
+          "block": 1,
+          "beat": "Link two: the reaction to the slip."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Link three: the expensive one, and where the chain could have been cut most cheaply."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "link_1": "Small trigger (skipped checklist, tired, late).",
+        "link_2": "Emotional reaction (chasing, resizing).",
+        "link_3": "The costly action, described without amounts.",
+        "cut_point": "Which link is cheapest to break and how."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose pointing, label 'Made-up example'"
+        },
+        {
+          "beat": 2,
+          "kind": "chips",
+          "use": "one chip: {link_1}"
+        },
+        {
+          "beat": 3,
+          "kind": "chips",
+          "use": "two chips: {link_1}, {link_2}"
+        },
+        {
+          "beat": 4,
+          "kind": "chips",
+          "use": "three chips, caption = {cut_point}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Cut the first link. It is the cheap one. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not use more than three links.",
+        "Do not attach money amounts to the links.",
+        "Do not end on the disaster; end on the cut point."
+      ]
+    },
+    {
+      "id": "t12",
+      "name": "Before I Click",
+      "angle": "checklist",
+      "hook_pattern": "{count} questions I answer in writing before any trade. If one is blank, I wait.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the count and the blank-means-wait rule."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Questions one and two, read plainly."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Remaining questions."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Why written beats mental: it slows James down; it does not guarantee a good outcome."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "count": "Three or four.",
+        "questions": "Process questions only (why, how much can I lose, when am I wrong, how do I feel).",
+        "theme": "The situation this checklist is for (pre-trade, pre-market, after a loss)."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "'{count} QUESTIONS' big, sub = {theme}"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "first two items"
+        },
+        {
+          "beat": 3,
+          "kind": "checklist",
+          "use": "full list, title = {theme}"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose writing, say = the written-beats-mental line"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "A blank line is an answer too. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not include any question about what to buy or where price will go.",
+        "Do not exceed four items; the block will overrun.",
+        "Do not call it a system or a formula."
+      ]
+    },
+    {
+      "id": "t13",
+      "name": "Signs to Close the Laptop",
+      "angle": "checklist",
+      "hook_pattern": "Three signs in my notes that mean I am done for the day, whatever the screen says.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the three-signs promise."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Sign one and sign two, each a behaviour James can observe in himself."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Sign three, the subtle one."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "What he does instead: one line in the journal, then stop."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "signs": "Three observable states (re-checking a closed trade, raising size to get back, breaking a rule twice).",
+        "subtle_sign": "Which of the three is least obvious.",
+        "stop_action": "The closing ritual line."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose tired, say = short hook"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "items one and two, title 'Done for today if'"
+        },
+        {
+          "beat": 3,
+          "kind": "kinetic",
+          "use": "{subtle_sign}, amber"
+        },
+        {
+          "beat": 4,
+          "kind": "typing",
+          "use": "label 'Last line of the day', text = {stop_action}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "The market is open tomorrow. So are my notes. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not frame stopping as protecting profits; frame it as protecting decisions.",
+        "Do not give a daily loss number as a rule for viewers.",
+        "Do not drift into health or mental-health advice."
+      ]
+    },
+    {
+      "id": "t14",
+      "name": "One Question for Your Journal",
+      "angle": "question",
+      "hook_pattern": "If you journal one thing this week, answer this: {question}",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the question itself, nothing before it."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Why this question: what it exposes that a profit-and-loss number hides."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "A made-up sample answer, and what it would tell the writer."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Invite the viewer to write their own answer; no promise attached."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "question": "One open reflective question, under fifteen words.",
+        "exposes": "The blind spot it reveals.",
+        "sample_answer": "A believable invented answer, labelled as an example."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "the question across three lines, badge true"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose thinking, say = {exposes}"
+        },
+        {
+          "beat": 3,
+          "kind": "typing",
+          "use": "label 'Example answer', text = {sample_answer}"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose pointing, say = 'Your turn. One line.'"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Write yours down. I will not check it. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not ask yes-or-no questions.",
+        "Do not answer the question for the viewer with a rule.",
+        "Do not promise that journaling improves results; it improves the record."
+      ]
+    },
+    {
+      "id": "t15",
+      "name": "A Question I Keep Getting Wrong",
+      "angle": "question",
+      "hook_pattern": "Quick one from my notes: {quiz_question} Most beginners, me included, pick {wrong_answer}.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: a concept question with a tempting wrong answer."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Pause beat: restate the two options so the viewer can choose."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Answer and the one-sentence reason."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Why the wrong one is tempting and what it costs in a hypothetical."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "quiz_question": "Concept question with one defensible answer (order types, spread, leverage arithmetic).",
+        "wrong_answer": "The intuitive but incorrect option.",
+        "right_answer": "The correct option; must be definitional or arithmetic, not opinion.",
+        "reason": "Plain explanation."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "question as lines, sub 'A or B?'"
+        },
+        {
+          "beat": 2,
+          "kind": "chips",
+          "use": "two chips for the options, no win/loss meaning implied in caption"
+        },
+        {
+          "beat": 3,
+          "kind": "kinetic",
+          "use": "{right_answer}, win colour"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose shrug, say = {reason}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "I got it wrong the first time. It is in ink. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not quiz on predictions or opinions; only checkable definitions or arithmetic.",
+        "Do not claim 'most beginners' as a statistic; keep it as James's impression or cite it.",
+        "Do not use trick wording."
+      ]
+    },
+    {
+      "id": "t16",
+      "name": "Would You Rather",
+      "angle": "question",
+      "hook_pattern": "Would you rather {option_a}, or {option_b}? I changed my answer after writing it out.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the two hypothetical options."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "The instinctive pick and why."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Write it out: what each option feels like over many trades, in words or simple arithmetic."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "James's changed answer, with the admission that the other choice is not wrong for everyone."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "option_a": "A trade-off pole (many small wins and a rare big loss).",
+        "option_b": "The opposite pole (many small losses and a rare big win).",
+        "instinct": "Which one feels better and why.",
+        "written_out": "What the longer view shows; arithmetic must be internally consistent and labelled hypothetical."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "A line, 'OR', B line"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose thinking, say = {instinct}"
+        },
+        {
+          "beat": 3,
+          "kind": "dots",
+          "use": "total = a hypothetical run of trades, label shows the rare event among them"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose shrug, say = changed answer"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "No right answer. Just know which one you picked. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not declare a winner as advice.",
+        "Do not imply either profile is profitable.",
+        "Do not leave the arithmetic unlabelled as hypothetical."
+      ]
+    },
+    {
+      "id": "t17",
+      "name": "Same Trades, Different Size",
+      "angle": "comparison",
+      "hook_pattern": "Two made-up traders, {name_a} and {name_b}, take the exact same {n} trades. Only one thing differs: {difference}.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: identical trades, one difference."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Show the shared sequence of wins and losses."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Result for each, expressed as how much of the account is left or how they felt, not as income."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The point: the variable was behaviour, not prediction; both could still lose."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "name_a": "Invented name.",
+        "name_b": "Invented name.",
+        "n": "Small number of trades, six to ten.",
+        "difference": "One behavioural variable (size per trade, stopping rule, adding to losers).",
+        "sequence": "Shared hypothetical win/loss order; compute both outcomes carefully."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose pointing, label 'Made-up'"
+        },
+        {
+          "beat": 2,
+          "kind": "chips",
+          "use": "{sequence}, caption 'same trades'"
+        },
+        {
+          "beat": 3,
+          "kind": "kpis",
+          "use": "two cards, one per trader, title 'Hypothetical'"
+        },
+        {
+          "beat": 4,
+          "kind": "kinetic",
+          "use": "{difference} as the only line, amber"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Same chart. Different notebook. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not make one trader a hero who profits; show smaller damage, not gain, as the contrast.",
+        "Do not vary more than one thing.",
+        "Do not skip verifying both outcome calculations."
+      ]
+    },
+    {
+      "id": "t18",
+      "name": "This Term vs That Term",
+      "angle": "comparison",
+      "hook_pattern": "{term_a} and {term_b} sound like the same thing. In my notes they are on different pages.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: two confusable terms."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "{term_a} in one plain sentence."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "{term_b} in one plain sentence, with the difference stressed."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "When mixing them up costs a beginner, in a hypothetical; note the risk."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "term_a": "First term (stop order, margin, spread, realised).",
+        "term_b": "The term it gets confused with (limit order, leverage, commission, unrealised).",
+        "def_a": "Definition without jargon.",
+        "def_b": "Definition without jargon.",
+        "mixup_cost": "A hypothetical consequence of confusing them."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "term_a 'VS' term_b"
+        },
+        {
+          "beat": 2,
+          "kind": "typing",
+          "use": "label = {term_a}, text = {def_a}"
+        },
+        {
+          "beat": 3,
+          "kind": "typing",
+          "use": "label = {term_b}, text = {def_b}"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose worried, label 'Hypothetical', say = {mixup_cost}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Two words, two pages. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not define using another undefined term.",
+        "Do not describe broker-specific behaviour as universal; say 'check how your platform does it'.",
+        "Do not recommend one order type or product."
+      ]
+    },
+    {
+      "id": "t19",
+      "name": "The Plan vs What I Did",
+      "angle": "comparison",
+      "hook_pattern": "Left page: what the plan said. Right page: what happened. This made-up example has a gap of {gap}.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: two pages and the gap."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Left page: two or three planned lines."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Right page: the actual actions, deviations highlighted."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The gap is the lesson: measure the distance between pages, not the money."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "gap": "Short description of the deviation (one rule, ten minutes, double size).",
+        "planned": "Planned lines.",
+        "actual": "What was done instead.",
+        "measure": "How the viewer could record the gap in their own journal."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "'PLAN' / 'REALITY', sub = {gap}"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "title 'Plan', items = {planned}"
+        },
+        {
+          "beat": 3,
+          "kind": "chips",
+          "use": "each actual action as a chip, loss tone only on deviations"
+        },
+        {
+          "beat": 4,
+          "kind": "progress",
+          "use": "have = rules followed, need = rules planned, caption = {measure}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "I do not grade the trade. I grade the gap. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not let the deviation be rewarded with a win as the conclusion.",
+        "Do not include prices or tickers.",
+        "Do not exceed three plan lines."
+      ]
+    },
+    {
+      "id": "t20",
+      "name": "Today's Page, Read Aloud",
+      "angle": "journal_entry",
+      "hook_pattern": "Today's page. {day_label}. Mood: {mood}. Trades taken: {trades_taken}.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: James reads the header of a fictional journal page."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "The entry body: what he noticed, in two short sentences."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "The honest line: something uncomfortable he admits; a loss or a skipped trade is fine."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Tomorrow's one intention."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "day_label": "Generic day ('A slow Tuesday'), no real date.",
+        "mood": "One word.",
+        "trades_taken": "Small number, zero is allowed and interesting.",
+        "noticed": "Observation about behaviour.",
+        "honest_line": "The admission.",
+        "intention": "Process intention for tomorrow."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "typing",
+          "use": "label 'My notes', text = header line"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose writing, say = {noticed}"
+        },
+        {
+          "beat": 3,
+          "kind": "typing",
+          "use": "label 'Honest line', text = {honest_line}"
+        },
+        {
+          "beat": 4,
+          "kind": "checklist",
+          "use": "title 'Tomorrow', single item = {intention}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "That is the whole page. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not present the entry as a real trading record or imply James has real earnings.",
+        "Do not include a profit or loss figure; describe behaviour.",
+        "Do not use the same mood or day label twice in a week."
+      ]
+    },
+    {
+      "id": "t21",
+      "name": "The Entry, Rewritten",
+      "angle": "journal_entry",
+      "hook_pattern": "A journal entry that says '{vague_entry}' teaches you nothing. Here is the same entry, rewritten.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: show the useless entry."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "What is missing from it: reason, risk, feeling, or rule."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "The rewritten entry, read aloud."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "What future-you can do with the second version that they cannot with the first."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "vague_entry": "A realistic lazy entry ('Lost on a bad trade').",
+        "missing": "Two or three absent fields.",
+        "rewritten": "The improved entry, under twenty-five words.",
+        "future_use": "The pattern it makes findable."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "typing",
+          "use": "label 'Before', text = {vague_entry}"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "title 'Missing', items = {missing}"
+        },
+        {
+          "beat": 3,
+          "kind": "typing",
+          "use": "label 'After', text = {rewritten}"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose pointing, say = {future_use}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Same trade. Useful page. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not make the rewritten entry contain an entry or exit level.",
+        "Do not make it longer than a person would actually write.",
+        "Do not pitch the app inside the narration; the endcard carries the brand."
+      ]
+    },
+    {
+      "id": "t22",
+      "name": "The Column I Added",
+      "angle": "journal_entry",
+      "hook_pattern": "I added one column to my journal: {column}. It changed what I notice.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the new column."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "What goes in it and how long it takes to fill."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "A made-up few rows and the pattern that appears."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Caveat: a pattern in a few rows is a question, not a conclusion."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "column": "One journal field (sleep, time of day, 'was this in the plan', confidence one to five).",
+        "how_to_fill": "What to write, in seconds.",
+        "rows": "Three to five invented rows.",
+        "pattern": "What the rows hint at."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "'+ ONE COLUMN', sub = {column}"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose writing, say = {how_to_fill}"
+        },
+        {
+          "beat": 3,
+          "kind": "kpis",
+          "use": "one card per row or a two-card summary, title 'Made-up rows'"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose thinking, say = caveat"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "One column. Ten seconds. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not claim the column improves performance.",
+        "Do not suggest more than one column.",
+        "Do not present correlation in invented rows as a finding."
+      ]
+    },
+    {
+      "id": "t23",
+      "name": "Name the Feeling",
+      "angle": "psychology",
+      "hook_pattern": "That feeling when {trigger_moment} has a name. I wrote it at the top of a page: {feeling_name}.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: a relatable moment and its name."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "What the feeling pushes you to do."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "What James does in the gap: a pause, a written sentence, a smaller action."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Honesty: the feeling does not go away, and the trade can still lose."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "trigger_moment": "Specific moment (price runs without you, three losses in a row, a win right after you exit).",
+        "feeling_name": "Plain label (fear of missing out, revenge, relief).",
+        "urge": "The action it pushes.",
+        "gap_action": "The small written or physical pause."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose worried, say = {trigger_moment}"
+        },
+        {
+          "beat": 2,
+          "kind": "kinetic",
+          "use": "{feeling_name} big, sub = {urge}"
+        },
+        {
+          "beat": 3,
+          "kind": "typing",
+          "use": "label 'What I write', text = {gap_action}"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose shrug, say = honesty line"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Naming it is not fixing it. It is a start. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not diagnose or give mental-health advice.",
+        "Do not promise discipline as an outcome.",
+        "Do not cite psychology research without a named source."
+      ]
+    },
+    {
+      "id": "t24",
+      "name": "The Bias in Everyday Clothes",
+      "angle": "psychology",
+      "hook_pattern": "You already know {bias} from {everyday_situation}. It follows you to the chart.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: a thinking bias seen in ordinary life."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "The everyday version, lightly funny."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "The same bias in a hypothetical trading moment."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The written check James uses to notice it."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "bias": "One bias in plain words (sunk cost, anchoring, recency, confirmation).",
+        "everyday_situation": "Non-financial analogy (finishing a bad film, a queue, a restaurant order).",
+        "trading_version": "Hypothetical moment showing the same pattern.",
+        "check": "One question to write down."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose pointing, say = everyday line"
+        },
+        {
+          "beat": 2,
+          "kind": "kinetic",
+          "use": "{everyday_situation} in two dry lines"
+        },
+        {
+          "beat": 3,
+          "kind": "james",
+          "use": "pose worried, label 'Hypothetical', say = {trading_version}"
+        },
+        {
+          "beat": 4,
+          "kind": "typing",
+          "use": "label 'My check', text = {check}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Same brain, different room. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not use the academic name without the plain version.",
+        "Do not state study results or percentages without a source.",
+        "Do not use gambling as the everyday analogy."
+      ]
+    },
+    {
+      "id": "t25",
+      "name": "Streak Arithmetic",
+      "angle": "risk_math",
+      "hook_pattern": "Hypothetical: you risk {risk_pct} percent per trade and lose {streak} in a row. I worked out what is left.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the inputs and the question."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Count the losses one by one."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "What is left, as a percent of the start; compare with a larger risk percent."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Point: streaks happen to everyone, size decides whether you are still there after one."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "risk_pct": "Illustrative percent, spelled for speech.",
+        "streak": "Five to ten.",
+        "left_small": "Remaining percent at the small risk; compute compounding correctly and round.",
+        "risk_big": "A larger comparison percent.",
+        "left_big": "Remaining percent at the larger risk."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "'{streak} LOSSES IN A ROW', sub 'hypothetical'"
+        },
+        {
+          "beat": 2,
+          "kind": "dots",
+          "use": "total = {streak}, label 'losses', caption = risk per trade"
+        },
+        {
+          "beat": 3,
+          "kind": "kpis",
+          "use": "two cards: left at small risk, left at big risk"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose shrug, say = the point"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Pure arithmetic, not a forecast. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not state how likely a streak is unless derived from a stated hypothetical win rate.",
+        "Do not recommend a risk percent.",
+        "Do not round in a way that changes the comparison."
+      ]
+    },
+    {
+      "id": "t26",
+      "name": "The Climb Back",
+      "angle": "risk_math",
+      "hook_pattern": "Lose {loss_pct} percent and you do not need {loss_pct} percent to get back. I wrote down the real number.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the asymmetry teaser."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Walk the sum with a round hypothetical starting amount."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Reveal the required gain and one deeper example."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Why this is on page one of the notes: small losses are cheaper to repair."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "loss_pct": "Drawdown percent (ten, twenty, fifty).",
+        "start": "Round starting amount.",
+        "needed_pct": "Gain required to recover; needed = loss / (1 - loss), rounded.",
+        "deeper": "A second loss and needed pair."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "'DOWN {loss_pct}%', loss colour"
+        },
+        {
+          "beat": 2,
+          "kind": "typing",
+          "use": "label 'On paper', text = the subtraction with {start}"
+        },
+        {
+          "beat": 3,
+          "kind": "progress",
+          "use": "have = amount left, need = {start}, caption = 'needs {needed_pct} percent to return'"
+        },
+        {
+          "beat": 4,
+          "kind": "kpis",
+          "use": "two cards: the two loss/needed pairs"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "It is just division. It still surprised me. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not imply recovery is achievable or expected.",
+        "Do not get the formula wrong; verify every pair.",
+        "Do not reuse the same loss percent as the last use of this template."
+      ]
+    },
+    {
+      "id": "t27",
+      "name": "Win Rate Is Half the Sum",
+      "angle": "risk_math",
+      "hook_pattern": "Made-up record: {wins} wins out of {total}. Sounds {sounds_like}. Then I added the second column.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: a win count that sounds good or bad."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Add average win and average loss sizes, in hypothetical units."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Do the sum: total won minus total lost."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "The note: neither number means anything alone, and past rows do not predict the next."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "wins": "Number of winners.",
+        "total": "Total trades, ten or twenty for easy speech.",
+        "sounds_like": "'great' or 'terrible'; alternate between uses.",
+        "avg_win": "Hypothetical average win in units.",
+        "avg_loss": "Hypothetical average loss in units.",
+        "net": "Computed net; should contradict the first impression."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "chips",
+          "use": "the wins and losses as chips, caption 'made-up record'"
+        },
+        {
+          "beat": 2,
+          "kind": "kpis",
+          "use": "two cards: average win, average loss"
+        },
+        {
+          "beat": 3,
+          "kind": "sum",
+          "use": "won, lost, trades from the computed totals"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose shrug, say = the note"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Two columns. Always two. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not state or imply a typical or achievable win rate.",
+        "Do not use currency amounts large enough to look like income; prefer 'units'.",
+        "Do not present the favourable variant as a method that works."
+      ]
+    },
+    {
+      "id": "t28",
+      "name": "One Habit, Three Steps",
+      "angle": "process",
+      "hook_pattern": "My {habit_name} takes {duration}. Three steps. Here they are.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: habit and how short it is."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Step one and step two, as actions."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Step three and what the finished output looks like."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "When James skips it and what that costs him in clarity, not money."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "habit_name": "A routine (weekly review, pre-market note, end-of-day tag).",
+        "duration": "Honest time, spelled for speech.",
+        "steps": "Three imperative steps, each under eight words.",
+        "output": "The artefact produced (one sentence, one tag, one number)."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "kinetic",
+          "use": "{habit_name}, sub = {duration}"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "first two steps"
+        },
+        {
+          "beat": 3,
+          "kind": "checklist",
+          "use": "all three steps, then typing-style output in caption"
+        },
+        {
+          "beat": 4,
+          "kind": "james",
+          "use": "pose shrug, say = skip confession"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Short enough that I have no excuse. I still find one. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not describe a trading strategy as a habit.",
+        "Do not exceed three steps.",
+        "Do not claim the habit leads to profitability."
+      ]
+    },
+    {
+      "id": "t29",
+      "name": "From Vague Rule to Testable Rule",
+      "angle": "process",
+      "hook_pattern": "My old rule was '{vague_rule}'. You cannot break a rule that vague, which is the problem.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: the vague rule and the dry observation."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Why vague rules feel good: they are never violated."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Sharpen it: add a number, a condition, or a time so a yes-or-no check is possible."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "How it shows up in the journal: a tick or a cross per trade; a ticked rule can still lose."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "vague_rule": "A fuzzy rule ('be patient', 'do not overtrade', 'manage risk').",
+        "sharp_rule": "Checkable version; the number is James's example, not a recommendation.",
+        "check": "How it is marked per trade."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "typing",
+          "use": "label 'Old rule', text = {vague_rule}"
+        },
+        {
+          "beat": 2,
+          "kind": "james",
+          "use": "pose shrug, say = why vague feels good"
+        },
+        {
+          "beat": 3,
+          "kind": "typing",
+          "use": "label 'New rule', text = {sharp_rule}"
+        },
+        {
+          "beat": 4,
+          "kind": "progress",
+          "use": "have = hypothetical ticks, need = trades, caption = {check}"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard with james:true, title TradeNotes, tagline = {takeaway} in six words or fewer, small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Now I can fail it. That is the improvement. That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not present {sharp_rule} as the rule viewers should adopt.",
+        "Do not include entry or exit criteria in the rule.",
+        "Do not equate following the rule with winning."
+      ]
+    },
+    {
+      "id": "t30",
+      "name": "The Week in Three Lines",
+      "angle": "recap",
+      "hook_pattern": "Three lines from this week's notes. If you missed the pages, this is the short version.",
+      "beats": [
+        {
+          "n": 1,
+          "block": 1,
+          "beat": "Hook: three-line recap promise."
+        },
+        {
+          "n": 2,
+          "block": 1,
+          "beat": "Line one and line two, each naming the earlier video's idea in a sentence."
+        },
+        {
+          "n": 3,
+          "block": 2,
+          "beat": "Line three, plus which one James found hardest to follow himself."
+        },
+        {
+          "n": 4,
+          "block": 2,
+          "beat": "Next week's theme as a question."
+        },
+        {
+          "n": 5,
+          "block": 2,
+          "beat": "Sign-off and endcard."
+        }
+      ],
+      "slots": {
+        "line_1": "Takeaway from an earlier video this week.",
+        "line_2": "Second takeaway, different angle.",
+        "line_3": "Third takeaway.",
+        "hardest": "Which line James struggles with and why.",
+        "next_theme": "Next week's question."
+      },
+      "scene_plan": [
+        {
+          "beat": 1,
+          "kind": "james",
+          "use": "pose writing, label 'This week'"
+        },
+        {
+          "beat": 2,
+          "kind": "checklist",
+          "use": "items = line_1, line_2"
+        },
+        {
+          "beat": 3,
+          "kind": "checklist",
+          "use": "all three, title 'This week in my notes'"
+        },
+        {
+          "beat": 4,
+          "kind": "kinetic",
+          "use": "{next_theme}, amber"
+        },
+        {
+          "beat": 5,
+          "kind": "endcard",
+          "use": "endcard james:true, tagline 'New pages next week', small = 'Educational only. Not financial advice.'"
+        }
+      ],
+      "cta_pattern": "Next week: {next_theme} That's today's page from my notes. See you tomorrow. — James",
+      "do_not": [
+        "Do not introduce a new concept in a recap.",
+        "Do not recap videos that were not actually published; pull lines from real prior specs.",
+        "Do not summarise results; summarise ideas."
+      ]
+    }
+  ]
+}

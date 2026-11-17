@@ -230,7 +230,7 @@ function drawSceneInner(c: SKRSContext2D, W: number, H: number, t: number, dur: 
     }
     case "james": {
       const a = outCubic(seg(t, 0, 0.4));
-      drawJames(c, W / 2, H * 0.62, H * 0.3, s.pose ?? "write", t);
+      drawJames(c, W / 2, H * 0.8, H * 0.2, s.pose ?? "write", t); // below the caption zone (captions sit at 18-70% of frame height)
       c.save(); c.globalAlpha = a;
       const bw = W * 0.86, bh = W * 0.3, bx = (W - bw) / 2, by = H * 0.2;
       rr(c, bx, by, bw, bh, 28); c.fillStyle = PAL.panel; c.fill(); c.lineWidth = 3; c.strokeStyle = PAL.amber; c.stroke();
@@ -240,7 +240,7 @@ function drawSceneInner(c: SKRSContext2D, W: number, H: number, t: number, dur: 
     }
     case "endcard": {
       const a = outCubic(seg(t, 0, 0.5));
-      if (s.james !== false) { c.save(); c.globalAlpha = a; drawJames(c, W / 2, H * 0.78, H * 0.2, "wave", t); text(c, "— James", W / 2, H * 0.9, Math.round(W / 26), PAL.mute, 600); c.restore(); }
+      if (s.james !== false) { c.save(); c.globalAlpha = a; drawJames(c, W / 2, H * 0.81, H * 0.17, "wave", t); text(c, "— James", W / 2, H * 0.915, Math.round(W / 26), PAL.mute, 600); c.restore(); }
       c.save(); c.globalAlpha = a; text(c, s.title, W / 2, H * 0.40 + (1 - a) * 24, Math.round(W / 9), PAL.text, 800, "center", W * 0.9);
       c.fillStyle = PAL.amber; c.fillRect(W * 0.38, H * 0.425, W * 0.24, 6);
       s.tagline.split(/(?<=\.)\s+/).forEach((ln, i) => text(c, ln, W / 2, H * 0.49 + i * W * 0.055, Math.round(W / 24), PAL.mute, 500, "center", W * 0.84)); c.restore();
