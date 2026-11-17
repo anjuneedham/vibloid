@@ -91,7 +91,7 @@ export class OpenAITTSProvider implements TTSProvider {
     if (!key) throw new Error("OPENAI_API_KEY not set");
     const model = process.env.OPENAI_TTS_MODEL ?? "gpt-4o-mini-tts";
     const voice = opts.voice ?? process.env.OPENAI_TTS_VOICE ?? "onyx";
-    const instructions = process.env.OPENAI_TTS_INSTRUCTIONS ?? "Speak like a confident, warm documentary narrator. Natural pacing, clear emphasis on key numbers, no hype.";
+    const instructions = process.env.OPENAI_TTS_INSTRUCTIONS ?? "You are James, a calm, warm, curious narrator reading his own notes. Natural pacing, friendly and slightly dry, clear emphasis on key numbers, no hype.";
     const parts: string[] = [];
     const chunks = chunkText(text);
     for (let i = 0; i < chunks.length; i++) {

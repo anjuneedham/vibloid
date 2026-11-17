@@ -118,6 +118,7 @@ export async function generateScript(projectId: string, opts: { style: Style; ll
   const read = (f: string) => fs.readFileSync(path.resolve(f), "utf8");
   const addenda = [
     read("prompts/visuals.md") + `\nAVAILABLE DATASETS:\n${datasets.length ? datasets.map((d: any) => `- "${d.name}" (${d.kind}; source: ${d.source}${d.as_of ? `; as of ${d.as_of}` : ""})`).join("\n") : "(none: do not use charts)"}`,
+    read("prompts/james.md"),
     channel?.niche === "trading" ? read("prompts/trading.md") : "",
     channel?.kind === "brand" ? read("prompts/brand.md").replaceAll("{{APP}}", channel.voice?.app?.name ?? "the app").replaceAll("{{BLURB}}", channel.voice?.app?.blurb ? `(${channel.voice.app.blurb})` : "") : "",
     winners,
