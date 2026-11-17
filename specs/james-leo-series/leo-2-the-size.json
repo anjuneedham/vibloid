@@ -1,0 +1,121 @@
+{
+  "slug": "leo-2-the-size",
+  "title": "Leo's trade, page 2: how many shares",
+  "channel": {
+    "name": "James's Notes",
+    "kind": "attention",
+    "niche": "trading"
+  },
+  "style": {
+    "preset": "bold",
+    "accent": "#3b82f6",
+    "bg": "#0b0f14",
+    "tp": -2.4
+  },
+  "body": {
+    "hook": "Page two of five. Leo, our made-up trader, decides his risk before anything else.",
+    "promise": "One percent of five thousand dollars is fifty dollars.",
+    "beats": [
+      {
+        "narration": "Each share risks two dollars. So fifty divided by two is twenty five shares.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "typing",
+          "label": "Leo's sum",
+          "text": "$50 / $2 = 25 shares",
+          "caption": "Risk first, size second"
+        }
+      },
+      {
+        "narration": "The one percent isn't magic, and any amount can be lost.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "james",
+          "say": "No percent is safe.",
+          "pose": "think",
+          "label": "James"
+        }
+      },
+      {
+        "narration": "The point is the loss was chosen in advance.",
+        "visual_query": "leo",
+        "visual_type": "scene",
+        "scene": {
+          "kind": "kinetic",
+          "lines": [
+            {
+              "text": "THE LOSS"
+            },
+            {
+              "text": "CHOSEN",
+              "color": "amber"
+            },
+            {
+              "text": "IN ADVANCE"
+            }
+          ]
+        }
+      }
+    ],
+    "cta": "Tomorrow's page: the price goes the wrong way. That's today's page from my notes. See you tomorrow. — James",
+    "claims": [],
+    "scenes": {
+      "hook": {
+        "kind": "kinetic",
+        "lines": [
+          {
+            "text": "PAGE 2"
+          },
+          {
+            "text": "OF 5",
+            "color": "amber"
+          }
+        ],
+        "sub": "Leo's made-up trade",
+        "badge": true
+      },
+      "promise": {
+        "kind": "kpis",
+        "title": "Hypothetical",
+        "cards": [
+          {
+            "label": "Account",
+            "value": "$5,000",
+            "tone": "neutral"
+          },
+          {
+            "label": "Max loss, 1%",
+            "value": "$50",
+            "tone": "loss",
+            "hint": "chosen in advance"
+          }
+        ],
+        "note": "Made-up numbers."
+      },
+      "cta": {
+        "kind": "endcard",
+        "title": "Page 2 of 5",
+        "tagline": "Tomorrow: the price goes the wrong way.",
+        "small": "Educational only. Not financial advice."
+      }
+    }
+  },
+  "post": {
+    "ytTitle": "Leo's trade, page 2: size the trade from the loss (made-up example)",
+    "ytDesc": "Page 2 of 5. James walks through a made-up trade, one small step a day. Everything here is a made-up example for learning.",
+    "tiktok": "Page 2 of 5: Leo's made-up trade. Educational only. Not financial advice.",
+    "tags": [
+      "trading journal",
+      "risk management",
+      "learn to trade",
+      "james"
+    ],
+    "hashtags": [
+      "#tradingjournal",
+      "#riskmanagement",
+      "#learntotrade"
+    ]
+  }
+}

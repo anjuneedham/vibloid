@@ -18,11 +18,41 @@ export type Scene = (
   | { kind: "sum"; won: number; lost: number; trades: number }
   | { kind: "kpis"; cards: { label: string; value: string; hint?: string; tone?: "win" | "loss" | "neutral"; flag?: boolean }[]; note?: string; title?: string }
   | { kind: "progress"; have: number; need: number; caption?: string }
-  | { kind: "endcard"; title: string; tagline: string; small?: string }
+  | { kind: "endcard"; title: string; tagline: string; small?: string; james?: boolean }
+  | { kind: "james"; say: string; pose?: JamesPose; label?: string }
   | { kind: "typing"; text: string; label?: string; caption?: string }
   | { kind: "checklist"; items: string[]; title?: string }
   | { kind: "dots"; total: number; label: string; caption?: string }
 ) & { theme?: Theme };
+
+export type JamesPose = "wave" | "write" | "think";
+/** James the stickman (same drawing as the TradeNotes site mascot), centred at (cx, cy), `h` pixels tall. Animated by t seconds. */
+export function drawJames(c: SKRSContext2D, cx: number, cy: number, h: number, pose: JamesPose, t: number, color = PAL.text, accent = PAL.accent) {
+  const k = h / 140; // design space 120x140, origin top-left
+  const X = (x: number) => cx + (x - 60) * k, Y = (y: number) => cy + (y - 70) * k;
+  const line = (pts: [number, number][]) => { c.beginPath(); pts.forEach(([x, y], i) => (i ? c.lineTo(X(x), Y(y)) : c.moveTo(X(x), Y(y)))); c.stroke(); };
+  c.save(); c.lineCap = "round"; c.lineJoin = "round"; c.lineWidth = Math.max(3, 4 * k); c.strokeStyle = color; c.fillStyle = color;
+  const bob = Math.sin(t * 2.2) * 1.5; // gentle idle bob
+  c.beginPath(); c.arc(X(60), Y(26 + bob), 17 * k, 0, Math.PI * 2); c.fillStyle = PAL.bg; c.fill(); c.stroke(); c.fillStyle = color;
+  const ey = pose === "write" ? 28 : 24;
+  for (const ex of [pose === "write" ? 55 : 54, 66]) { c.beginPath(); c.arc(X(ex), Y(ey + bob), 1.9 * k, 0, Math.PI * 2); c.fill(); }
+  c.lineWidth = Math.max(2, 3 * k);
+  if (pose === "think") line([[54, 34 + bob], [66, 34 + bob]]); else { c.beginPath(); c.arc(X(60), Y(30 + bob), 7 * k, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }
+  c.lineWidth = Math.max(3, 4 * k);
+  line([[60, 43], [60, 87]]); line([[60, 87], [43, 120]]); line([[60, 87], [77, 120]]);
+  if (pose === "wave") {
+    line([[60, 56], [40, 76]]);
+    const a = Math.sin(t * 7) * 0.35; const ex = 60 + 24 * Math.cos(-0.7 + a), ey2 = 56 + 24 * Math.sin(-0.7 + a); line([[60, 56], [ex, ey2]]);
+  } else if (pose === "think") {
+    line([[60, 56], [40, 76]]); line([[60, 56], [72, 64], [64, 48]]);
+    c.fillStyle = accent; c.font = `800 ${Math.round(22 * k)}px ${FONT}`; c.textAlign = "center"; c.fillText("?", X(96), Y(26)); c.fillStyle = color;
+  } else {
+    rr(c, X(44), Y(64), 34 * k, 26 * k, 3 * k); c.fillStyle = accent; c.fill(); c.strokeStyle = accent; c.stroke(); c.strokeStyle = color;
+    line([[60, 56], [50, 70]]); line([[60, 56], [76, 70]]);
+    const j = Math.sin(t * 14) * 2; c.lineWidth = Math.max(2, 3 * k); line([[82, 58 + j], [70, 70]]);
+  }
+  c.restore();
+}
 
 const clamp = (x: number, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const seg = (t: number, a: number, b: number) => clamp((t - a) / (b - a));      // progress of t within [a,b]
@@ -198,8 +228,19 @@ function drawSceneInner(c: SKRSContext2D, W: number, H: number, t: number, dur: 
       if (s.caption) { c.save(); c.globalAlpha = seg(t, dur * 0.6, dur * 0.85); text(c, s.caption, W / 2, H * 0.6, Math.round(W / 20), PAL.amber, 700, "center", W * 0.86); c.restore(); }
       break;
     }
+    case "james": {
+      const a = outCubic(seg(t, 0, 0.4));
+      drawJames(c, W / 2, H * 0.8, H * 0.2, s.pose ?? "write", t); // below the caption zone (captions sit at 18-70% of frame height)
+      c.save(); c.globalAlpha = a;
+      const bw = W * 0.86, bh = W * 0.3, bx = (W - bw) / 2, by = H * 0.2;
+      rr(c, bx, by, bw, bh, 28); c.fillStyle = PAL.panel; c.fill(); c.lineWidth = 3; c.strokeStyle = PAL.amber; c.stroke();
+      text(c, s.say, W / 2, by + bh * 0.58, Math.round(W / 15), PAL.text, 700, "center", bw * 0.88);
+      text(c, s.label ?? "James", W / 2, by - 18, Math.round(W / 30), PAL.amber, 700); c.restore();
+      break;
+    }
     case "endcard": {
       const a = outCubic(seg(t, 0, 0.5));
+      if (s.james !== false) { c.save(); c.globalAlpha = a; drawJames(c, W / 2, H * 0.81, H * 0.17, "wave", t); text(c, "— James", W / 2, H * 0.915, Math.round(W / 26), PAL.mute, 600); c.restore(); }
       c.save(); c.globalAlpha = a; text(c, s.title, W / 2, H * 0.40 + (1 - a) * 24, Math.round(W / 9), PAL.text, 800, "center", W * 0.9);
       c.fillStyle = PAL.amber; c.fillRect(W * 0.38, H * 0.425, W * 0.24, 6);
       s.tagline.split(/(?<=\.)\s+/).forEach((ln, i) => text(c, ln, W / 2, H * 0.49 + i * W * 0.055, Math.round(W / 24), PAL.mute, 500, "center", W * 0.84)); c.restore();
