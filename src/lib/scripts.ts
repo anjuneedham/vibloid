@@ -6,6 +6,9 @@ import { getLLM, type LLM } from "./llm";
 import { logCost } from "./queue";
 import { winnersContext } from "./analytics";
 import { channelForProject } from "./channels";
+import { styleContext, templateContext, priorScriptTexts, overlapRatio, MAX_OVERLAP } from "./style";
+import { maxNarrationChars } from "./providers/tts";
+import { directVisuals } from "./visual-director";
 
 export const STYLES = {
   seven_habits: "Listicle: '7 money habits ...' style; each beat is one habit with a concrete example and number.",
@@ -82,9 +85,9 @@ export function renderBlockers(b: ScriptBody, items: FactItem[], channel?: { kin
   return out;
 }
 
-export async function createProject(input: { title: string; format: "short" | "long"; topic?: string; clipIds?: string[]; channelId?: string }) {
-  const r = await getPool().query(`insert into projects (title,format,topic,clip_ids,channel_id) values ($1,$2,$3,$4,$5) returning *`,
-    [input.title, input.format, input.topic ?? null, input.clipIds ?? [], input.channelId ?? null]);
+export async function createProject(input: { title: string; format: "short" | "long"; topic?: string; clipIds?: string[]; channelId?: string; brief?: { current_event?: string; style?: string; hook_idea?: string } }) {
+  const r = await getPool().query(`insert into projects (title,format,topic,clip_ids,channel_id,brief) values ($1,$2,$3,$4,$5,$6) returning *`,
+    [input.title, input.format, input.topic ?? null, input.clipIds ?? [], input.channelId ?? null, JSON.stringify(input.brief ?? {})]);
   return r.rows[0];
 }
 
@@ -110,7 +113,9 @@ export async function generateScript(projectId: string, opts: { style: Style; ll
     const text = (c.words ?? []).filter((w: any) => w.start >= Number(c.start_s) - 0.01 && w.end <= Number(c.end_s) + 0.01).map((w: any) => w.w).join(" ");
     return `- clip_ref ${c.id}: "${text}"`;
   }).join("\n");
-  const length = p.format === "short" ? "SHORT (about 150 words, under 60 seconds)" : "LONG-FORM (1200-1800 words)";
+  // Long-form length is bound by the voice-credit budget (Flash: 0.5 credit/char), not just minutes: ~5.9 chars per spoken word.
+  const maxChars = maxNarrationChars(), maxWords = Math.floor(maxChars / 5.9);
+  const length = p.format === "short" ? "SHORT (about 150 words, under 60 seconds)" : `LONG-FORM (about ${maxWords - 100}-${maxWords} words, ~10 minutes, and HARD LIMIT ${maxChars} characters of narration in total, counting hook, promise, every beat and the CTA)`;
   const user = `Topic: ${p.topic ?? p.title}\nFormat: ${length}\nStyle: ${STYLES[opts.style]}\n${clipTxt ? `\nClips you may reference as evidence/quotes (inside your own commentary):\n${clipTxt}\n` : ""}${p.brief?.hook_idea ? `\nHook idea from the weekly plan: ${p.brief.hook_idea}\n` : ""}${opts.feedback ? `\nRevision feedback: ${opts.feedback}\n` : ""}`;
   const winners = await winnersContext();
   const channel = await channelForProject(projectId);
@@ -119,13 +124,33 @@ export async function generateScript(projectId: string, opts: { style: Style; ll
   const addenda = [
     read("prompts/visuals.md") + `\nAVAILABLE DATASETS:\n${datasets.length ? datasets.map((d: any) => `- "${d.name}" (${d.kind}; source: ${d.source}${d.as_of ? `; as of ${d.as_of}` : ""})`).join("\n") : "(none: do not use charts)"}`,
     read("prompts/james.md"),
+    p.brief?.current_event ? read("prompts/trend-topic.md") + `\nCURRENT_EVENT: ${String(p.brief.current_event).slice(0, 600)}` : "",
+    templateContext(opts.style === "story_motivation" ? "story" : undefined),
+    await styleContext(projectId),
     channel?.niche === "trading" ? read("prompts/trading.md") : "",
     channel?.kind === "brand" ? read("prompts/brand.md").replaceAll("{{APP}}", channel.voice?.app?.name ?? "the app").replaceAll("{{BLURB}}", channel.voice?.app?.blurb ? `(${channel.voice.app.blurb})` : "") : "",
     winners,
   ].filter(Boolean);
   const system = read("prompts/script.md") + "\n\n" + addenda.join("\n\n");
-  const { data, usage } = await (opts.llm ?? getLLM()).json({ system, user, schema: ScriptBody, maxTokens: p.format === "short" ? 2500 : 8000 });
-  await logCost({ jobId: opts.jobId, projectId, provider: "anthropic", unit: "tokens", quantity: usage.inputTokens + usage.outputTokens, costUsd: usage.costUsd });
+  const llm = opts.llm ?? getLLM();
+  const prior = await priorScriptTexts(projectId);
+  const maxTokens = p.format === "short" ? 2500 : 8000;
+  let { data, usage } = await llm.json({ system, user, schema: ScriptBody, maxTokens, role: "main" });
+  let spent = usage;
+  // Originality gate: reused phrasing or an over-long long-form script gets one rewrite with the problem named.
+  const problems = (b: ScriptBody) => [
+    ...(overlapRatio(scriptText(b), prior) > MAX_OVERLAP ? [`${Math.round(overlapRatio(scriptText(b), prior) * 100)}% of its phrases repeat earlier scripts. Rewrite with fresh wording and new examples.`] : []),
+    ...(p.format === "long" && scriptText(b).length > maxChars ? [`narration is ${scriptText(b).length} characters, over the ${maxChars} limit. Cut to fit.`] : []),
+  ];
+  const first = problems(data);
+  if (first.length) {
+    const retry = await llm.json({ system, user: `${user}\nYour previous draft was rejected: ${first.join(" ")}\nWrite a new full script.`, schema: ScriptBody, maxTokens, role: "main" });
+    data = retry.data; spent = { ...retry.usage, inputTokens: spent.inputTokens + retry.usage.inputTokens, outputTokens: spent.outputTokens + retry.usage.outputTokens, costUsd: spent.costUsd + retry.usage.costUsd };
+    const left = problems(data);
+    if (left.length) throw new Error("script rejected after rewrite: " + left.join(" "));
+  }
+  await logCost({ jobId: opts.jobId, projectId, provider: "anthropic", unit: "tokens", quantity: spent.inputTokens + spent.outputTokens, costUsd: spent.costUsd });
+  if (p.format === "long") data = await directVisuals(data, { llm, projectId, jobId: opts.jobId, datasets: datasets.map((d: any) => d.name) }); // Fable pass, long-form only
   return saveScript(projectId, data);
 }
 

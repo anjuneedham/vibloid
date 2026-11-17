@@ -123,7 +123,7 @@ export async function weeklyReport(opts: { llm?: LLM; jobId?: string; now?: Date
   const week = mondayOf(opts.now ?? new Date());
   const ins = await computeInsights(28);
   const user = `Week starting ${week}.\n\nDATA (JSON):\n${JSON.stringify({ sampleSize: ins.sampleSize, sampleWarning: ins.sampleWarning, topVideos: ins.topVideos, byFormat: ins.byFormat, byTopic: ins.byTopic, byHourUtc: ins.byHourUtc, topHooks: ins.topHooks }, null, 1)}`;
-  const { data, usage } = await (opts.llm ?? getLLM()).json({ system: fs.readFileSync(path.resolve("prompts/weekly-report.md"), "utf8"), user, schema: Report, maxTokens: 3000 });
+  const { data, usage } = await (opts.llm ?? getLLM()).json({ system: fs.readFileSync(path.resolve("prompts/weekly-report.md"), "utf8"), user, schema: Report, maxTokens: 3000, role: "light" });
   await logCost({ jobId: opts.jobId, provider: "anthropic", unit: "tokens", quantity: usage.inputTokens + usage.outputTokens, costUsd: usage.costUsd });
   if (ins.sampleWarning && !data.sample_warning) data.sample_warning = ins.sampleWarning;
   await db.query(`insert into weekly_reports (week_start, report) values ($1,$2) on conflict (week_start) do update set report=excluded.report`, [week, JSON.stringify(data)]);

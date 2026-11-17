@@ -10,5 +10,5 @@ export async function POST(req: Request) {
   const denied = requireOwner(req); if (denied) return denied;
   const b = await req.json();
   if (!b.title || !["short", "long"].includes(b.format)) return Response.json({ error: "title and format required" }, { status: 400 });
-  return Response.json({ project: await createProject(b) }, { status: 201 });
+  return Response.json({ project: await createProject({ ...b, brief: b.brief && typeof b.brief === "object" ? { current_event: String(b.brief.current_event ?? "").slice(0, 600) || undefined, style: b.brief.style, hook_idea: b.brief.hook_idea } : undefined }) }, { status: 201 });
 }

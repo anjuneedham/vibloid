@@ -4,7 +4,7 @@ import path from "node:path";
 import { getPool } from "./db";
 import { getStorage } from "./storage";
 import { assertProjectRenderable } from "./gates";
-import { getTTSProvider, type TTSProvider } from "./providers/tts";
+import { getTTSProvider, assertVoiceCredits, type TTSProvider } from "./providers/tts";
 import { getImageProvider, type ImageProvider } from "./providers/images";
 import { buildAss, hexToAss, buildSrt, buildVtt } from "./captions";
 import { DIMS, type Segment, type Timeline } from "./timeline";
@@ -51,6 +51,7 @@ export async function assembleProject(projectId: string, o: { tts?: TTSProvider;
     ...b.beats.map((x: any) => ({ kind: "beat" as const, text: x.narration, query: x.visual_query, on: x.on_screen_text, clipRef: x.clip_ref, beat: x, scene: x.visual_type === "scene" ? (x.scene as Scene) : undefined })),
     { kind: "cta", text: b.cta, query: "city skyline sunrise", scene: b.scenes?.cta as Scene | undefined },
   ];
+  assertVoiceCredits(parts.map((x) => x.text), process.env.TTS_PROVIDER ?? "mock"); // stop before spending credits
   await db.query("delete from assets where project_id=$1 and kind in ('audio','image','video','caption','timeline','music')", [projectId]);
 
   const segments: Segment[] = [];

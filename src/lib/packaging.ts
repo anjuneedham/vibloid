@@ -20,8 +20,9 @@ const PackOut = z.object({
   top3: z.array(z.object({ title: z.string(), reasoning: z.string() })).min(1).max(5),
   description: z.string(),
   tags: z.array(z.string()).max(30),
-  thumbnail_concepts: z.array(z.object({ text: z.string(), subject_query: z.string(), layout: z.enum(["left", "center", "bottom"]) })).min(1).max(3),
+  thumbnail_concepts: z.array(z.object({ text: z.string(), subject_query: z.string(), layout: z.enum(["left", "center", "bottom"]) })).min(1).max(3).optional(),
 });
+const ThumbOut = z.object({ thumbnail_concepts: z.array(z.object({ text: z.string(), subject_query: z.string(), layout: z.enum(["left", "center", "bottom"]) })).min(1).max(3) });
 const JudgeOut = z.object({ results: z.array(z.object({ title: z.string(), delivers: z.boolean(), issues: z.array(z.string()).default([]) })) });
 
 const COUNT = /\b(\d+)\s+(ways|habits|tips|rules|steps|things|mistakes|lessons|reasons|secrets|myths|ideas|strategies|principles)\b/i;
@@ -67,7 +68,7 @@ export async function buildPackaging(projectId: string, opts: { llm?: LLM; image
   const tl: Timeline | null = tlRow ? JSON.parse(fs.readFileSync(storage.localPath(tlRow.storage_key), "utf8")) : null;
 
   const scriptStr = `HOOK: ${script.hook}\nPROMISE: ${script.promise}\n${script.beats.map((b, i) => `${i + 1}. ${b.narration}`).join("\n")}\nCTA: ${script.cta}`;
-  const pack = await llm.json({ system: fs.readFileSync(path.resolve("prompts/packaging.md"), "utf8"), user: `Format: ${p.format}\nTopic: ${p.topic ?? p.title}\n\nSCRIPT:\n${scriptStr}`, schema: PackOut, maxTokens: 3000 });
+  const pack = await llm.json({ system: fs.readFileSync(path.resolve("prompts/packaging.md"), "utf8"), user: `Format: ${p.format}\nTopic: ${p.topic ?? p.title}\n\nSCRIPT:\n${scriptStr}`, schema: PackOut, maxTokens: 3000, role: "main" });
   await logCost({ jobId: opts.jobId, projectId, provider: "anthropic", unit: "tokens", quantity: pack.usage.inputTokens + pack.usage.outputTokens, costUsd: pack.usage.costUsd });
 
   // Promise-delivery validator: rules first, then an LLM judge on what survives.
@@ -76,7 +77,7 @@ export async function buildPackaging(projectId: string, opts: { llm?: LLM; image
   const survivors = ruled.filter((r) => r.issues.length === 0).map((r) => r.title);
   const judged = new Map<string, { delivers: boolean; issues: string[] }>();
   if (survivors.length) {
-    const j = await llm.json({ system: fs.readFileSync(path.resolve("prompts/promise-check.md"), "utf8"), user: `TITLES:\n${survivors.map((t) => `- ${t}`).join("\n")}\n\nSCRIPT:\n${scriptStr}`, schema: JudgeOut });
+    const j = await llm.json({ system: fs.readFileSync(path.resolve("prompts/promise-check.md"), "utf8"), user: `TITLES:\n${survivors.map((t) => `- ${t}`).join("\n")}\n\nSCRIPT:\n${scriptStr}`, schema: JudgeOut, role: "light" });
     await logCost({ jobId: opts.jobId, projectId, provider: "anthropic", unit: "tokens", quantity: j.usage.inputTokens + j.usage.outputTokens, costUsd: j.usage.costUsd });
     j.data.results.forEach((r) => judged.set(r.title, r));
   }
@@ -87,12 +88,19 @@ export async function buildPackaging(projectId: string, opts: { llm?: LLM; image
   });
   const chosen = promiseCheck.find((c) => c.ok)?.title ?? null;
 
+  // Thumbnail concepts: the click-deciding asset gets the visual model (Fable); falls back to the main model's concepts.
+  const event = p.brief?.current_event ? `\nCURRENT_EVENT (hint at it only with neutral, factual visuals): ${String(p.brief.current_event).slice(0, 300)}` : "";
+  const thumbs = await llm.json({ system: fs.readFileSync(path.resolve("prompts/packaging.md"), "utf8") + `\nFor this call output ONLY: {"thumbnail_concepts":[...]} (exactly 3).`, user: `Format: ${p.format}\nTopic: ${p.topic ?? p.title}\nBest titles: ${pack.data.top3.map((t) => t.title).join(" | ")}${event}\n\nSCRIPT:\n${scriptStr}`, schema: ThumbOut, maxTokens: 1500, role: "visual" }).catch(() => null);
+  if (thumbs) await logCost({ jobId: opts.jobId, projectId, provider: "anthropic", unit: "tokens", quantity: thumbs.usage.inputTokens + thumbs.usage.outputTokens, costUsd: thumbs.usage.costUsd });
+  const thumbConcepts = thumbs?.data.thumbnail_concepts ?? pack.data.thumbnail_concepts ?? [];
+  if (!thumbConcepts.length) throw new Error("no thumbnail concepts returned");
+
   // Thumbnails
   const images = opts.images ?? getImageProvider();
   await db.query("delete from assets where project_id=$1 and kind='thumbnail'", [projectId]);
   const concepts: any[] = [];
-  for (let i = 0; i < pack.data.thumbnail_concepts.length; i++) {
-    const c = pack.data.thumbnail_concepts[i];
+  for (let i = 0; i < thumbConcepts.length; i++) {
+    const c = thumbConcepts[i];
     const words = c.text.trim().split(/\s+/).slice(0, 4); // hard cap at 4 words
     const bgKey = `projects/${projectId}/thumb-bg${i}.png`;
     const lic = (await images.fetch(c.subject_query, storage.localPath(bgKey), { orientation: "landscape" })).license;

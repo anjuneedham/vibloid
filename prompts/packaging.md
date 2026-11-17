@@ -13,3 +13,8 @@ Hard rules:
 - No guaranteed-returns, "get rich quick", "secret they don't want you to know", or similar hype.
 
 Output JSON: {"titles":[{"title":string,"angle":string}],"top3":[{"title":string,"reasoning":string}],"description":string,"tags":string[],"thumbnail_concepts":[{"text":string,"subject_query":string,"layout":"left"|"center"|"bottom"}]}
+
+Thumbnail rules (concepts are made for high click-through to a niche audience, not for tricking anyone):
+- One idea per thumbnail: one subject, one short phrase (4 words or fewer). The text must add curiosity or tension, not repeat the title.
+- If a current event is part of the video, the thumbnail may hint at it with a neutral, factual visual (e.g. "empty wallet", "price tag") but must not show fake headlines, fake charts, fake income, real people's faces or logos.
+- Make the 3 concepts different from each other (different subject, different phrase), so we can A/B them.

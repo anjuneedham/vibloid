@@ -8,7 +8,7 @@ import { OpenAITranscriptProvider } from "./transcript";
 import type { Word } from "./transcript";
 import { httpError, wrapProvider } from "../resilience";
 
-export type TTSResult = { audioPath: string; durationS: number; words: Word[]; costUsd: number; provider: string; chars: number };
+export type TTSResult = { audioPath: string; durationS: number; words: Word[]; costUsd: number; provider: string; chars: number; credits?: number };
 export interface TTSProvider {
   synthesize(text: string, outPath: string, opts?: { voice?: string }): Promise<TTSResult>;
 }
@@ -40,6 +40,23 @@ export function charsToWords(chars: string[], starts: number[], ends: number[]):
   return words;
 }
 
+/** Default to a cheap model: Flash v2.5 bills 0.5 credit per character (about 4,500 credits for 10 minutes of narration). */
+export const ELEVENLABS_DEFAULT_MODEL = "eleven_flash_v2_5";
+export const elevenModel = () => process.env.ELEVENLABS_MODEL ?? ELEVENLABS_DEFAULT_MODEL;
+/** Credits per character: Flash/Turbo models are half price, Multilingual v2/v3 are 1 per character. */
+export const creditsPerChar = (model = elevenModel()) => (/flash|turbo/i.test(model) ? 0.5 : 1);
+export const estimateCredits = (chars: number, model = elevenModel()) => Math.ceil(chars * creditsPerChar(model));
+export const maxCreditsPerVideo = () => Number(process.env.ELEVENLABS_MAX_CREDITS_PER_VIDEO ?? 4500);
+/** Character budget for one video's narration under the credit cap (4,500 credits on Flash = 9,000 characters). */
+export const maxNarrationChars = () => Math.floor(maxCreditsPerVideo() / creditsPerChar());
+
+/** Throws before any audio is generated if the narration would spend more credits than the per-video cap. */
+export function assertVoiceCredits(texts: string[], provider: string) {
+  if (provider !== "elevenlabs") return;
+  const chars = texts.reduce((n, t) => n + t.length, 0), credits = estimateCredits(chars), cap = maxCreditsPerVideo();
+  if (credits > cap) throw new Error(`render blocked: narration is ${chars} characters = ~${credits} ElevenLabs credits on ${elevenModel()}, over the ${cap} cap. Shorten the script (max ~${maxNarrationChars()} characters) or raise ELEVENLABS_MAX_CREDITS_PER_VIDEO.`);
+}
+
 export class ElevenLabsTTSProvider implements TTSProvider {
   async synthesize(text: string, outPath: string, opts: { voice?: string } = {}): Promise<TTSResult> {
     const key = process.env.ELEVENLABS_API_KEY;
@@ -47,7 +64,7 @@ export class ElevenLabsTTSProvider implements TTSProvider {
     const voice = opts.voice ?? process.env.ELEVENLABS_VOICE_ID ?? "21m00Tcm4TlvDq8ikWAM";
     const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice}/with-timestamps`, {
       method: "POST", headers: { "xi-api-key": key, "content-type": "application/json" },
-      body: JSON.stringify({ text, model_id: process.env.ELEVENLABS_MODEL ?? "eleven_multilingual_v2" }),
+      body: JSON.stringify({ text, model_id: elevenModel() }),
     });
     if (!res.ok) throw await httpError(res, "ElevenLabs");
     const j: any = await res.json();
@@ -58,8 +75,9 @@ export class ElevenLabsTTSProvider implements TTSProvider {
     const a = j.alignment ?? j.normalized_alignment;
     const words = charsToWords(a.characters, a.character_start_times_seconds, a.character_end_times_seconds);
     const dur = words.length ? words[words.length - 1].end : 0;
-    const rate = Number(process.env.ELEVENLABS_USD_PER_1K_CHARS ?? 0.3); // estimate; check your plan
-    return { audioPath: outPath, durationS: dur, words, chars: text.length, costUsd: (text.length / 1000) * rate, provider: "elevenlabs" };
+    const credits = estimateCredits(text.length);
+    const usdPerCredit = Number(process.env.ELEVENLABS_USD_PER_CREDIT ?? 0.0003); // estimate; check your plan
+    return { audioPath: outPath, durationS: dur, words, chars: text.length, credits, costUsd: credits * usdPerCredit, provider: "elevenlabs" };
   }
 }
 

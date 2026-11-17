@@ -42,7 +42,7 @@ export async function planBatch(o: { attentionChannelId: string; brandChannelId:
     `AVAILABLE DATASETS:\n${datasets.length ? datasets.map((d) => `- "${d.name}" (source: ${d.source})`).join("\n") : "(none)"}`,
     winners,
   ].filter(Boolean).join("\n\n");
-  const { data, usage } = await (o.llm ?? getLLM()).json({ system: fs.readFileSync(path.resolve("prompts/batch-ideas.md"), "utf8"), user, schema: Ideas, maxTokens: 3000 });
+  const { data, usage } = await (o.llm ?? getLLM()).json({ system: fs.readFileSync(path.resolve("prompts/batch-ideas.md"), "utf8"), user, schema: Ideas, maxTokens: 3000, role: "main" });
   await logCost({ provider: "anthropic", unit: "tokens", quantity: usage.inputTokens + usage.outputTokens, costUsd: usage.costUsd });
   if (data.attention.length < nA || data.brand.length < nB) throw new Error(`model returned ${data.attention.length}+${data.brand.length} ideas, need ${nA}+${nB}; try again`);
   const attention = distinctStyles(data.attention.slice(0, nA)), brandIdeas = data.brand.slice(0, nB);

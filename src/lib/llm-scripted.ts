@@ -6,7 +6,7 @@ import type { LLM } from "./llm";
  * It recognizes each prompt by its system text and returns a canned, schema-valid answer.
  */
 export class ScriptedLLM implements LLM {
-  async json<T>(o: { system: string; user: string; schema: z.ZodType<T> }) {
+  async json<T>(o: { system: string; user: string; schema: z.ZodType<T>; role?: string }) {
     return { data: o.schema.parse(this.answer(o.system, o.user)), usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 } };
   }
 
