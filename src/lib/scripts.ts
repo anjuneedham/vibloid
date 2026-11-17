@@ -123,7 +123,7 @@ export async function generateScript(projectId: string, opts: { style: Style; ll
   const read = (f: string) => fs.readFileSync(path.resolve(f), "utf8");
   const addenda = [
     read("prompts/visuals.md") + `\nAVAILABLE DATASETS:\n${datasets.length ? datasets.map((d: any) => `- "${d.name}" (${d.kind}; source: ${d.source}${d.as_of ? `; as of ${d.as_of}` : ""})`).join("\n") : "(none: do not use charts)"}`,
-    read("prompts/james.md"),
+    channel?.niche === "gold" ? read("prompts/gold.md") : read("prompts/james.md"), // The Gold Journal has its own narrator; James belongs to the trading channels
     p.brief?.current_event ? read("prompts/trend-topic.md") + `\nCURRENT_EVENT: ${String(p.brief.current_event).slice(0, 600)}` : "",
     templateContext(opts.style === "story_motivation" ? "story" : undefined),
     await styleContext(projectId),

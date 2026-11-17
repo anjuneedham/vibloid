@@ -2,7 +2,7 @@ import { getPool } from "./db";
 import { getStorage } from "./storage";
 import { renderBlockers } from "./scripts";
 import { assertRenderable, type Rights } from "./rights";
-import { DISCLAIMER, TRADING_RISK } from "./packaging";
+import { DISCLAIMER, TRADING_RISK, GOLD_RISK } from "./packaging";
 import { QUOTA_COST, QuotaError, reserveQuota, getYouTubeClient, type YouTubeClient } from "./youtube";
 import { enqueue } from "./queue";
 import { channelForProject } from "./channels";
@@ -28,6 +28,7 @@ export async function computeChecklist(projectId: string): Promise<{ auto: Omit<
   if (!disclaimer) problems.push("description is missing the financial disclaimer");
   const ch = await channelForProject(projectId);
   if (ch?.niche === "trading" && !pk?.description?.includes(TRADING_RISK)) problems.push("description is missing the trading risk warning");
+  if (ch?.niche === "gold" && !pk?.description?.includes(GOLD_RISK)) problems.push("description is missing the gold risk warning");
   const footer = ch?.disclosure?.description_footer;
   if (footer && !pk?.description?.includes(footer)) problems.push("description is missing this channel's required disclosure (own-product / sponsorship)");
   const music = (await db.query("select license from assets where project_id=$1 and kind in ('music','image','video','thumbnail')", [projectId])).rows;

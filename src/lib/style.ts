@@ -27,15 +27,18 @@ const flat = (b: ScriptBody) => [b.hook, b.promise, ...b.beats.map((x) => x.narr
 
 /** Previously written scripts (own channel history) as text, newest first. */
 export async function priorScriptTexts(excludeProjectId?: string, limit = 40): Promise<string[]> {
+  // Same channel only: each channel keeps its own voice and its own originality history.
   const rows = (await getPool().query(
-    "select distinct on (s.project_id) s.body from scripts s where ($1::uuid is null or s.project_id <> $1) order by s.project_id, s.version desc limit $2", [excludeProjectId ?? null, limit])).rows;
+    `select distinct on (s.project_id) s.body from scripts s join projects p on p.id=s.project_id
+     where ($1::uuid is null or s.project_id <> $1) and p.channel_id is not distinct from (select channel_id from projects where id=$1)
+     order by s.project_id, s.version desc limit $2`, [excludeProjectId ?? null, limit])).rows;
   return rows.map((r) => flat(r.body));
 }
 
 /** Voice reference: a few earlier hooks/openings to match tone and cadence. Told explicitly not to copy. */
 export async function styleContext(excludeProjectId?: string): Promise<string> {
   const rows = (await getPool().query(
-    "select distinct on (s.project_id) s.body from scripts s join projects p on p.id=s.project_id where p.status in ('approved','scheduled','published','packaged','rendered') and ($1::uuid is null or s.project_id <> $1) order by s.project_id, s.version desc limit 4", [excludeProjectId ?? null])).rows;
+    "select distinct on (s.project_id) s.body from scripts s join projects p on p.id=s.project_id where p.status in ('approved','scheduled','published','packaged','rendered') and ($1::uuid is null or s.project_id <> $1) and p.channel_id is not distinct from (select channel_id from projects where id=$1) order by s.project_id, s.version desc limit 4", [excludeProjectId ?? null])).rows;
   if (!rows.length) return "";
   const ex = rows.map((r) => `- Hook: "${r.body.hook}"\n  Opening beat: "${String(r.body.beats?.[0]?.narration ?? "").slice(0, 220)}"`).join("\n");
   return `STYLE REFERENCE (our earlier scripts). Match the voice, sentence length and pacing. Do NOT reuse any sentence or distinctive phrase; the content must be new.\n${ex}`;

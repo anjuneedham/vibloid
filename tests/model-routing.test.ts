@@ -58,3 +58,13 @@ describe("visual director", () => {
     expect(await directVisuals(body, { llm })).toBe(body);
   });
 });
+
+describe("The Gold Journal channel", () => {
+  it("has its own risk warning, mentions price risk and costs", async () => {
+    const { GOLD_RISK } = await import("../src/lib/packaging");
+    expect(GOLD_RISK).toMatch(/fall as well as rise/);
+    const prompt = (await import("node:fs")).readFileSync("prompts/gold.md", "utf8");
+    expect(prompt).toMatch(/Never say or imply gold will rise/);
+    expect(prompt).toMatch(/Do not use James/);
+  });
+});

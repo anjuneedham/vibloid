@@ -13,6 +13,7 @@ import type { Timeline } from "./timeline";
 
 export const DISCLAIMER = "This video is for educational and entertainment purposes only and is not financial, investment, tax or legal advice. Investing involves risk, including loss of principal. Past performance does not guarantee future results. Do your own research or speak to a licensed professional.";
 export const TRADING_RISK = "Trading and investing involve substantial risk of loss and are not suitable for everyone. Examples are educational and not a recommendation to buy or sell anything. Past results do not predict future results. You can lose more than you put in.";
+export const GOLD_RISK = "Gold and other precious metals can fall as well as rise in price, and holding them carries storage, spread and liquidity costs. Nothing here is a recommendation to buy or sell, and nothing predicts future prices. Past performance does not guarantee future results.";
 export const AI_DISCLOSURE = "Narration and some visuals in this video are AI-generated or AI-assisted.";
 
 const PackOut = z.object({
@@ -114,7 +115,7 @@ export async function buildPackaging(projectId: string, opts: { llm?: LLM; image
     .map((r) => r.license).filter((l) => l.author).map((l) => `Image: ${l.author} (${l.source})`);
   const attributions = [...new Set((await db.query("select distinct s.attribution, s.url from clips c join sources s on s.id=c.source_id where c.id = any($1) and s.attribution is not null", [p.clip_ids])).rows.map((r) => `Clip source: ${r.attribution}${r.url ? " - " + r.url : ""}`))];
   const ch = await channelForProject(projectId);
-  const description = [pack.data.description.trim(), buildChapters(tl), [...attributions, ...[...new Set(credits)]].join("\n"), ch?.disclosure?.description_footer, AI_DISCLOSURE, DISCLAIMER, ch?.niche === "trading" ? TRADING_RISK : ""].filter(Boolean).join("\n\n");
+  const description = [pack.data.description.trim(), buildChapters(tl), [...attributions, ...[...new Set(credits)]].join("\n"), ch?.disclosure?.description_footer, AI_DISCLOSURE, DISCLAIMER, ch?.niche === "trading" ? TRADING_RISK : "", ch?.niche === "gold" ? GOLD_RISK : ""].filter(Boolean).join("\n\n");
 
   await db.query(
     `insert into packaging (project_id,titles,chosen_title,description,tags,thumbnail_concepts,promise_check) values ($1,$2,$3,$4,$5,$6,$7)
