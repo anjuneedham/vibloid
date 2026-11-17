@@ -120,5 +120,17 @@
       "#riskmanagement",
       "#learntotrade"
     ]
+  },
+  "audio": {
+    "blocks": [
+      {
+        "text": "Page one of five. Meet Leo, a made-up trader with a made-up five thousand dollar account. Before he clicks anything, he writes a plan. Buy at one hundred. Stop at ninety eight. Target at one hundred four.",
+        "file": "assets/james-audio/leo-1-the-plan.b1.mp3"
+      },
+      {
+        "text": "If the stop is hit, he loses two dollars a share. Any trade can lose. He wrote it before the trade, not after. Tomorrow's page: how many shares is that? That's today's page from my notes. See you tomorrow. — James",
+        "file": "assets/james-audio/leo-1-the-plan.b2.mp3"
+      }
+    ]
   }
 }

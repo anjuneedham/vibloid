@@ -120,5 +120,17 @@
       "#riskmanagement",
       "#learntotrade"
     ]
+  },
+  "audio": {
+    "blocks": [
+      {
+        "text": "Page three of five. Leo bought twenty five shares at one hundred, and the price starts to slip. Ninety nine. Then ninety eight. Part of him wants to move the stop lower. His plan says no.",
+        "file": "assets/james-audio/leo-3-the-stop.b1.mp3"
+      },
+      {
+        "text": "The stop is hit. He loses fifty dollars, exactly what he planned. His made-up account is now four thousand nine hundred fifty. Tomorrow's page: what Leo writes down. That's today's page from my notes. See you tomorrow. — James",
+        "file": "assets/james-audio/leo-3-the-stop.b2.mp3"
+      }
+    ]
   }
 }
