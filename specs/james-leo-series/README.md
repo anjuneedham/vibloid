@@ -7,7 +7,7 @@ Each part is **two ElevenLabs blocks** (~15 s each, ~38 words). The exact text f
 | Part | Spec | Audio |
 |---|---|---|
 | 1 plan | `leo-1-the-plan.json` | done, built |
-| 2 size | `leo-2-the-size.json` | block 1 generated (`leo-2-the-size.b1.mp3`); block 2 still to generate (generation was busy); spec not yet updated |
+| 2 size | `leo-2-the-size.json` | done, built |
 | 3 stop | `leo-3-the-stop.json` | done, built (block 1 is 10.3 s, slightly under the 11-16 s target) |
 | 4 journal | `leo-4-the-journal.json` | done, built |
 | 5 rule | `leo-5-the-rule.json` | done, built |

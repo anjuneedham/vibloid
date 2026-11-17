@@ -117,5 +117,17 @@
       "#riskmanagement",
       "#learntotrade"
     ]
+  },
+  "audio": {
+    "blocks": [
+      {
+        "text": "Page two of five. Leo, our made-up trader, decides his risk before anything else. One percent of five thousand dollars is fifty dollars. Each share risks two dollars. So fifty divided by two is twenty five shares.",
+        "file": "assets/james-audio/leo-2-the-size.b1.mp3"
+      },
+      {
+        "text": "The one percent isn't magic, and any amount can be lost. The point is the loss was chosen in advance. Tomorrow's page: the price goes the wrong way. That's today's page from my notes. See you tomorrow. — James",
+        "file": "assets/james-audio/leo-2-the-size.b2.mp3"
+      }
+    ]
   }
 }
