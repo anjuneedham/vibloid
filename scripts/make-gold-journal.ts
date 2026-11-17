@@ -189,7 +189,13 @@ let durs = narration.map((p) => Math.max(2.5, (words(p) / WPM) * 60 + 0.35));
 const audioFile = arg("audio"), audioDir = arg("audio-dir");
 if (audioDir) durs = narration.map((_, i) => probe(path.join(audioDir, `p${String(i).padStart(2, "0")}.mp3`)) + 0.25);
 else if (audioFile) { const total = probe(audioFile), sum = durs.reduce((a, b) => a + b, 0); durs = durs.map((d) => (d * total) / sum); }
-const starts = durs.map((_, i) => durs.slice(0, i).reduce((a, b) => a + b, 0));
+let starts = durs.map((_, i) => durs.slice(0, i).reduce((a, b) => a + b, 0));
+const startsFile = arg("starts"); // exact paragraph start times (seconds) measured from the voiceover; needs --audio
+if (startsFile && audioFile) {
+  starts = JSON.parse(fs.readFileSync(startsFile, "utf8")) as number[];
+  if (starts.length !== narration.length) throw new Error(`--starts has ${starts.length} entries, need ${narration.length}`);
+  const tot = probe(audioFile); durs = starts.map((s, i) => (i + 1 < starts.length ? starts[i + 1] : tot) - s);
+}
 const total = starts[starts.length - 1] + durs[durs.length - 1];
 
 // ---------- captions (phrase cues, proportional to characters inside each paragraph) ----------
@@ -213,7 +219,7 @@ const ass = `[Script Info]\nScriptType: v4.00+\nPlayResX: ${W}\nPlayResY: ${H}\n
 fs.writeFileSync(path.join(OUT, `gold-journal-${SLUG}.srt`), srt);
 fs.writeFileSync(path.join(OUT, `gold-journal-${SLUG}.vtt`), vtt);
 fs.writeFileSync(path.join(OUT, "captions.ass"), ass);
-fs.writeFileSync(path.join(OUT, "timing.json"), JSON.stringify({ mode: audioDir ? "audio-dir" : audioFile ? "audio-scaled" : `estimated-${WPM}wpm`, totalSeconds: total, paragraphs: durs.map((d, i) => ({ i, start: +starts[i].toFixed(2), dur: +d.toFixed(2), text: narration[i].slice(0, 50) })) }, null, 1));
+fs.writeFileSync(path.join(OUT, "timing.json"), JSON.stringify({ mode: audioDir ? "audio-dir" : startsFile && audioFile ? "audio-aligned" : audioFile ? "audio-scaled" : `estimated-${WPM}wpm`, totalSeconds: total, paragraphs: durs.map((d, i) => ({ i, start: +starts[i].toFixed(2), dur: +d.toFixed(2), text: narration[i].slice(0, 50) })) }, null, 1));
 
 // ---------- render ----------
 async function main() {
