@@ -17,6 +17,8 @@ export default function Insights() {
         <span className="good">{msg}</span>
       </div>
 
+      {data?.ypp?.map((y: any) => <YppCard key={y.channelId} y={y} />)}
+
       {ins && (
         <div className="grid">
           <div className="card"><h2>Top videos (28 days)</h2>
@@ -45,5 +47,41 @@ export default function Insights() {
         </div>
       )}
     </>
+  );
+}
+
+const STATUS: Record<string, string> = { full: "Eligible for ad revenue", early: "Eligible for early tier (fan funding only)", not_yet: "Not eligible yet" };
+
+function Bar({ r }: { r: { label: string; current: number; target: number; met: boolean; pct: number } }) {
+  return (
+    <p style={{ margin: "6px 0" }}>
+      {r.label}: <strong className={r.met ? "good" : ""}>{r.current.toLocaleString("en-US")}</strong> / {r.target.toLocaleString("en-US")}
+      <span style={{ display: "block", height: 6, background: "var(--border, #333)", borderRadius: 3 }}><span style={{ display: "block", height: 6, width: `${Math.round(r.pct * 100)}%`, background: "var(--accent)", borderRadius: 3 }} /></span>
+    </p>
+  );
+}
+
+function YppCard({ y }: { y: any }) {
+  const p = y.progress;
+  if (!p) return <div className="card"><h2>YouTube Partner Program · {y.channel}</h2><p className="mute">No channel data yet. Run “Refresh data &amp; write report”; numbers appear after the first pull.</p></div>;
+  const f = p.tiers.full, e = p.tiers.early, pr = p.projection;
+  return (
+    <div className="card">
+      <h2>YouTube Partner Program · {y.channel}</h2>
+      <p><strong>{STATUS[p.status]}</strong> <span className="mute">· data as of {y.asOf}</span></p>
+      <div className="grid">
+        <div><h2>Ad revenue tier</h2><Bar r={f.subs} /><Bar r={f.hours} /><p className="mute" style={{ margin: 0 }}>or</p><Bar r={f.shorts} /></div>
+        <div><h2>Early tier (fan funding)</h2><Bar r={e.subs} />{e.uploads && <Bar r={e.uploads} />}<Bar r={e.hours} /><p className="mute" style={{ margin: 0 }}>or</p><Bar r={e.shorts} /></div>
+      </div>
+      {p.status !== "full" && (
+        <p>
+          {pr.viewsNeeded ? <>~{pr.viewsNeeded.toLocaleString("en-US")} more long-form views at your current average watch time. </> : null}
+          {pr.weeksToFull != null ? <>At the last 28 days’ pace: about {pr.weeksToFull} week{pr.weeksToFull === 1 ? "" : "s"} to the ad-revenue tier.</> : <span className="mute">Not enough recent growth to project a date.</span>}
+        </p>
+      )}
+      <p>{p.nextStep}</p>
+      {y.subscribersHidden && <p className="mute">⚠ This channel hides its subscriber count, so subscribers show as 0.</p>}
+      <p className="mute" style={{ fontSize: 12 }}>Watch hours count long-form and live only (not Shorts). Analytics can’t filter by privacy, and uploads are counted from what Vibloid published. YouTube Studio → Earn is authoritative.</p>
+    </div>
   );
 }

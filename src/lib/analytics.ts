@@ -6,18 +6,28 @@ import { getLLM, type LLM } from "./llm";
 import { logCost } from "./queue";
 import { pacificDay } from "./youtube";
 import { httpError } from "./resilience";
+import { evaluateYpp, type YppSnapshot } from "./ypp";
 
 export type VideoStats = { views: number; avgViewDurationS: number | null; ctr: number | null; subsGained: number; estMinutesWatched: number | null; retention: number[] | null };
-export interface AnalyticsClient { fetchVideoStats(videoId: string, day: string, channelId?: string | null): Promise<VideoStats> }
+/** Channel-level numbers behind the YPP tracker (see src/lib/ypp.ts). `subscribers` is null when the channel hides its count. */
+export type ChannelStats = YppSnapshot;
+export interface AnalyticsClient {
+  fetchVideoStats(videoId: string, day: string, channelId?: string | null): Promise<VideoStats>;
+  fetchChannelStats(day: string, channelId?: string | null): Promise<ChannelStats>;
+}
 
 /** Deterministic fake numbers for dev/tests. */
 export class MockAnalyticsClient implements AnalyticsClient {
-  constructor(private fixed?: Partial<VideoStats>) {}
+  constructor(private fixed?: Partial<VideoStats>, private channel?: Partial<ChannelStats>) {}
   async fetchVideoStats(videoId: string): Promise<VideoStats> {
     const h = [...videoId].reduce((a, c) => a + c.charCodeAt(0), 0);
     return { views: 100 + (h % 900), avgViewDurationS: 20 + (h % 30), ctr: 0.03 + (h % 7) / 100, subsGained: h % 9, estMinutesWatched: 50 + (h % 200), retention: [1, 0.8, 0.6, 0.5, 0.4], ...this.fixed };
   }
+  async fetchChannelStats(): Promise<ChannelStats> { return { ...MOCK_CHANNEL, ...this.channel }; }
 }
+
+/** Mock channel: past the early tier, short of 4,000 hours. */
+const MOCK_CHANNEL: ChannelStats = { subscribers: 640, longWatchMinutes365: 120_000, shortsViews90: 400_000, longAvgViewDurationS: 240, longWatchMinutes28: 12_000, subsGained28: 60 };
 
 /** YouTube Analytics API. Not exercised by the test suite (needs live credentials). The CTR metric name is best-effort and tolerated to fail. */
 export class GoogleAnalyticsClient implements AnalyticsClient {
@@ -38,6 +48,39 @@ export class GoogleAnalyticsClient implements AnalyticsClient {
     try { retention = ((await this.report({ startDate: "2020-01-01", endDate: day, metrics: "audienceWatchRatio", dimensions: "elapsedVideoTimeRatio", filters: `video==${videoId}` })).rows ?? []).map((r: any[]) => r[1]); } catch { /* optional */ }
     return { views: core[0], avgViewDurationS: core[1], subsGained: core[2], estMinutesWatched: core[3], ctr, retention };
   }
+
+  /**
+   * Channel totals for YPP eligibility. Long-form = on-demand + live (Shorts watch time does not count toward the 4,000 hours).
+   * Analytics cannot filter by privacy, so private/unlisted viewing is included (negligible in practice); Studio's Earn tab is authoritative.
+   * Best-effort against live API (creatorContentType value casing is normalised).
+   */
+  async fetchChannelStats(day: string, channelId?: string | null): Promise<ChannelStats> {
+    this.channelId = channelId;
+    const ago = (n: number) => new Date(new Date(day + "T00:00:00Z").getTime() - n * 86400_000).toISOString().slice(0, 10);
+    const byType = async (days: number) => {
+      const rows: any[][] = (await this.report({ startDate: ago(days - 1), endDate: day, dimensions: "creatorContentType", metrics: "views,estimatedMinutesWatched,averageViewDuration,subscribersGained,subscribersLost" })).rows ?? [];
+      const t = { long: { views: 0, minutes: 0, dur: null as number | null }, shorts: { views: 0 }, subsNet: 0 };
+      for (const [type, views, minutes, dur, gained, lost] of rows) {
+        const k = String(type).toUpperCase();
+        if (k === "SHORTS") t.shorts.views += views;
+        else if (k === "VIDEO_ON_DEMAND" || k === "LIVE_STREAM") {
+          t.long.dur = t.long.views + views > 0 ? ((t.long.dur ?? 0) * t.long.views + dur * views) / (t.long.views + views) : t.long.dur; // views-weighted
+          t.long.views += views; t.long.minutes += minutes;
+        }
+        t.subsNet += (gained ?? 0) - (lost ?? 0);
+      }
+      return t;
+    };
+    const [y, q, m] = [await byType(365), await byType(90), await byType(28)];
+    const res = await fetch("https://www.googleapis.com/youtube/v3/channels?" + new URLSearchParams({ part: "statistics", mine: "true" }), { headers: { Authorization: `Bearer ${await this.token(channelId)}` } });
+    if (!res.ok) throw await httpError(res, "channel statistics");
+    const st = ((await res.json()) as any).items?.[0]?.statistics;
+    return {
+      subscribers: !st || st.hiddenSubscriberCount ? null : Number(st.subscriberCount),
+      longWatchMinutes365: y.long.minutes, shortsViews90: q.shorts.views,
+      longAvgViewDurationS: m.long.dur, longWatchMinutes28: m.long.minutes, subsGained28: m.subsNet,
+    };
+  }
 }
 
 export async function pullAnalytics(client: AnalyticsClient, now = new Date()) {
@@ -55,6 +98,42 @@ export async function pullAnalytics(client: AnalyticsClient, now = new Date()) {
     n++;
   }
   return n;
+}
+
+/** One snapshot per connected channel per day (upsert, so it is safe to re-run). */
+export async function pullChannelStats(client: AnalyticsClient, now = new Date()) {
+  const db = getPool();
+  const day = pacificDay(new Date(now.getTime() - 24 * 3600_000));
+  const channels = (await db.query("select id from channels where youtube_refresh_token is not null order by created_at")).rows;
+  for (const c of channels) {
+    const s = await client.fetchChannelStats(day, c.id);
+    await db.query(
+      `insert into channel_snapshots (channel_id,snapshot_date,subscribers,long_watch_minutes_365,shorts_views_90,long_avg_view_duration_s,long_watch_minutes_28,subs_gained_28) values ($1,$2,$3,$4,$5,$6,$7,$8)
+       on conflict (channel_id, snapshot_date) do update set subscribers=excluded.subscribers, long_watch_minutes_365=excluded.long_watch_minutes_365, shorts_views_90=excluded.shorts_views_90, long_avg_view_duration_s=excluded.long_avg_view_duration_s, long_watch_minutes_28=excluded.long_watch_minutes_28, subs_gained_28=excluded.subs_gained_28`,
+      [c.id, day, s.subscribers, s.longWatchMinutes365, s.shortsViews90, s.longAvgViewDurationS, s.longWatchMinutes28, s.subsGained28],
+    );
+  }
+  return channels.length;
+}
+
+/** YPP progress per connected channel, from the latest snapshot. Uploads are counted from what Vibloid published (status 'published'). */
+export async function yppProgress() {
+  const db = getPool();
+  const rows = (await db.query(
+    `select c.id, c.name, s.snapshot_date, s.subscribers, s.long_watch_minutes_365, s.shorts_views_90, s.long_avg_view_duration_s, s.long_watch_minutes_28, s.subs_gained_28,
+            (select count(*)::int from publish_queue q join projects p on p.id=q.project_id
+              where p.channel_id=c.id and q.status='published' and coalesce(q.published_at, q.scheduled_at, q.approved_at) >= now() - interval '90 days') as uploads90
+     from channels c
+     left join lateral (select * from channel_snapshots x where x.channel_id=c.id order by snapshot_date desc limit 1) s on true
+     where c.youtube_refresh_token is not null order by c.created_at`)).rows;
+  return rows.map((r) => ({
+    channelId: r.id as string, channel: r.name as string, asOf: r.snapshot_date ? String(r.snapshot_date).slice(0, 10) : null, uploads90: r.uploads90 as number,
+    progress: r.snapshot_date ? evaluateYpp({
+      subscribers: r.subscribers, longWatchMinutes365: Number(r.long_watch_minutes_365), shortsViews90: Number(r.shorts_views_90),
+      longAvgViewDurationS: r.long_avg_view_duration_s == null ? null : Number(r.long_avg_view_duration_s), longWatchMinutes28: Number(r.long_watch_minutes_28), subsGained28: r.subs_gained_28,
+    }, r.uploads90) : null,
+    subscribersHidden: !!r.snapshot_date && r.subscribers == null,
+  }));
 }
 
 export type VideoPerf = { project_id: string; title: string; format: string; topic: string | null; hook: string | null; style_len_words: number; hour_utc: number | null; views: number; avg_view_duration_s: number | null; subs: number; ctr: number | null; days: number };

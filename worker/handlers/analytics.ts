@@ -1,4 +1,4 @@
-import { pullAnalytics, weeklyReport, MockAnalyticsClient, GoogleAnalyticsClient, type AnalyticsClient } from "../../src/lib/analytics";
+import { pullAnalytics, pullChannelStats, weeklyReport, MockAnalyticsClient, GoogleAnalyticsClient, type AnalyticsClient } from "../../src/lib/analytics";
 import { accessToken } from "../../src/lib/youtube";
 import type { Job } from "../../src/lib/queue";
 
@@ -6,5 +6,8 @@ import type { Job } from "../../src/lib/queue";
 function client(): AnalyticsClient {
   return process.env.ANALYTICS_PROVIDER === "mock" ? new MockAnalyticsClient() : new GoogleAnalyticsClient((ch) => accessToken(ch ?? undefined));
 }
-export const pullAnalyticsJob = async (_j: Job) => ({ snapshots: await pullAnalytics(client()) });
+export const pullAnalyticsJob = async (_j: Job) => {
+  const c = client();
+  return { snapshots: await pullAnalytics(c), channels: await pullChannelStats(c) };
+};
 export const weeklyReportJob = async (j: Job) => { const r = await weeklyReport({ jobId: j.id }); return { week: r.week, drafts: r.createdProjects.length }; };
