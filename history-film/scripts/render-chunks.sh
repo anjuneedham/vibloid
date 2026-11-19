@@ -11,7 +11,7 @@ for ((a=0; a<TOTAL; a+=STEP)); do
   fi
   n=$((n+1))
 done
-FF=/opt/pw-browsers/ffmpeg-1011/ffmpeg-linux
+FF=$(ls node_modules/@remotion/compositor-linux-x64-*/ffmpeg | head -1)
 : > out/chunks/list.txt
 for ((i=0;i<n;i++)); do echo "file 'part-$i.mp4'" >> out/chunks/list.txt; done
 $FF -y -f concat -safe 0 -i out/chunks/list.txt -c copy out/evidence-room-1-draft.mp4 && echo JOINED
