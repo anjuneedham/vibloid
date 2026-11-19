@@ -12,8 +12,15 @@ Checked by web search on 2026-11-19 against news coverage. BEFORE RECORDING: rea
 | Outside researcher: data do not distinguish consumption from external exposure | AP via KSAT https://www.ksat.com/tech/2026/11/05/seeds-preserved-hair-in-tomb-point-to-oldest-signs-of-cannabis-high-2800-years-ago-study-suggests/ | Quote: confirm wording and speaker |
 | Another outside expert: CBN levels "hard to believe" for wild cannabis | AP coverage (ADN copy https://adn.com/nation-world/2026/11/05/the-curious-case-of-ancient-cannabis-use) | Quote: confirm wording and speaker |
 | Reports link the find to Herodotus's account of Scythians and cannabis; tomb does not establish use during burial ceremonies | Greek Reporter https://greekreporter.com/2026/11/07/skythian-tomb-cannabis-herodotus/ | Reported by news |
-| Herodotus: hemp seeds on hot stones in a tent, vapour, shouting with joy [verify] | Herodotus, Histories, Book 4 (about chapters 73 to 75): from memory, NOT yet checked | MUST VERIFY |
-| Herodotus wrote centuries after the tomb and relied on reports [verify] | General scholarship: NOT yet checked | MUST VERIFY |
-| Tomb associated with Scythian culture | Reports only; confirm the paper's wording and dating of the culture | MUST VERIFY |
+| Herodotus: Scythians crawl under felt covers, throw hemp seed on red-hot stones, vapour no Greek bath could surpass, they howl with joy | Herodotus, Histories 4.73 to 4.75. Godley (Loeb) https://cts.perseids.org/read/greekLit/tlg0016/tlg001/perseus-eng2/4.73.1-4.75.3 ; Macaulay https://lexundria.com/hdt/4.75/mcly | VERIFIED 2026-11-19 (text read) |
+| Herodotus places the vapour bath after a funeral, as cleansing ("After the burial the Scythians cleanse themselves as follows") | Godley translation, same page (range 4.73 to 4.75; exact subsection not shown) | VERIFIED (text read). Confirm subsection number in print edition before citing it more precisely |
+| Herodotus wrote centuries after the tomb | Histories c. 430 BC is an estimate (Wikipedia, flagged "citation needed"); seeds dated early 8th c. BCE, so gap is over three centuries either way | SAFE as "centuries". Do not state an exact date |
+| Historians debate how much he saw himself; part of his Scythian material was second-hand | Penn Museum https://penn.museum/sites/expedition/?p=2981 ; Acta Archaeologica Lodziensia article (some researchers think he visited the lower Tyras) https://journals.ltn.lodz.pl/Acta-Archaeologica-Lodziensia/article/download/1099/1006/1977 | VERIFIED as "debated". The old line "he never visited the steppe" is NOT supported and was removed |
+| Tunnug 1 belongs to the oldest Scythian horizon | Sadykov, Blochin, Caspari, Journal of Field Archaeology (2020) https://boris-portal.unibe.ch/handle/20.500.12422/37241 ; Caspari et al. 2018 (as "Arzhan 0") | VERIFIED |
+
+## Notes to check in the Science paper before recording
+- The mound itself was dated by wood to the 9th century BCE (Sadykov et al. 2020), while the new study dates six seeds to the early 8th century BCE. Check how the paper explains the difference (later deposit?). Do not say "the tomb is from the 8th century BCE".
+- Seed count: outlets say about 1,000, over 1,400 and nearly 1,500. The script says "between a thousand and fifteen hundred". Confirm the paper's number and use it exactly.
+- Exact wording and speakers of the two outside-expert quotes.
 
 Rule: if a row cannot be verified, the line is cut or softened to "reports say".

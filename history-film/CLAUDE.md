@@ -101,3 +101,11 @@ Format: a new historical claim goes on trial. Same four beats every episode: DIG
 - VOICE: the user records ALL voices. Characters are not voiced separately: their lines show in speech bubbles and the user reads them (a different voice per character is optional). Characters may lip-flap while their bubble is up.
 - Every disputed claim is attributed ("researchers report", "one outside expert said"). Never state a contested claim as fact. Each episode ends with an evidence board and a verdict stamp.
 - Series files: `scripts/evidence-room-<n>-<slug>/` containing `script.md` and `sources.md`.
+
+## SOURCE RULE (applies to EVERY film from now on)
+
+- VERIFY FIRST: every factual claim must be checked against a real source (the original paper, the primary text, or at least two reliable reports) BEFORE it goes in a script or on screen. Record each in `sources.md` with a status: VERIFIED, REPORTED BY NEWS (attributed on screen), or MUST VERIFY. Never use "from memory" claims. If it cannot be verified, cut it or soften it to "reports say" / "historians debate".
+- SOURCES ON SCREEN: every beat shows a small SOURCE TAG in the panel or caption naming the source (for example "Science, Nov 2026" or "Herodotus, Histories 4.73 to 4.75"). The end card lists the sources and the description repeats them with links.
+- QUOTES: put quotation marks only around words actually in the source, and attribute them. Say who said it.
+- PRONUNCIATION: every script folder includes `pronunciation.md` for hard names, marked VERIFIED or UNVERIFIED. Never present a guess as verified.
+- Contradictions between sources are shown, not hidden (for example, 9th-century wood dates versus 8th-century seed dates).
