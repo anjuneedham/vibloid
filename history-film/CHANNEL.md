@@ -17,13 +17,13 @@ Strange, dark and overlooked history. Told with a straight face and a crooked sm
 
 Past Tense is a cartoon history channel for people who like their facts with a side of "wait, that really happened?"
 
-Every week we dig up a strange, dark or overlooked story from history: forgotten rulers, baffling decisions, mysterious disappearances and the small human details textbooks skip. Everything is hand-drawn in code, written and narrated by a real human, and sourced.
+Every day we dig up a strange, dark or overlooked story from history: forgotten rulers, baffling decisions, mysterious disappearances and the small human details textbooks skip. Everything is hand-drawn in code, written and narrated by a real human, and sourced.
 
-New video every week. If you like history that is smart, a little funny and never boring, subscribe and come back for the next one.
+New video every day. If you like history that is smart, a little funny and never boring, subscribe and come back tomorrow for the next one.
 
 Dramatised cartoon retellings. Sources are listed in every video description.
 
-(Short version for the profile line, 160 characters: "Cartoon history for the curious: strange, dark and overlooked stories, told with dry humour and real sources. New video every week.")
+(Short version for the profile line, 160 characters: "Cartoon history for the curious: strange, dark and overlooked stories, told with dry humour and real sources. New video every day.")
 
 ## Standard description footer (every video)
 
@@ -40,7 +40,9 @@ This video is a dramatised cartoon retelling for entertainment and education. Ch
 
 ## Upload plan
 
-- One 5-minute video per week, same day and time.
+- One 5-minute video every day, same time each day.
+- Work in batches: write and record 5 to 7 scripts in one sitting, so voiceovers are not a daily chore. Keep a buffer of finished videos in case of a missed day.
+- Reuse the shared characters, props, backgrounds and cards across films so each new video is mostly new story, not new art.
 - Add Shorts later by cutting the funniest or most shocking 30 seconds from each film.
 - Playlists: Forgotten Rulers, Mysteries, Terrible Decisions, Strange Places, Wars You Skipped.
 
