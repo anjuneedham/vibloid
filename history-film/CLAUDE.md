@@ -86,3 +86,18 @@ The look is inspired by dark, moody cartoon history stories: simple thick-outlin
 - Colours only from `src/shared/theme.ts`. Never hard-code.
 - Run `npx remotion bundle` before pushing to confirm the project builds.
 - Commit and push to the current development branch. Never publish or upload anything to YouTube: a human reviews and uploads.
+
+## SERIES: THE EVIDENCE ROOM (3 parts, about 5 minutes each)
+
+Format: a new historical claim goes on trial. Same four beats every episode: DIG announces the claim, DOUBT objects, THE CLERK produces the sources, THE CURATOR gives a verdict (PROVEN, PLAUSIBLE or UNPROVEN).
+
+- LOOK: COMIC BOOK PANELS (the user chose style 6 from the style reel). Reference implementation: `src/films/reel/Comic.tsx`.
+  - Each beat is a comic "page" of 2 to 4 panels on a cream halftone page. Thick black panel borders, hard drop shadow, halftone dots.
+  - Panels slam in one after another (spring from scale 1.18). Big moments get a starburst with Bangers text, speed lines, a white flash and a page shake.
+  - Narration appears in yellow caption boxes (Comic Neue bold). Character lines appear in speech bubbles with tails.
+  - Hard cuts between pages. Slow push-ins only on the verdict.
+- CAST (`src/shared/cast.tsx`, never change their looks): THE CURATOR (host, bowler hat + monocle + moustache), DIG (enthusiast, pith helmet), DOUBT (sceptic, red scarf + sleepy eyes), THE CLERK (sources, round glasses + inkwell).
+- SET: the Evidence Room (`src/shared/EvidenceRoom.tsx`): pin-board, red string, hanging lamp. Used for intro, evidence-table and verdict pages.
+- VOICE: the user records ALL voices. Characters are not voiced separately: their lines show in speech bubbles and the user reads them (a different voice per character is optional). Characters may lip-flap while their bubble is up.
+- Every disputed claim is attributed ("researchers report", "one outside expert said"). Never state a contested claim as fact. Each episode ends with an evidence board and a verdict stamp.
+- Series files: `scripts/evidence-room-<n>-<slug>/` containing `script.md` and `sources.md`.
