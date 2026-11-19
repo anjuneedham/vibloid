@@ -13,6 +13,7 @@ import {
   grad,
   Panel,
   RoomBackdrop,
+  SourceTag,
   SpeedLines,
   StampMark,
   useSpring,
@@ -38,6 +39,7 @@ export const Beat5: React.FC = () => {
         <Art>
           <rect x={0} y={820} width={1158} height={100} fill={PAL.woodDark} stroke={INK} strokeWidth={9} />
         </Art>
+        <SourceTag x={590} y={852} text="AP coverage, Nov 2026: outside expert" />
         <Actor
           who="doubt"
           x={330}
@@ -90,7 +92,8 @@ export const Beat5: React.FC = () => {
 export const Beat6: React.FC = () => {
   const frame = useCurrentFrame();
   const { T, S } = beatTimes("b6");
-  const c1 = S("c1");
+  const c1a = S("c1a");
+  const c1b = S("c1b");
   const d1 = S("d1");
   const o1 = S("o1");
   const c2a = S("c2a");
@@ -106,17 +109,27 @@ export const Beat6: React.FC = () => {
       <Panel id={1} x={50} y={74} w={900} h={540} start={T("pA")} bg={grad(PAL.sunTop, PAL.sunBottom)}>
         <Art>
           <rect x={0} y={470} width={878} height={60} fill={PAL.earth} stroke={INK} strokeWidth={9} />
-          <ScrollG x={460} y={56} w={360} h={150} label="HERODOTUS" fs={58} />
+          <ScrollG x={460} y={40} w={360} h={150} label="HERODOTUS" fs={58} />
         </Art>
-        <Actor who="curator" x={170} feet={492} width={220} talk={[c1]} browLift={0.3} headTilt={Math.sin(frame / 20) * 2} armR={-70 + Math.sin(frame / 12) * 4} />
+        <Actor who="curator" x={170} feet={492} width={220} talk={[c1a, c1b]} browLift={0.3} headTilt={Math.sin(frame / 20) * 2} armR={-70 + Math.sin(frame / 12) * 4} />
+        <SourceTag x={300} y={480} fs={19} nowrap text="Herodotus, Histories 4.73 to 4.75 (Godley translation)" />
         <Bubble
-          span={c1}
+          span={c1a}
           x={330}
-          y={250}
+          y={236}
           w={520}
           fs={30}
           tip={charPt(curA, 290, 215)}
-          text="Why does this matter? Because the ancient Greek writer Herodotus described Scythian people using hemp."
+          text="Why does this matter? Because the ancient Greek writer Herodotus described Scythian people using hemp seeds."
+        />
+        <Bubble
+          span={c1b}
+          x={330}
+          y={260}
+          w={520}
+          fs={32}
+          tip={charPt(curA, 290, 215)}
+          text="He places it after a funeral, as a way to cleanse themselves."
         />
       </Panel>
 
@@ -138,7 +151,7 @@ export const Beat6: React.FC = () => {
           w={430}
           fs={28}
           tip={charPt(dig, 230, 100)}
-          text="He wrote that they threw hemp seeds on hot stones inside a tent, and shouted with joy in the vapour!"
+          text="He wrote that they crawled under felt covers, threw hemp seeds on red-hot stones, and howled with joy in the vapour!"
         />
       </Panel>
 
@@ -164,13 +177,13 @@ export const Beat6: React.FC = () => {
           w={520}
           fs={32}
           tip={charPt(dbt, 290, 215)}
-          text="Herodotus wrote that centuries after this tomb. And he was repeating what he was told."
+          text="Herodotus wrote that centuries after this tomb. And historians debate how much of it he saw himself."
         />
       </Panel>
 
       <Panel id={4} x={976} y={640} w={894} h={366} start={T("pD")} bg={grad(PAL.sunTop, PAL.sunBottom)}>
         <Actor who="curator" x={130} feet={332} width={170} enter={T("pD")} talk={[c2a, c2b]} browLift={0.1} hits={[T("pD")]} />
-        <Bubble span={c2a} x={250} y={40} w={590} fs={34} tip={charPt(curD, 290, 215)} text="Reports tie this find to Scythian culture." />
+        <Bubble span={c2a} x={250} y={40} w={590} fs={34} tip={charPt(curD, 290, 215)} text="Archaeologists place Tunnug 1 in the oldest Scythian horizon." />
         <Bubble
           span={c2b}
           x={250}
@@ -216,6 +229,7 @@ export const Beat7: React.FC = () => {
         <StampMark x={262} y={300} w={376} start={stamps[0]} text="FOUND" color={PAL.stampGreen} fs={84} rot={-8} />
         <StampMark x={712} y={300} w={376} start={stamps[1]} text="CONTESTED" color={PAL.red} fs={68} rot={7} />
         <StampMark x={1162} y={330} w={376} start={stamps[2]} text="NOT ESTABLISHED" color={PAL.stampGrey} fs={52} rot={-6} />
+        <SourceTag x={340} y={820} text="Science, Nov 2026; AP, Nov 2026; Herodotus, Histories 4.73 to 4.75" />
         <Actor
           who="clerk"
           x={190}
@@ -252,6 +266,7 @@ export const Beat8: React.FC = () => {
     <ComicPage hits={[hit]} push={[0, len, 0.06]}>
       <Panel id={1} x={50} y={74} w={1000} h={932} start={T("pA")} bg={THEME.night}>
         <RoomBackdrop scale={0.9} ox={400} oy={40} floorY={900} />
+        <SourceTag x={20} y={862} text="Science, Nov 2026; outside experts quoted by AP" />
         <Actor
           who="curator"
           x={380}
@@ -383,7 +398,14 @@ export const Beat9: React.FC = () => {
         <BigText x={0} y={112} w={772} fs={46} color="#fff" stroke={7}>
           PART 1: THE SIBERIAN TOMB
         </BigText>
-        <Caption x={24} y={218} w={470} fs={36} span={[T("pC") + 8, 99999]} text="Sources: see the video description." />
+        <Caption x={24} y={186} w={470} fs={36} span={[T("pC") + 8, 99999]} text="Sources: see the video description." />
+        <SourceTag
+          x={24}
+          y={318}
+          w={560}
+          fs={21}
+          text="Science (Nov 2026); ScienceDaily; AP; Herodotus, Histories 4.73 to 4.75; Sadykov et al., 2020"
+        />
         <Actor who="clerk" x={650} feet={382} width={170} enter={T("pC") + 4} browLift={0.2} />
       </Panel>
     </ComicPage>

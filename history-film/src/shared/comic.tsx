@@ -563,3 +563,43 @@ export const RoomBackdrop: React.FC<{
     <EvidenceRoom lampX={lampX} floorY={floorY} />
   </div>
 );
+
+// ---------------------------------------------------------------------------
+// SOURCE TAG: small caption naming the source (series rule: every beat has one)
+// ---------------------------------------------------------------------------
+export const SourceTag: React.FC<{ x: number; y: number; text: string; w?: number; fs?: number; nowrap?: boolean }> = ({
+  nowrap = false,
+  x,
+  y,
+  text,
+  w,
+  fs = 22,
+}) => {
+  const frame = useCurrentFrame();
+  const o = interpolate(frame, [10, 22], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y + Math.sin(frame / 25 + x) * 1.5,
+        width: w,
+        whiteSpace: nowrap ? "nowrap" : undefined,
+        boxSizing: "border-box",
+        background: INK,
+        color: "#fff",
+        fontFamily: COMIC,
+        fontWeight: 700,
+        fontSize: fs,
+        lineHeight: 1.15,
+        padding: "5px 14px 6px",
+        border: `3px solid ${PAL.cardPaper}`,
+        opacity: o,
+        zIndex: 70,
+      }}
+    >
+      <span style={{ color: THEME.card }}>SOURCE: </span>
+      {text}
+    </div>
+  );
+};

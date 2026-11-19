@@ -106,14 +106,15 @@ export const CUES: Record<BeatId, Record<string, Cue>> = {
   },
   b6: {
     pA: 0,
-    c1: [0.04, 0.2], // "Why does this matter? Because Herodotus..."
+    c1a: [0.04, 0.13], // "Why does this matter? Because ... Herodotus described Scythian people using hemp seeds."
+    c1b: [0.13, 0.205], // "He places it after a funeral, as a way to cleanse themselves."
     pB: 0.21,
-    d1: [0.23, 0.44], // "He wrote that they threw hemp seeds..."
+    d1: [0.23, 0.44], // "He wrote that they crawled under felt covers..."
     steam: 0.3,
     pC: 0.46,
-    o1: [0.48, 0.62], // "Herodotus wrote that centuries after..."
+    o1: [0.48, 0.62], // "Herodotus wrote that centuries after... historians debate...""
     pD: 0.63,
-    c2a: [0.65, 0.8], // "Reports tie this find to Scythian culture."
+    c2a: [0.65, 0.8], // "Archaeologists place Tunnug 1 in the oldest Scythian horizon."
     c2b: [0.81, 0.98], // "But the tomb does not establish..."
   },
   b7: {

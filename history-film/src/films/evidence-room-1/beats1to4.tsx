@@ -13,6 +13,7 @@ import {
   grad,
   Panel,
   RoomBackdrop,
+  SourceTag,
   SpeedLines,
   StampMark,
   useSpring,
@@ -69,6 +70,7 @@ export const Beat1: React.FC = () => {
           tip={charPt(cA, 296, 215)}
           text="Today's case: a tomb in Siberia, a thousand cannabis seeds, and one very big claim."
         />
+        <SourceTag x={16} y={488} text="Science, Nov 2026" />
         <Caption
           x={22}
           y={22}
@@ -156,6 +158,21 @@ export const Beat2: React.FC = () => {
           <circle cx={900} cy={130} r={70} fill={THEME.card} stroke={INK} strokeWidth={9} />
           <MoundG x={440} y={742} w={580} start={4} />
         </Art>
+        <SourceTag x={20} y={862} text="Science, Nov 2026 (reported by ScienceDaily and AP)" />
+        <div
+          style={{
+            position: "absolute",
+            left: 640,
+            top: 770,
+            fontFamily: COMIC,
+            fontWeight: 700,
+            fontSize: 28,
+            color: THEME.card,
+            textShadow: `2px 2px 0 ${INK}`,
+          }}
+        >
+          Tyva (also spelled Tuva)
+        </div>
         <Actor
           who="dig"
           x={250}
@@ -270,7 +287,7 @@ export const Beat3: React.FC = () => {
           style={{
             position: "absolute",
             left: 60,
-            top: 372,
+            top: 352,
             width: 960,
             textAlign: "center",
             fontFamily: COMIC,
@@ -284,6 +301,7 @@ export const Beat3: React.FC = () => {
         >
           about 2,700 to 2,800 years ago
         </div>
+        <SourceTag x={20} y={402} text="Science, Nov 2026 (reported by ScienceDaily and AP)" />
         <Actor who="curator" x={1620} feet={430} width={230} enter={4} talk={[c1a, c1b]} browLift={0.2} headTilt={Math.sin(frame / 22) * 2} />
         <Bubble span={c1a} x={1070} y={44} w={480} fs={34} tip={charPt(cur, 100, 215)} text="Radiocarbon dating of six of those seeds places them in the early eighth century BCE." />
         <Bubble span={c1b} x={1070} y={44} w={480} fs={34} tip={charPt(cur, 100, 215)} text="That is somewhere around twenty-seven or twenty-eight hundred years ago." />
@@ -379,6 +397,7 @@ export const Beat4: React.FC = () => {
             </BigText>
           </>
         ) : null}
+        <SourceTag x={360} y={858} text="AP report, Nov 2026: outside researchers" />
         <Actor
           who="curator"
           x={190}
