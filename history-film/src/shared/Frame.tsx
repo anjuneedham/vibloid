@@ -30,18 +30,22 @@ export const Letterbox: React.FC = () => (
   </>
 );
 
-export const Wordmark: React.FC<{ opacity?: number }> = ({ opacity = 0.5 }) => (
+export const Wordmark: React.FC<{ opacity?: number; bottom?: number; zIndex?: number }> = ({
+  opacity = 0.5,
+  bottom = BAR_HEIGHT + 20,
+  zIndex = 900,
+}) => (
   <div
     style={{
       position: "absolute",
       right: 44,
-      bottom: BAR_HEIGHT + 20,
+      bottom,
       fontFamily: BANGERS,
       fontSize: 34,
       letterSpacing: 2,
       color: THEME.white,
       opacity,
-      zIndex: 900,
+      zIndex,
       textShadow: "0 2px 6px rgba(0,0,0,0.6)",
     }}
   >
