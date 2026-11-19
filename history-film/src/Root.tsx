@@ -2,6 +2,7 @@ import React from "react";
 import { Composition, Still } from "remotion";
 import { Avatar, Banner } from "./films/test/Brand";
 import { StyleReel } from "./films/reel/StyleReel";
+import { CastSheet } from "./films/series/CastSheet";
 import { Test10s } from "./films/test/Test10s";
 import { FPS, HEIGHT, WIDTH } from "./shared/theme";
 
@@ -24,6 +25,7 @@ export const RemotionRoot: React.FC = () => {
         width={WIDTH}
         height={HEIGHT}
       />
+      <Still id="CastSheet" component={CastSheet} width={WIDTH} height={HEIGHT} />
       <Still id="Avatar" component={Avatar} width={800} height={800} />
       <Still id="Banner" component={Banner} width={2560} height={1440} />
     </>

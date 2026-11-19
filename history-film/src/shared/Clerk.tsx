@@ -11,6 +11,8 @@ export type ClerkPalette = {
   lens: string; // glasses lens fill
   glass: string; // inkwell glass
   eye: string;
+  hat: string;
+  trim: string; // hat band / scarf
 };
 
 export const CLERK_PALETTE: ClerkPalette = {
@@ -22,6 +24,8 @@ export const CLERK_PALETTE: ClerkPalette = {
   lens: "rgba(255,255,255,0.22)",
   glass: "#6FB6D9",
   eye: THEME.ink,
+  hat: "#2A2530",
+  trim: "#C9A24A",
 };
 
 export type Mouth = "flat" | "smile" | "frown" | "open" | "o" | "smirk";
@@ -48,6 +52,12 @@ export type ClerkProps = {
   draw?: number;
   /** only the head and shoulders */
   headOnly?: boolean;
+  glasses?: "round" | "monocle" | "none";
+  hat?: "none" | "bowler" | "pith" | "cap";
+  moustache?: boolean;
+  scarf?: boolean;
+  /** 0 = open dot eyes ... 1 = heavy sleepy lids */
+  lids?: number;
   filterId?: string;
   width?: number;
   style?: React.CSSProperties;
@@ -70,6 +80,11 @@ export const Clerk: React.FC<ClerkProps> = ({
   autoBlink = true,
   draw,
   headOnly = false,
+  glasses = "round",
+  hat = "none",
+  moustache = false,
+  scarf = false,
+  lids = 0,
   filterId,
   width = 400,
   style,
@@ -143,6 +158,12 @@ export const Clerk: React.FC<ClerkProps> = ({
             fill={p.accent}
             {...sp({ strokeWidth: sw * 0.55 })}
           />
+          {scarf ? (
+            <>
+              <path d="M142 318 Q 200 356 258 318 L 266 346 Q 200 384 134 346 Z" fill={p.trim} {...sp({ strokeWidth: sw * 0.7 })} />
+              <path d="M226 352 L 250 440 L 214 432 L 208 362 Z" fill={p.trim} {...sp({ strokeWidth: sw * 0.7 })} />
+            </>
+          ) : null}
           {/* buttons */}
           <circle cx={200} cy={420} r={4} fill={p.ink} opacity={detailOp} />
           <circle cx={200} cy={470} r={4} fill={p.ink} opacity={detailOp} />
@@ -172,19 +193,33 @@ export const Clerk: React.FC<ClerkProps> = ({
         {/* head */}
         <g transform={`translate(0 ${headDrop + bob}) rotate(${headTilt} 200 300)`}>
           {/* hair wisps */}
-          <path d="M178 92 Q 172 62 196 60" fill="none" {...sp({ strokeWidth: sw * 0.8 })} />
-          <path d="M214 90 Q 226 66 244 74" fill="none" {...sp({ strokeWidth: sw * 0.8 })} />
+          {hat === "none" ? (
+            <>
+              <path d="M178 92 Q 172 62 196 60" fill="none" {...sp({ strokeWidth: sw * 0.8 })} />
+              <path d="M214 90 Q 226 66 244 74" fill="none" {...sp({ strokeWidth: sw * 0.8 })} />
+            </>
+          ) : null}
           <path
             d="M70 205 C 70 115, 140 85, 205 88 C 275 90, 335 120, 332 200 C 330 270, 275 305, 200 305 C 125 305, 72 275, 70 205 Z"
             fill={p.skin}
             {...sp()}
           />
           {/* glasses */}
-          <circle cx={150} cy={eyeY} r={34} fill={lensFill} {...(sp() as object)} strokeWidth={sw * 0.75} />
-          <circle cx={250} cy={eyeY} r={34} fill={lensFill} {...(sp() as object)} strokeWidth={sw * 0.75} />
-          <path d="M184 202 Q200 194 216 202" fill="none" {...sp({ strokeWidth: sw * 0.7 })} />
-          <path d="M116 200 L82 194" fill="none" {...sp({ strokeWidth: sw * 0.6 })} />
-          <path d="M284 200 L318 194" fill="none" {...sp({ strokeWidth: sw * 0.6 })} />
+          {glasses === "round" ? (
+            <>
+              <circle cx={150} cy={eyeY} r={34} fill={lensFill} {...(sp() as object)} strokeWidth={sw * 0.75} />
+              <circle cx={250} cy={eyeY} r={34} fill={lensFill} {...(sp() as object)} strokeWidth={sw * 0.75} />
+              <path d="M184 202 Q200 194 216 202" fill="none" {...sp({ strokeWidth: sw * 0.7 })} />
+              <path d="M116 200 L82 194" fill="none" {...sp({ strokeWidth: sw * 0.6 })} />
+              <path d="M284 200 L318 194" fill="none" {...sp({ strokeWidth: sw * 0.6 })} />
+            </>
+          ) : null}
+          {glasses === "monocle" ? (
+            <>
+              <circle cx={250} cy={eyeY} r={36} fill={lensFill} {...(sp() as object)} strokeWidth={sw * 0.7} />
+              <path d="M284 222 Q 318 262 300 330" fill="none" {...sp({ strokeWidth: sw * 0.4 })} />
+            </>
+          ) : null}
           {/* eyes */}
           {closed ? (
             <>
@@ -193,8 +228,19 @@ export const Clerk: React.FC<ClerkProps> = ({
             </>
           ) : (
             <>
-              <circle cx={152} cy={eyeY + 2} r={eyeR} fill={p.eye} opacity={detailOp} />
-              <circle cx={248} cy={eyeY + 2} r={eyeR} fill={p.eye} opacity={detailOp} />
+              {lids > 0.3 ? (
+                [152, 248].map((ex) => (
+                  <g key={ex} opacity={detailOp}>
+                    <path d={`M${ex - eyeR} ${eyeY + 2} L${ex + eyeR} ${eyeY + 2} A${eyeR} ${eyeR} 0 0 1 ${ex - eyeR} ${eyeY + 2} Z`} fill={p.eye} />
+                    <line x1={ex - eyeR - 5} y1={eyeY + 2} x2={ex + eyeR + 5} y2={eyeY + 2} stroke={p.ink} strokeWidth={sw * 0.55} strokeLinecap="round" />
+                  </g>
+                ))
+              ) : (
+                <>
+                  <circle cx={152} cy={eyeY + 2} r={eyeR} fill={p.eye} opacity={detailOp} />
+                  <circle cx={248} cy={eyeY + 2} r={eyeR} fill={p.eye} opacity={detailOp} />
+                </>
+              )}
             </>
           )}
           {/* brows */}
@@ -215,6 +261,35 @@ export const Clerk: React.FC<ClerkProps> = ({
             fill={mouth === "open" || mouth === "o" ? p.ink : "none"}
             {...sp({ strokeWidth: sw * 0.6 })}
           />
+          {moustache ? (
+            <path
+              d="M164 246 Q 182 230 200 242 Q 218 230 236 246 Q 218 256 200 250 Q 182 256 164 246 Z"
+              fill={p.ink}
+              {...sp({ strokeWidth: sw * 0.3 })}
+            />
+          ) : null}
+          {hat === "bowler" ? (
+            <>
+              <path d="M112 126 Q 116 18 200 12 Q 284 18 288 126 Z" fill={p.hat} {...sp()} />
+              <path d="M76 130 Q 200 158 324 130 Q 336 114 302 112 L98 112 Q 64 114 76 130 Z" fill={p.hat} {...sp()} />
+              <path d="M116 100 Q 200 116 284 100" fill="none" {...sp({ strokeWidth: sw * 0.9, stroke: p.trim })} />
+            </>
+          ) : null}
+          {hat === "pith" ? (
+            <>
+              <path d="M96 128 Q 100 22 200 16 Q 300 22 304 128 Z" fill={p.hat} {...sp()} />
+              <path d="M54 134 Q 200 168 346 134 Q 334 112 300 112 L100 112 Q 66 112 54 134 Z" fill={p.hat} {...sp()} />
+              <path d="M104 104 Q 200 122 296 104" fill="none" {...sp({ strokeWidth: sw * 0.9, stroke: p.trim })} />
+              <circle cx={200} cy={18} r={7} fill={p.trim} {...(sp() as object)} strokeWidth={sw * 0.4} />
+            </>
+          ) : null}
+          {hat === "cap" ? (
+            <>
+              <path d="M100 122 Q 104 40 196 34 Q 290 38 298 122 Z" fill={p.hat} {...sp()} />
+              <path d="M100 122 Q 48 122 36 140 Q 90 148 150 128 Z" fill={p.hat} {...sp()} />
+              <path d="M104 104 Q 200 118 296 104" fill="none" {...sp({ strokeWidth: sw * 0.6, stroke: p.trim })} />
+            </>
+          ) : null}
         </g>
       </g>
     </svg>
