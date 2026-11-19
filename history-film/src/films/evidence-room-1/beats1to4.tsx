@@ -274,7 +274,7 @@ export const Beat3: React.FC = () => {
       <Panel id={1} x={50} y={74} w={1820} h={470} start={T("pA")} bg={grad(PAL.labTop, PAL.labBottom)} dots={PAL.dotsLight}>
         <div style={{ position: "absolute", left: 60, top: 36, width: 960, transform: `scale(${0.4 + 0.6 * card})`, transformOrigin: "0 0" }}>
           <BigText x={0} y={0} w={960} fs={64} color={PAL.burstPale} stroke={7}>
-            EARLY
+            SIX SEEDS: EARLY
           </BigText>
           <BigText x={0} y={56} w={960} fs={140} color={THEME.card} stroke={10}>
             8TH CENTURY BCE
@@ -301,7 +301,7 @@ export const Beat3: React.FC = () => {
         >
           about 2,700 to 2,800 years ago
         </div>
-        <SourceTag x={20} y={402} text="Science, Nov 2026 (reported by ScienceDaily and AP)" />
+        <SourceTag x={20} y={402} text="Science, Nov 2026 (radiocarbon dating of six seeds)" />
         <Actor who="curator" x={1620} feet={430} width={230} enter={4} talk={[c1a, c1b]} browLift={0.2} headTilt={Math.sin(frame / 22) * 2} />
         <Bubble span={c1a} x={1070} y={44} w={480} fs={34} tip={charPt(cur, 100, 215)} text="Radiocarbon dating of six of those seeds places them in the early eighth century BCE." />
         <Bubble span={c1b} x={1070} y={44} w={480} fs={34} tip={charPt(cur, 100, 215)} text="That is somewhere around twenty-seven or twenty-eight hundred years ago." />
