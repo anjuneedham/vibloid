@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Past Tense Photo Finder</title>
+  <style>
+    :root {
+      --bg: #0b0c14; --panel: #151625; --line: #2a2c44; --text: #f2f0e8; --muted: #a7a8bd;
+      --yellow: #ffe600; --candle: #ffb347; --green: #3df2a0; --amber: #ffb347;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: "Comic Neue", "Segoe UI", system-ui, sans-serif; font-size: 18px; line-height: 1.4; }
+    header, main, footer { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+    header { padding-top: 22px; }
+    h1 { margin: 0; font-size: 34px; color: var(--yellow); letter-spacing: 1px; }
+    .sub { color: var(--muted); margin: 4px 0 16px; }
+    form { display: flex; gap: 8px; flex-wrap: wrap; }
+    input[type=search] { flex: 1 1 260px; padding: 14px 16px; font-size: 18px; border-radius: 12px; border: 2px solid var(--line); background: var(--panel); color: var(--text); }
+    button, .btn { padding: 12px 16px; font-size: 16px; font-weight: 700; border-radius: 12px; border: 0; background: var(--yellow); color: #14121a; cursor: pointer; text-decoration: none; display: inline-block; font-family: inherit; }
+    button.alt, .btn.alt { background: var(--panel); color: var(--text); border: 2px solid var(--line); }
+    label.chk { display: flex; align-items: center; gap: 8px; margin: 12px 0 4px; color: var(--muted); }
+    label.chk input { width: 22px; height: 22px; }
+    .status { margin: 12px 0; color: var(--muted); min-height: 1.4em; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+    .card { background: var(--panel); border: 2px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+    .card img { width: 100%; height: 190px; object-fit: cover; background: #000; display: block; }
+    .card .body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .title { font-weight: 700; word-break: break-word; }
+    .meta { color: var(--muted); font-size: 15px; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 14px; font-weight: 700; width: fit-content; }
+    .badge.pd { background: rgba(61,242,160,.15); color: var(--green); }
+    .badge.chk { background: rgba(255,179,71,.15); color: var(--amber); }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+    .row button, .row a { flex: 1 1 auto; text-align: center; padding: 10px 10px; font-size: 15px; }
+    section.panel { background: var(--panel); border: 2px solid var(--line); border-radius: 14px; padding: 14px; margin: 18px 0; }
+    section.panel h2 { margin: 0 0 8px; font-size: 22px; color: var(--candle); }
+    .links { display: flex; gap: 8px; flex-wrap: wrap; }
+    textarea { width: 100%; min-height: 110px; background: #0b0c14; color: var(--text); border: 2px solid var(--line); border-radius: 10px; padding: 10px; font-family: ui-monospace, monospace; font-size: 13px; }
+    .note { color: var(--muted); font-size: 15px; }
+    footer { padding-bottom: 40px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PAST TENSE: Photo Finder</h1>
+    <p class="sub">Search archive photos, check the licence, and copy the source line for our sourcing log.</p>
+    <form id="f">
+      <input id="q" type="search" placeholder="e.g. Emu War 1932, Strasbourg 1518, Paris siege 1870" autocomplete="off" />
+      <button type="submit">Search</button>
+    </form>
+    <label class="chk"><input type="checkbox" id="pdOnly" checked /> Public domain / CC0 only (recommended)</label>
+    <div class="status" id="status"></div>
+  </header>
+
+  <main>
+    <div class="grid" id="grid"></div>
+
+    <section class="panel">
+      <h2>Search other archives</h2>
+      <p class="note">These open in a new tab. Always check the rights statement on each item page.</p>
+      <div class="links" id="otherLinks"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Selected photos (<span id="count">0</span>)</h2>
+      <p class="note">Tap "Select" on a photo, then copy these rows into <code>ASSETS.md</code> and tell Claude which photos to use.</p>
+      <textarea id="basket" readonly placeholder="| Title | URL | Licence | Date checked | Used in film |"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button id="copyAll" type="button">Copy all rows</button>
+        <button id="clearAll" type="button" class="alt">Clear</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="note">
+      "Public domain" on Wikimedia Commons is the uploader's claim for that file. It can differ by country, and some images show people or trademarks that have other restrictions.
+      Open the source page and confirm before we use anything. If unsure, we redraw the picture in our own cartoon style instead.
+    </p>
+  </footer>
+
+<script>
+(function () {
+  var API = "https://commons.wikimedia.org/w/api.php";
+  var grid = document.getElementById("grid");
+  var statusEl = document.getElementById("status");
+  var basket = [];
+
+  function el(tag, attrs, children) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "text") n.textContent = attrs[k];
+      else if (k === "class") n.className = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { n.appendChild(c); });
+    return n;
+  }
+  function plain(html) {
+    if (!html) return "";
+    var d = new DOMParser().parseFromString(html, "text/html");
+    var t = (d.body.textContent || "").replace(/\s+/g, " ").trim();
+    var h = Math.floor(t.length / 2);
+    if (t.length > 6 && t.length % 2 === 0 && t.slice(0, h) === t.slice(h)) t = t.slice(0, h);
+    return t;
+  }
+  function isPD(licence, terms) {
+    var s = ((licence || "") + " " + (terms || "")).toLowerCase();
+    return /public domain|\bpd\b|pd-|cc0|pdm|no known copyright/.test(s);
+  }
+  function today() { return new Date().toISOString().slice(0, 10); }
+  function copy(text, btn) {
+    function done() { var o = btn.textContent; btn.textContent = "Copied"; setTimeout(function () { btn.textContent = o; }, 1200); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+    } else { fallback(); }
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); done(); } catch (e) {}
+      document.body.removeChild(t);
+    }
+  }
+  function row(item) {
+    return "| " + item.title.replace(/\|/g, "/") + " | " + item.page + " | " + item.licence.replace(/\|/g, "/") + " | " + today() + " | |";
+  }
+  function renderBasket() {
+    document.getElementById("count").textContent = basket.length;
+    document.getElementById("basket").value = basket.map(row).join("\n");
+  }
+  function renderOther(q) {
+    var e = encodeURIComponent(q || "");
+    var links = [
+      ["Library of Congress", "https://www.loc.gov/pictures/search/?q=" + e],
+      ["Internet Archive", "https://archive.org/search?query=" + e + "&and%5B%5D=mediatype%3A%22image%22"],
+      ["NYPL Digital Collections", "https://digitalcollections.nypl.org/search/index?keywords=" + e + "&filters%5Brights%5D=pd"],
+      ["Europeana (open licences)", "https://www.europeana.eu/en/search?query=" + e + "&reusability=open"],
+      ["Wikimedia Commons", "https://commons.wikimedia.org/w/index.php?search=" + e + "&ns6=1"]
+    ];
+    var box = document.getElementById("otherLinks");
+    box.innerHTML = "";
+    links.forEach(function (l) {
+      box.appendChild(el("a", { "class": "btn alt", href: l[1], target: "_blank", rel: "noopener", text: l[0] }));
+    });
+  }
+
+  function card(item) {
+    var badge = el("span", { "class": "badge " + (item.pd ? "pd" : "chk"), text: item.pd ? "Public domain / CC0" : "Check licence: " + item.licence });
+    var thumb = el("a", { href: item.full, target: "_blank", rel: "noopener" }, [el("img", { src: item.thumb, alt: item.title, loading: "lazy" })]);
+    var body = el("div", { "class": "body" }, [
+      el("div", { "class": "title", text: item.title }),
+      badge,
+      el("div", { "class": "meta", text: [item.date, item.author].filter(Boolean).join(" · ") }),
+      el("div", { "class": "meta", text: item.credit ? "Credit: " + item.credit : "" }),
+      (function () {
+        var r = el("div", { "class": "row" });
+        var sel = el("button", { type: "button", text: "Select" });
+        sel.addEventListener("click", function () {
+          if (!basket.some(function (b) { return b.page === item.page; })) basket.push(item);
+          renderBasket(); sel.textContent = "Selected";
+        });
+        var cp = el("button", { type: "button", "class": "alt", text: "Copy source line" });
+        cp.addEventListener("click", function () { copy(row(item), cp); });
+        var open = el("a", { "class": "btn alt", href: item.page, target: "_blank", rel: "noopener", text: "Source page" });
+        r.appendChild(sel); r.appendChild(cp); r.appendChild(open);
+        return r;
+      })()
+    ]);
+    return el("div", { "class": "card" }, [thumb, body]);
+  }
+
+  function search(q) {
+    grid.innerHTML = "";
+    renderOther(q);
+    statusEl.textContent = "Searching...";
+    var url = API + "?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=40" +
+      "&gsrsearch=" + encodeURIComponent(q + " filetype:bitmap") +
+      "&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=500";
+    fetch(url).then(function (r) { return r.json(); }).then(function (data) {
+      var pages = data && data.query && data.query.pages ? Object.keys(data.query.pages).map(function (k) { return data.query.pages[k]; }) : [];
+      pages.sort(function (a, b) { return (a.index || 0) - (b.index || 0); });
+      var onlyPD = document.getElementById("pdOnly").checked;
+      var shown = 0;
+      pages.forEach(function (p) {
+        var ii = p.imageinfo && p.imageinfo[0];
+        if (!ii) return;
+        var m = ii.extmetadata || {};
+        var licence = plain(m.LicenseShortName && m.LicenseShortName.value) || "Unknown";
+        var pd = isPD(licence, plain(m.UsageTerms && m.UsageTerms.value));
+        if (onlyPD && !pd) return;
+        var item = {
+          title: p.title.replace(/^File:/, ""),
+          page: ii.descriptionurl,
+          thumb: ii.thumburl || ii.url,
+          full: ii.url,
+          licence: licence,
+          pd: pd,
+          author: plain(m.Artist && m.Artist.value).slice(0, 80),
+          credit: plain(m.Credit && m.Credit.value).slice(0, 80),
+          date: plain(m.DateTimeOriginal && m.DateTimeOriginal.value).slice(0, 40)
+        };
+        grid.appendChild(card(item)); shown++;
+      });
+      statusEl.textContent = shown
+        ? shown + " result" + (shown === 1 ? "" : "s") + (onlyPD ? " (public domain / CC0 only)" : "") + ". Tap a photo to see it full size."
+        : "No results. Try different words, or untick the public domain filter, or use the other archives below.";
+    }).catch(function (e) {
+      statusEl.textContent = "Could not reach the archive (" + e.message + "). Check your connection and try again.";
+    });
+  }
+
+  document.getElementById("f").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var q = document.getElementById("q").value.trim();
+    if (q) search(q);
+  });
+  document.getElementById("copyAll").addEventListener("click", function () { copy(document.getElementById("basket").value, this); });
+  document.getElementById("clearAll").addEventListener("click", function () { basket = []; renderBasket(); });
+  renderOther("");
+})();
+</script>
+</body>
+</html>
