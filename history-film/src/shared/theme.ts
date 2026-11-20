@@ -111,6 +111,11 @@ export const SHADOW = {
   textDim: "#E2C998",
   dust: "#FFE4AE",
   shade: "rgba(12,7,5,0.42)", // soft shadow cast on the screen
+  lead: "#8E8C84", // the Nemesis curse tablet (lead sheet)
+  leadDark: "#4F4D47",
+  leadHi: "#C9C6BA",
+  mapInk: "#3A2A1A", // Ordnance-Survey-style plan lettering
+  water: "#7FA3B0",
 } as const;
 
 /** Episode 2+ Shorts look: LINOCUT two-colour print (black + one Welsh-dragon red on cream). */

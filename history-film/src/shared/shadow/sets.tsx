@@ -1,6 +1,7 @@
 import React from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
 import { rand } from "../Frame";
+import { COMIC } from "../fonts";
 import { SHADOW } from "../theme";
 import { Cutout } from "./stage";
 
@@ -49,7 +50,7 @@ const CARDS: [number, number, number, number, number][] = [
 ];
 
 /** The pin-board: a dark frame, translucent paper cards lit from behind, brass pins and the red thread. */
-export const PinBoard: React.FC<{ id?: string; lit?: number[] }> = ({ id = "board", lit = [] }) => {
+export const PinBoard: React.FC<{ id?: string; lit?: number[]; labels?: string[] }> = ({ id = "board", lit = [], labels }) => {
   const frame = useCurrentFrame();
   const pins = CARDS.map(([x, y, w, , r]) => {
     const cx = x + w / 2;
@@ -68,7 +69,7 @@ export const PinBoard: React.FC<{ id?: string; lit?: number[] }> = ({ id = "boar
             {/* each card is a lighter paper: drawn as solid with a hole in it, so its lines read as handwriting */}
             <rect x={x} y={y} width={w} height={h} fill="white" />
             <rect x={x + 10} y={y + 10} width={w - 20} height={h - 20} fill="black" />
-            {Array.from({ length: Math.floor((h - 40) / 22) }).map((_, k) => (
+            {labels?.[i] ? null : Array.from({ length: Math.floor((h - 40) / 22) }).map((_, k) => (
               <rect key={k} x={x + 22} y={y + 30 + k * 22} width={(w - 44) * (0.5 + rand(i * 9 + k) * 0.5)} height={5} fill="white" />
             ))}
             {i === 2 ? (
@@ -105,6 +106,16 @@ export const PinBoard: React.FC<{ id?: string; lit?: number[] }> = ({ id = "boar
         {/* red thread, glowing where the lamp catches it */}
         <path d={thread.map((t, i) => `${i ? "L" : "M"}${pins[t][0]} ${pins[t][1]}`).join(" ")} stroke={SHADOW.thread} strokeWidth={9} fill="none" opacity={0.5} filter={`url(#${id}-glow)`} />
         <path d={thread.map((t, i) => `${i ? "L" : "M"}${pins[t][0]} ${pins[t][1]}`).join(" ")} stroke={SHADOW.thread} strokeWidth={3.5} fill="none" />
+        {/* real words on the cards (short labels), inked on the lit paper */}
+        {labels
+          ? CARDS.map(([x, y, w, h, r], i) =>
+              labels[i] ? (
+                <foreignObject key={`l${i}`} x={x + 12} y={y + 22} width={w - 24} height={h - 30} transform={`rotate(${r} ${x + w / 2} ${y + h / 2})`}>
+                  <div style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 25, lineHeight: 1.08, color: SHADOW.scribe, textAlign: "center" }}>{labels[i]}</div>
+                </foreignObject>
+              ) : null,
+            )
+          : null}
         {pins.map(([px, py], i) => (
           <g key={i}>
             <circle cx={px} cy={py} r={9} fill={SHADOW.brassDark} />

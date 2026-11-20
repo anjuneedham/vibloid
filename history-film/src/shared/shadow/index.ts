@@ -8,3 +8,4 @@ export * from "./ShadowActor";
 export * from "./slide";
 export * from "./seal";
 export * from "./sets";
+export * from "./idle";

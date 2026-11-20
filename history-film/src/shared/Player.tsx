@@ -36,6 +36,10 @@ export type PlayerProps = {
   z?: number;
   /** gentle whole-body sway in degrees */
   sway?: number;
+  /** explicit whole-body rotation in degrees (overrides sway): per-character idle motion */
+  rot?: number;
+  /** explicit lift in px (positive = up): per-character idle motion */
+  lift?: number;
 } & Pick<ClerkProps, "browLift" | "browTilt" | "wide" | "lids" | "armL" | "armR" | "headTilt" | "prop" | "eyesClosed" | "autoBlink">;
 
 export const Player: React.FC<PlayerProps> = ({
@@ -57,6 +61,8 @@ export const Player: React.FC<PlayerProps> = ({
   opacity = 1,
   z = 10,
   sway = 0,
+  rot: rotOverride,
+  lift = 0,
   ...expr
 }) => {
   const real = useCurrentFrame();
@@ -70,7 +76,7 @@ export const Player: React.FC<PlayerProps> = ({
   const b = actorBox(who, x, feet, width);
   const bnc = bounce ? Math.abs(Math.sin(frame / 5)) * bounce : 0;
   const sw = strokeWidth ?? Math.min(18, Math.max(9, (7 * 400) / width));
-  const rot = sway ? Math.sin(frame / 23 + x) * sway : 0;
+  const rot = rotOverride ?? (sway ? Math.sin(frame / 23 + x) * sway : 0);
   const popS = pop ? 1 + (1 - k) * 0.25 : 1;
   // cast.tsx spreads props last, so only pass a palette when a style really overrides it
   const pal = palette ? { palette } : {};
@@ -80,7 +86,7 @@ export const Player: React.FC<PlayerProps> = ({
       style={{
         position: "absolute",
         left: b.left,
-        top: b.top - bnc + (pop ? 0 : (1 - k) * 24),
+        top: b.top - bnc - lift + (pop ? 0 : (1 - k) * 24),
         zIndex: z,
         opacity: opacity * (pop ? Math.min(1, k * 2) : k),
         transform: `scaleY(${b.sy}) rotate(${rot}deg) scale(${popS})`,

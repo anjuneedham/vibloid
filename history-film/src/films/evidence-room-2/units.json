@@ -1,0 +1,357 @@
+{
+ "estimated": true,
+ "units": [
+  {
+   "id": "L01",
+   "beat": 1,
+   "who": "curator",
+   "start": 1.0,
+   "end": 6.85,
+   "words": 11,
+   "estimated": true
+  },
+  {
+   "id": "L02",
+   "beat": 1,
+   "who": "curator",
+   "start": 7.85,
+   "end": 16.7,
+   "words": 17,
+   "estimated": true
+  },
+  {
+   "id": "L03",
+   "beat": 2,
+   "who": "dig",
+   "start": 19.2,
+   "end": 25.644,
+   "words": 13,
+   "estimated": true
+  },
+  {
+   "id": "L04",
+   "beat": 2,
+   "who": "dig",
+   "start": 26.644,
+   "end": 34.844,
+   "words": 16,
+   "estimated": true
+  },
+  {
+   "id": "L05",
+   "beat": 2,
+   "who": "clerk",
+   "start": 35.844,
+   "end": 43.394,
+   "words": 12,
+   "estimated": true
+  },
+  {
+   "id": "L06",
+   "beat": 3,
+   "who": "curator",
+   "start": 45.894,
+   "end": 60.094,
+   "words": 27,
+   "estimated": true
+  },
+  {
+   "id": "L07",
+   "beat": 3,
+   "who": "curator",
+   "start": 61.094,
+   "end": 65.594,
+   "words": 9,
+   "estimated": true
+  },
+  {
+   "id": "L08",
+   "beat": 3,
+   "who": "curator",
+   "start": 66.594,
+   "end": 76.294,
+   "words": 18,
+   "estimated": true
+  },
+  {
+   "id": "L09",
+   "beat": 3,
+   "who": "curator",
+   "start": 77.294,
+   "end": 82.644,
+   "words": 10,
+   "estimated": true
+  },
+  {
+   "id": "L10",
+   "beat": 3,
+   "who": "doubt",
+   "start": 83.644,
+   "end": 87.208,
+   "words": 6,
+   "estimated": true
+  },
+  {
+   "id": "L11",
+   "beat": 3,
+   "who": "clerk",
+   "start": 88.208,
+   "end": 92.408,
+   "words": 7,
+   "estimated": true
+  },
+  {
+   "id": "L12",
+   "beat": 4,
+   "who": "curator",
+   "start": 94.908,
+   "end": 106.108,
+   "words": 21,
+   "estimated": true
+  },
+  {
+   "id": "L13",
+   "beat": 4,
+   "who": "dig",
+   "start": 107.108,
+   "end": 114.839,
+   "words": 15,
+   "estimated": true
+  },
+  {
+   "id": "L14",
+   "beat": 4,
+   "who": "clerk",
+   "start": 115.839,
+   "end": 121.589,
+   "words": 9,
+   "estimated": true
+  },
+  {
+   "id": "L15",
+   "beat": 4,
+   "who": "doubt",
+   "start": 122.589,
+   "end": 123.125,
+   "words": 1,
+   "estimated": true
+  },
+  {
+   "id": "L16",
+   "beat": 5,
+   "who": "clerk",
+   "start": 125.625,
+   "end": 131.375,
+   "words": 9,
+   "estimated": true
+  },
+  {
+   "id": "L17",
+   "beat": 5,
+   "who": "clerk",
+   "start": 132.375,
+   "end": 135.725,
+   "words": 5,
+   "estimated": true
+  },
+  {
+   "id": "L18",
+   "beat": 5,
+   "who": "curator",
+   "start": 136.725,
+   "end": 144.075,
+   "words": 14,
+   "estimated": true
+  },
+  {
+   "id": "L19",
+   "beat": 5,
+   "who": "curator",
+   "start": 145.075,
+   "end": 154.275,
+   "words": 17,
+   "estimated": true
+  },
+  {
+   "id": "L20",
+   "beat": 5,
+   "who": "dig",
+   "start": 155.275,
+   "end": 159.025,
+   "words": 8,
+   "estimated": true
+  },
+  {
+   "id": "L21",
+   "beat": 5,
+   "who": "doubt",
+   "start": 160.025,
+   "end": 166.804,
+   "words": 12,
+   "estimated": true
+  },
+  {
+   "id": "L22",
+   "beat": 6,
+   "who": "curator",
+   "start": 169.304,
+   "end": 182.354,
+   "words": 24,
+   "estimated": true
+  },
+  {
+   "id": "L23",
+   "beat": 6,
+   "who": "dig",
+   "start": 183.354,
+   "end": 194.366,
+   "words": 22,
+   "estimated": true
+  },
+  {
+   "id": "L24",
+   "beat": 6,
+   "who": "doubt",
+   "start": 195.366,
+   "end": 200.537,
+   "words": 9,
+   "estimated": true
+  },
+  {
+   "id": "L25",
+   "beat": 7,
+   "who": "curator",
+   "start": 203.037,
+   "end": 209.887,
+   "words": 13,
+   "estimated": true
+  },
+  {
+   "id": "L26",
+   "beat": 7,
+   "who": "clerk",
+   "start": 210.887,
+   "end": 219.987,
+   "words": 14,
+   "estimated": true
+  },
+  {
+   "id": "L27",
+   "beat": 7,
+   "who": "doubt",
+   "start": 220.987,
+   "end": 228.302,
+   "words": 13,
+   "estimated": true
+  },
+  {
+   "id": "L28",
+   "beat": 7,
+   "who": "curator",
+   "start": 229.302,
+   "end": 235.652,
+   "words": 12,
+   "estimated": true
+  },
+  {
+   "id": "L29",
+   "beat": 7,
+   "who": "dig",
+   "start": 236.652,
+   "end": 244.502,
+   "words": 16,
+   "estimated": true
+  },
+  {
+   "id": "L30",
+   "beat": 7,
+   "who": "dig",
+   "start": 245.502,
+   "end": 248.783,
+   "words": 7,
+   "estimated": true
+  },
+  {
+   "id": "L31",
+   "beat": 7,
+   "who": "clerk",
+   "start": 249.783,
+   "end": 266.683,
+   "words": 27,
+   "estimated": true
+  },
+  {
+   "id": "L32",
+   "beat": 7,
+   "who": "doubt",
+   "start": 267.683,
+   "end": 269.826,
+   "words": 4,
+   "estimated": true
+  },
+  {
+   "id": "L33",
+   "beat": 8,
+   "who": "clerk",
+   "start": 272.326,
+   "end": 291.126,
+   "words": 29,
+   "estimated": true
+  },
+  {
+   "id": "L34",
+   "beat": 8,
+   "who": "clerk",
+   "start": 292.126,
+   "end": 296.926,
+   "words": 8,
+   "estimated": true
+  },
+  {
+   "id": "L35",
+   "beat": 9,
+   "who": "curator",
+   "start": 299.426,
+   "end": 308.976,
+   "words": 17,
+   "estimated": true
+  },
+  {
+   "id": "L36",
+   "beat": 9,
+   "who": "curator",
+   "start": 310.476,
+   "end": 311.826,
+   "words": 2,
+   "estimated": true
+  },
+  {
+   "id": "L37",
+   "beat": 9,
+   "who": "dig",
+   "start": 312.826,
+   "end": 315.638,
+   "words": 6,
+   "estimated": true
+  },
+  {
+   "id": "L38",
+   "beat": 9,
+   "who": "doubt",
+   "start": 316.638,
+   "end": 318.781,
+   "words": 4,
+   "estimated": true
+  },
+  {
+   "id": "L39",
+   "beat": 10,
+   "who": "curator",
+   "start": 321.281,
+   "end": 327.631,
+   "words": 12,
+   "estimated": true
+  }
+ ],
+ "total": 327.631
+}

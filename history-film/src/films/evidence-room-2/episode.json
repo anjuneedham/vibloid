@@ -1,0 +1,19 @@
+{
+  "_note": "Episode 2 data that will change. Edit here, not in the components. teaser = the L39 line shown on screen (also used by scripts/estimate_timing_2.py for its length).",
+  "teaser": "Next time: a pope puts a dead pope on trial. / Case adjourned.",
+  "teaserCard": "NEXT CASE: A POPE PUTS A DEAD POPE ON TRIAL",
+  "verdict": "UNPROVEN",
+  "caseTitle": "THE ROUND TABLE AT CAERLEON",
+  "claim": "King Arthur's Round Table was the Roman amphitheatre at Caerleon.",
+  "sources": [
+    "Museum Wales: \"Caerleon, City of the Legion\"; \"Roman Ruins\"; National Roman Legion Museum info sheet",
+    "Cadw: Caerleon Roman Amphitheatre and Roman Baths pages; Trailblazers: Tessa Verney Wheeler (booklet)",
+    "Coflein (RCAHMW): Caerleon Roman Amphitheatre",
+    "RCAHMW Historic Place Names (Ordnance Survey 2nd edition, recorded 1898 to 1908)",
+    "Geoffrey of Monmouth, History of the Kings of Britain: trans. J. A. Giles (1848), trans. S. Evans (1904), Latin ed. Giles (1844)",
+    "Wace, Roman de Brut (1155): Camelot Project (A. Lupack); Wikipedia \"Round Table\" (citing Kibler)",
+    "Gerald of Wales, Itinerary through Wales (1188), trans. R. C. Hoare (1806)",
+    "Hallam Tennyson, Alfred Lord Tennyson: A Memoir, vol. 1 (1897)",
+    "People's Collection Wales / Amgueddfa Cymru: \"King Arthur's Round Table\""
+  ]
+}

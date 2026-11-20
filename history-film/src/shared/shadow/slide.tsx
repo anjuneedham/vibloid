@@ -15,9 +15,11 @@ export const LanternSlide: React.FC<{
   w: number;
   enter: number;
   label?: string;
+  /** the exhibit tag printed before the label */
+  exhibit?: string;
   children: React.ReactNode;
   tilt?: number;
-}> = ({ x, y, w, enter, label, children, tilt = -1.2 }) => {
+}> = ({ x, y, w, enter, label, exhibit = "EXHIBIT A", children, tilt = -1.2 }) => {
   const frame = useCurrentFrame();
   const t = frame - enter;
   if (t < 0) return null;
@@ -103,7 +105,7 @@ export const LanternSlide: React.FC<{
             letterSpacing: 1,
           }}
         >
-          <span style={{ fontFamily: BANGERS, color: SHADOW.brass, letterSpacing: 3, marginRight: 10 }}>EXHIBIT A</span>
+          <span style={{ fontFamily: BANGERS, color: SHADOW.brass, letterSpacing: 3, marginRight: 10 }}>{exhibit}</span>
           {label}
         </div>
       ) : null}
