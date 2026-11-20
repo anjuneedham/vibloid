@@ -171,4 +171,4 @@ The cartouches and slides set quotes word for word and punctuation for punctuati
 - L22 says Gerald "listed palaces, baths, temples and theatres"; the Hoare text also lists "a tower". The slide shows the full sentence.
 - L25 "a blaze of publicity" is Coflein's phrase; it is spoken without quotation marks and shown without them (the source tag names Coflein).
 - L26: `sources.md` says to confirm that the "exclusive" updates were about Arthur. The line as written does not say so and the slide does not either.
-- L39: the script still has the placeholder "[PART 3 CASE, TO BE CHOSEN]". The draft uses `episode.json` ("Next time: a pope puts a dead pope on trial. Case adjourned."). Its length changes the end time slightly.
+- L39: settled. The script now reads "Next time: a pope puts a dead pope on trial. / Case adjourned." and `episode.json` matches. Its length changes the end time slightly.
