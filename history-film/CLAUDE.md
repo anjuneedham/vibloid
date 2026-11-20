@@ -91,7 +91,8 @@ The look is inspired by dark, moody cartoon history stories: simple thick-outlin
 
 Format: a new historical claim goes on trial. Same four beats every episode: DIG announces the claim, DOUBT objects, THE CLERK produces the sources, THE CURATOR gives a verdict (PROVEN, PLAUSIBLE or UNPROVEN).
 
-- LOOK: COMIC BOOK PANELS (the user chose style 6 from the style reel). Reference implementation: `src/films/reel/Comic.tsx`.
+- EPISODE 2+ LOOK (options pending the owner's choice): comic panels are Part 1 only. The cast stays exactly as in `src/shared/cast.tsx`; only the world and treatment change. Recommended: LANTERN-LIT SHADOW THEATRE for the 5-minute film (`src/shared/shadow/*`, `ShadowStyleTest`) and LINOCUT two-colour print for the Short (`src/shared/linocut/*`, `LinocutStyleTest`). Alternatives (manuscript, newspaper board) are in `EvidenceRoomStyleReel`. Art bible, light/motion rules, beat staging and shot list: `STYLE-EPISODE2.md`.
+- LOOK (Part 1): COMIC BOOK PANELS (the user chose style 6 from the style reel). Reference implementation: `src/films/reel/Comic.tsx`.
   - Each beat is a comic "page" of 2 to 4 panels on a cream halftone page. Thick black panel borders, hard drop shadow, halftone dots.
   - Panels slam in one after another (spring from scale 1.18). Big moments get a starburst with Bangers text, speed lines, a white flash and a page shake.
   - Narration appears in yellow caption boxes (Comic Neue bold). Character lines appear in speech bubbles with tails.
