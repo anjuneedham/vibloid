@@ -10,6 +10,7 @@ import { CastHead } from "./films/series/CastHead";
 import { CastSheet } from "./films/series/CastSheet";
 import { Test10s } from "./films/test/Test10s";
 import { FPS, HEIGHT, WIDTH } from "./shared/theme";
+import { SHADOW_TEST_FRAMES, ShadowStyleTest } from "./films/evidence-room-2-style/ShadowStyleTest";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="ShortEvidenceRoom1" component={ShortEvidenceRoom1} durationInFrames={SHORT_FRAMES} fps={FPS} width={1080} height={1920} />
       <Still id="Thumbnail1" component={Thumbnail1} width={1280} height={720} />
       <Still id="CastSheet" component={CastSheet} width={WIDTH} height={HEIGHT} />
+      <Composition id="ShadowStyleTest" component={ShadowStyleTest} durationInFrames={SHADOW_TEST_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
       <Still id="Avatar" component={Avatar} width={800} height={800} />
       <Still id="Banner" component={Banner} width={2560} height={1440} />
     </>
