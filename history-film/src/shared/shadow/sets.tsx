@@ -110,8 +110,8 @@ export const PinBoard: React.FC<{ id?: string; lit?: number[]; labels?: string[]
         {labels
           ? CARDS.map(([x, y, w, h, r], i) =>
               labels[i] ? (
-                <foreignObject key={`l${i}`} x={x + 12} y={y + 22} width={w - 24} height={h - 30} transform={`rotate(${r} ${x + w / 2} ${y + h / 2})`}>
-                  <div style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 25, lineHeight: 1.08, color: SHADOW.scribe, textAlign: "center" }}>{labels[i]}</div>
+                <foreignObject key={`l${i}`} x={x + 10} y={y + 26} width={w - 20} height={h - 34} transform={`rotate(${r} ${x + w / 2} ${y + h / 2})`}>
+                  <div style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 19, lineHeight: 1.08, color: SHADOW.scribe, textAlign: "center" }}>{labels[i]}</div>
                 </foreignObject>
               ) : null,
             )

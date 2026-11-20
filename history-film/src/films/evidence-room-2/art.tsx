@@ -152,20 +152,19 @@ export const MapArt: React.FC<{ label?: number; pulse?: number }> = ({ label = 1
       River Usk
     </text>
     {/* the fortress: a rounded rectangle, its walls hatched */}
-    <rect x={110} y={90} width={420} height={330} rx={40} fill="none" stroke={SHADOW.mapInk} strokeWidth={8} strokeDasharray="22 8" transform="rotate(-8 320 255)" />
-    <text x={320} y={270} textAnchor="middle" fontFamily={FELL} fontSize={36} letterSpacing={4} fill={SHADOW.mapInk} transform="rotate(-8 320 255)">
+    <rect x={70} y={110} width={380} height={300} rx={40} fill="none" stroke={SHADOW.mapInk} strokeWidth={8} strokeDasharray="22 8" transform="rotate(-8 320 255)" />
+    <text x={260} y={270} textAnchor="middle" fontFamily={FELL} fontSize={36} letterSpacing={4} fill={SHADOW.mapInk} transform="rotate(-8 260 260)">
       CAERLEON
     </text>
     {/* the amphitheatre, outside the walls */}
     <ellipse cx={700} cy={360} rx={150} ry={112} fill="none" stroke={SHADOW.mapInk} strokeWidth={22} opacity={0.35} />
     <ellipse cx={700} cy={360} rx={150} ry={112} fill="none" stroke={SHADOW.mapInk} strokeWidth={6} />
-    <ellipse cx={700} cy={360} rx={110} ry={76} fill="none" stroke={SHADOW.mapInk} strokeWidth={3} />
-    <ellipse cx={700} cy={360} rx={175 + pulse * 30} ry={135 + pulse * 22} fill="none" stroke={SHADOW.rubric} strokeWidth={6} opacity={(1 - pulse) * label} />
+        <ellipse cx={700} cy={360} rx={175 + pulse * 30} ry={135 + pulse * 22} fill="none" stroke={SHADOW.rubric} strokeWidth={6} opacity={(1 - pulse) * label} />
     <g opacity={label}>
-      <text x={700} y={185} textAnchor="middle" fontFamily={FELL} fontStyle="italic" fontSize={44} fill={SHADOW.mapInk}>
+      <text x={720} y={200} textAnchor="middle" fontFamily={FELL} fontStyle="italic" fontSize={44} fill={SHADOW.mapInk}>
         King Arthur’s Round Table
       </text>
-      <text x={700} y={372} textAnchor="middle" fontFamily={FELL} fontSize={30} letterSpacing={6} fill={SHADOW.mapInk}>
+      <text x={700} y={370} textAnchor="middle" fontFamily={FELL} fontSize={24} letterSpacing={3} fill={SHADOW.mapInk}>
         AMPHITHEATRE
       </text>
     </g>
@@ -328,7 +327,7 @@ export const TabletArt: React.FC<{ k: number }> = ({ k }) => {
       <Html x={150} y={120} w={720} h={430}>
         <div style={{ fontFamily: ROMAN, fontSize: 40, lineHeight: 1.32, letterSpacing: 2, color: SHADOW.leadDark, textAlign: "center", textShadow: `1px 1px 0 ${SHADOW.leadHi}` }}>
           {words.map((w, i) => (
-            <span key={i} style={{ opacity: i < shown ? 1 : 0.08 }}>
+            <span key={i} style={{ opacity: i < shown ? 1 : 0.4 }}>
               {w}{" "}
             </span>
           ))}

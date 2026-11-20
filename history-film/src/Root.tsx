@@ -13,6 +13,9 @@ import { FPS, HEIGHT, WIDTH } from "./shared/theme";
 import { SHADOW_TEST_FRAMES, ShadowStyleTest } from "./films/evidence-room-2-style/ShadowStyleTest";
 import { LINO_TEST_FRAMES, LinocutStyleTest } from "./films/evidence-room-2-style/LinocutStyleTest";
 import { EvidenceRoomStyleReel, REEL_FRAMES } from "./films/evidence-room-2-style/EvidenceRoomStyleReel";
+import { EVIDENCE_ROOM_2_FRAMES, EvidenceRoom2 } from "./films/evidence-room-2/EvidenceRoom2";
+import { ShortEvidenceRoom2 } from "./films/evidence-room-short-2/ShortEvidenceRoom2";
+import { SHORT_FRAMES as SHORT2_FRAMES } from "./films/evidence-room-short-2/timing";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -48,6 +51,8 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="ShadowStyleTest" component={ShadowStyleTest} durationInFrames={SHADOW_TEST_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
       <Composition id="LinocutStyleTest" component={LinocutStyleTest} durationInFrames={LINO_TEST_FRAMES} fps={FPS} width={1080} height={1920} />
       <Composition id="EvidenceRoomStyleReel" component={EvidenceRoomStyleReel} durationInFrames={REEL_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+      <Composition id="EvidenceRoom2" component={EvidenceRoom2} durationInFrames={EVIDENCE_ROOM_2_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+      <Composition id="ShortEvidenceRoom2" component={ShortEvidenceRoom2} durationInFrames={SHORT2_FRAMES} fps={FPS} width={1080} height={1920} />
       <Still id="Avatar" component={Avatar} width={800} height={800} />
       <Still id="Banner" component={Banner} width={2560} height={1440} />
     </>

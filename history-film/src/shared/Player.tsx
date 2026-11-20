@@ -40,7 +40,7 @@ export type PlayerProps = {
   rot?: number;
   /** explicit lift in px (positive = up): per-character idle motion */
   lift?: number;
-} & Pick<ClerkProps, "browLift" | "browTilt" | "wide" | "lids" | "armL" | "armR" | "headTilt" | "prop" | "eyesClosed" | "autoBlink">;
+} & Pick<ClerkProps, "browLift" | "browTilt" | "wide" | "lids" | "armL" | "armR" | "headTilt" | "headDrop" | "prop" | "eyesClosed" | "autoBlink">;
 
 export const Player: React.FC<PlayerProps> = ({
   who,

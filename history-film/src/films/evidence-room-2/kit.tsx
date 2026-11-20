@@ -72,7 +72,7 @@ export const useTalk = (who: Who): Span[] => {
 };
 
 // ------------------------------------------------------------------ cast on the stage
-export type CastSpec = { who: Who; x: number; width?: number; feet?: number } & Partial<PlayerProps>;
+export type CastSpec = { who: Who; x: number; width?: number; feet?: number; idle?: boolean } & Partial<Omit<PlayerProps, "who" | "x">>;
 
 /** Camera lean toward whoever is speaking (two-shot rule: lean ~ instead of cutting). Returns cam x. */
 export const useLean = (cast: CastSpec[], amount = 0.2) => {

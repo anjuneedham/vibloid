@@ -85,7 +85,7 @@ export const PlaceShot: React.FC<{
         </Layer>
         {kind === "fortress" ? (
           <Layer depth={0.45}>
-            <div style={{ position: "absolute", inset: 0, transform: "translateY(150px) scale(1.25)", transformOrigin: "50% 100%" }}>
+            <div style={{ position: "absolute", inset: 0, transform: "translateY(60px) scale(1.7)", transformOrigin: "50% 100%" }}>
               <FortressWall id={`${k}-fw`} />
             </div>
           </Layer>
@@ -110,7 +110,7 @@ export const PlaceShot: React.FC<{
       <PaperGrain opacity={0.42} />
       <LampVignette hot={hot} strength={0.9} />
       {overlay}
-      {place ? <PlaceTag place={place} sub={sub} span={[10, len - 6]} /> : null}
+      {place ? <div style={{ position: "absolute", inset: 0, transform: "translateY(-150px)", zIndex: 600 }}><PlaceTag place={place} sub={sub} span={[10, len - 6]} /></div> : null}
     </AbsoluteFill>
   );
 };
@@ -233,7 +233,7 @@ export const PlayShot: React.FC<{
       </Stage>
       <KeyLight x={hot[0]} y={hot[1] - 100} strength={0.8} />
       <Finish hot={hot} gel={gel ?? (moon ? SHADOW.gelTeal : SHADOW.gelAmber)} gelOpacity={0.22} />
-      {caption ? <PlaceTag place={caption.place} sub={caption.sub} span={[8, len - 6]} /> : null}
+      {caption ? <div style={{ position: "absolute", inset: 0, transform: "translateY(-150px)", zIndex: 600 }}><PlaceTag place={caption.place} sub={caption.sub} span={[8, len - 6]} /></div> : null}
     </AbsoluteFill>
   );
 };
@@ -299,7 +299,7 @@ export const PoetPlay: React.FC = () => (
           <path key={i} d={`M1000 ${640 + i * 34} Q 1110 ${630 + i * 34 + Math.sin(f / 9 + i) * 8} 1220 ${640 + i * 34} T 1440 ${640 + i * 34} L1440 ${650 + i * 34} Q 1330 ${660 + i * 34} 1220 ${650 + i * 34} T 1000 ${650 + i * 34} Z`} fill="white" />
         ))}
         <rect x={-300} y={905} width={2520} height={400} fill="white" />
-        <ScholarSil x={560} y={905} s={1.25} t={f} hat="brim" />
+        <ScholarSil x={720} y={905} s={1.2} t={f} hat="brim" />
       </>
     )}
   </PlayShot>
@@ -516,7 +516,7 @@ export const EndCard: React.FC = () => {
         <div style={{ fontFamily: BANGERS, fontSize: 60, letterSpacing: 6, color: SHADOW.rubric, textAlign: "center" }}>SOURCES</div>
         <div style={{ marginTop: 6 }}>
           {EP.sources.map((s, i) => (
-            <div key={i} style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 25, lineHeight: 1.22, color: SHADOW.scribe, opacity: o(i), marginTop: 9 }}>
+            <div key={i} style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 29, lineHeight: 1.22, color: SHADOW.scribe, opacity: o(i), marginTop: 14 }}>
               · {s}
             </div>
           ))}
