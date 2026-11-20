@@ -1,6 +1,6 @@
 # The Evidence Room, Part 2: The Round Table at Caerleon
 
-Status: DRAFT for approval. About 510 spoken words, 39 lines, about 5:00 to 5:15 at your Part 1 pace (126 wpm) once breathing gaps are added.
+Status: DRAFT for approval. About 495 spoken words, 39 lines, about 4:50 to 5:10 at your Part 1 pace (126 wpm) once breathing gaps are added.
 Look: NOT comic. Long film = lantern-lit shadow theatre. Short = linocut poster. Same four cast members as Part 1. (Style is pending the owner's choice from the style reel.)
 Voice: you read every line. Each character has a target pitch, pace and weight: see `../../VOICES.md`. Slash marks (/) are pauses. Numbers are written the way they are SAID.
 Every beat shows a SOURCE TAG on screen. Verification status of every claim is in `sources.md`. Pronunciations are in `pronunciation.md`.
@@ -81,7 +81,7 @@ L39 [CURATOR] Next time: [PART 3 CASE, TO BE CHOSEN]. / Case adjourned.
 ---
 
 ## The 1-minute Short: lines reused (no new recording)
-L02, L04, L09, L10, L17, L26, L28, L36, L37, L38. About 93 words, about 50 to 55 seconds with gaps.
+L02, L04, L09, L10, L17, L26, L28, L36, L37, L38. About 92 words, about 50 to 55 seconds with gaps.
 Order: hook (L02) / claim (L04) / cinema joke (L09, L10) / no table in Geoffrey (L17) / newspaper (L26, L28) / verdict (L36) / button (L37, L38).
 
 ## Delivery notes (full cards in VOICES.md)
