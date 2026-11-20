@@ -55,7 +55,7 @@ const LinoCartouche: React.FC<{ id: LineId }> = ({ id }) => {
       <div style={{ position: "relative", background: LINO.paper, border: `8px solid ${LINO.ink}`, padding: "40px 30px 22px", filter: "url(#lino-ink)", minHeight: 120 }}>
         <div style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 48, lineHeight: 1.16, color: LINO.ink }}>
           {words.map((w, i) => (
-            <span key={i} style={{ opacity: frame >= Math.floor((p0 + i * per) / 2) * 2 ? 1 : 0.12 }}>
+            <span key={i} style={{ whiteSpace: "nowrap", opacity: frame >= Math.floor((p0 + i * per) / 2) * 2 ? 1 : 0.12 }}>
               {w}{" "}
             </span>
           ))}

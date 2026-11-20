@@ -313,7 +313,7 @@ const LineCartouche: React.FC<{ id: LineId }> = ({ id }) => {
         </div>
         <div style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 46, lineHeight: 1.2, color: SHADOW.text, textShadow: `0 2px 8px ${SHADOW.room}` }}>
           {words.map((w, i) => (
-            <span key={i} style={{ opacity: interpolate(frame, [p0 + i * per, p0 + i * per + 5], [0.18, 1], clamp) }}>
+            <span key={i} style={{ whiteSpace: "nowrap", opacity: interpolate(frame, [p0 + i * per, p0 + i * per + 5], [0.18, 1], clamp) }}>
               {w}
               {i < words.length - 1 ? " " : ""}
             </span>
