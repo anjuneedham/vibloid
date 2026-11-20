@@ -1,0 +1,215 @@
+{
+"threshold": 0.0248,
+"chunks": [
+{
+"s": 1.24,
+"e": 1.83,
+"text": "Caerleon.",
+"prob": 0.31
+},
+{
+"s": 2.26,
+"e": 3.32,
+"text": "In South Wales, you",
+"prob": 0.44
+},
+{
+"s": 3.77,
+"e": 4.76,
+"text": "A Roman Fortress.",
+"prob": 0.68
+},
+{
+"s": 5.31,
+"e": 8.2,
+"text": "Home of the Second Augustan Legion.",
+"prob": 0.68
+},
+{
+"s": 8.6,
+"e": 9.66,
+"text": "And outside the walls.",
+"prob": 0.77
+},
+{
+"s": 10.33,
+"e": 11.69,
+"text": "A huge oval arena.",
+"prob": 0.81
+},
+{
+"s": 12.39,
+"e": 12.84,
+"text": "Old maps.",
+"prob": 0.69
+},
+{
+"s": 13.25,
+"e": 13.78,
+"text": "Let's rebuild it.",
+"prob": 0.6
+},
+{
+"s": 14.18,
+"e": 15.88,
+"text": "King Arthur's Round Table.",
+"prob": 0.73
+},
+{
+"s": 17.29,
+"e": 17.61,
+"text": "Thanks for watching!",
+"prob": 0.43
+},
+{
+"s": 20.69,
+"e": 23.49,
+"text": "He says, author held a magnificent court.",
+"prob": 0.8
+},
+{
+"s": 24.23,
+"e": 25.52,
+"text": "In the City of Legions.",
+"prob": 0.43
+},
+{
+"s": 26.34,
+"e": 27.75,
+"text": "That is Caerleon.",
+"prob": 0.74
+},
+{
+"s": 32.16,
+"e": 32.59,
+"text": "So...",
+"prob": 0.57
+},
+{
+"s": 32.9,
+"e": 33.93,
+"text": "Arthur's Table.",
+"prob": 0.33
+},
+{
+"s": 34.82,
+"e": 36.18,
+"text": "So, Arthur's Table.",
+"prob": 0.51
+},
+{
+"s": 36.66,
+"e": 39.7,
+"text": "Arrives almost 20 years later.",
+"prob": 0.85
+},
+{
+"s": 41.0,
+"e": 41.97,
+"text": "Then and in.",
+"prob": 0.57
+},
+{
+"s": 42.49,
+"e": 45.34,
+"text": "Then in 1856, the poet with.",
+"prob": 0.81
+},
+{
+"s": 45.93,
+"e": 48.49,
+"text": "Tennyson stays in Caerleon and writes, It's",
+"prob": 0.81
+},
+{
+"s": 49.66,
+"e": 50.41,
+"text": "And right in.",
+"prob": 0.65
+},
+{
+"s": 51.63,
+"e": 53.19,
+"text": "Then in 18, in.",
+"prob": 0.47
+},
+{
+"s": 53.81,
+"e": 55.83,
+"text": "56, The Poet Tennyson,",
+"prob": 0.68
+},
+{
+"s": 56.22,
+"e": 57.47,
+"text": "Stays in Caerleon.",
+"prob": 0.74
+},
+{
+"s": 57.91,
+"e": 59.42,
+"text": "And write in a letter.",
+"prob": 0.8
+},
+{
+"s": 60.14,
+"e": 63.17,
+"text": "I sit like King Arthur in Caerleon.",
+"prob": 0.87
+},
+{
+"s": 65.95,
+"e": 67.93,
+"text": "But the digging was real.",
+"prob": 0.88
+},
+{
+"s": 69.92,
+"e": 71.81,
+"text": "Cadw says, Tessa Wheeler.",
+"prob": 0.45
+},
+{
+"s": 72.55,
+"e": 77.39,
+"text": "Mortimer Wheeler's wife did the actual excavation.",
+"prob": 0.91
+},
+{
+"s": 78.87,
+"e": 80.45,
+"text": "And they found a lead.",
+"prob": 0.82
+},
+{
+"s": 80.76,
+"e": 82.21,
+"text": "Curse Table.",
+"prob": 0.15
+},
+{
+"s": 87.43,
+"e": 87.68,
+"text": "But...",
+"prob": 0.35
+},
+{
+"s": 88.1,
+"e": 89.46,
+"text": "It's a great story.",
+"prob": 0.96
+},
+{
+"s": 93.93,
+"e": 94.11,
+"text": "Thanks for watching!",
+"prob": 0.44
+},
+{
+"s": 94.5,
+"e": 94.82,
+"text": "",
+"prob": 0.0
+}
+]
+}

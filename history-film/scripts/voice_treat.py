@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Optional light 'character treatment' for a one-performer voiceover.
 
-Usage: python3 scripts/voice_treat.py <voiceover.mp3|wav> <units.json> <out.mp3> [--strength 0..1]
+Usage: python3 scripts/voice_treat.py <voiceover.mp3|wav> <units.json> <out.mp3> [--strength 0..1] [--auto]
 
 Applies a small, different pitch + tone chain to each character's lines so one performer reads as four people.
 It keeps every line's start, end and length, so timing.ts and the animation do not change.
@@ -9,6 +9,8 @@ Pitch is shifted by resampling and then restoring length with atempo, so the shi
 not a chipmunk. Keep it subtle: the performance (pace, pitch movement, pauses) must still do most of the work.
 
 --strength scales the semitone shifts (1.0 = the values below, 0.5 = half as much).
+--auto measures each voice's median pitch in the file and shifts it to the target gap from the Curator (Dig +5, Clerk +2,
+Doubt -2.5 semitones, the targets in VOICES.md), so it works whatever your natural pitch offsets are. Shifts are clamped to +-6.
 The result is for the owner's ears to judge. Always compare with the untreated take.
 """
 import json
@@ -26,7 +28,7 @@ CHAINS = {
     "curator": {"st": 0.0, "eq": "equalizer=f=140:t=q:w=1.2:g=2.5,highshelf=f=4500:g=-1"},
     "dig": {"st": 6.0, "eq": "highshelf=f=3000:g=2.5,equalizer=f=250:t=q:w=1.0:g=-2"},
     "doubt": {"st": -2.5, "eq": "highshelf=f=3500:g=-3,volume=-1.5dB"},
-    "clerk": {"st": 3.0, "eq": "highpass=f=220,lowpass=f=6500,equalizer=f=2500:t=q:w=1.0:g=2,volume=-3dB"},
+    "clerk": {"st": 3.0, "eq": "highpass=f=130,lowpass=f=7000,equalizer=f=2500:t=q:w=1.0:g=2,volume=2dB"},
 }
 
 
@@ -60,15 +62,42 @@ def treat(seg, st, eq):
     return y[: len(seg)]
 
 
+TARGET_GAP = {"curator": 0.0, "dig": 5.0, "doubt": -2.5, "clerk": 2.0}
+
+
+def auto_shifts(src, units_path):
+    """Semitone shift per voice = target gap from the Curator minus the gap already in the recording."""
+    import os
+    import numpy as np
+
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import voice_check as vc
+
+    x = vc.load(src)
+    f = {}
+    for u in json.load(open(units_path))["units"]:
+        f.setdefault(u["who"], []).extend(vc.f0_frames(x[int(u["start"] * vc.SR) : int(u["end"] * vc.SR)]))
+    med = {k: float(np.median(v)) for k, v in f.items() if len(v) > 30}
+    ref = med["curator"]
+    out = {}
+    for who, hz in med.items():
+        natural = 12 * np.log2(hz / ref)
+        out[who] = max(-6.0, min(6.0, TARGET_GAP[who] - natural))
+        print(f"{who:8s} natural {hz:6.1f} Hz ({natural:+.1f} st vs Curator) -> shift {out[who]:+.1f} st")
+    return out
+
+
 def main():
     src, units_path, out = sys.argv[1:4]
     strength = float(sys.argv[sys.argv.index("--strength") + 1]) if "--strength" in sys.argv else 1.0
+    shifts = auto_shifts(src, units_path) if "--auto" in sys.argv else {}
     x = decode(src)
     y = x.copy()
     for u in json.load(open(units_path))["units"]:
         c = CHAINS.get(u["who"])
         if not c:
             continue
+        c = dict(c, st=shifts.get(u["who"], c["st"]))
         a, b = int(u["start"] * SR), int(u["end"] * SR)
         fade = int(0.01 * SR)
         seg = treat(x[a:b], c["st"] * strength, c["eq"])

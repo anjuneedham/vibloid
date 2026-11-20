@@ -1,0 +1,467 @@
+{
+"threshold": 0.0171,
+"chunks": [
+{
+"s": 0.82,
+"e": 2.55,
+"text": "Ladies and Gentlemen.",
+"prob": 0.75
+},
+{
+"s": 3.15,
+"e": 5.04,
+"text": "The Court of History is back in session.",
+"prob": 0.77
+},
+{
+"s": 6.55,
+"e": 7.26,
+"text": "Today's case...",
+"prob": 0.57
+},
+{
+"s": 7.83,
+"e": 9.66,
+"text": "A mean ruin in Wales.",
+"prob": 0.62
+},
+{
+"s": 10.27,
+"e": 11.97,
+"text": "And the Legend that calls it King.",
+"prob": 0.57
+},
+{
+"s": 12.38,
+"e": 13.88,
+"text": "Arthur's Round Table.",
+"prob": 0.57
+},
+{
+"s": 14.43,
+"e": 14.69,
+"text": "Thanks for watching!",
+"prob": 0.46
+},
+{
+"s": 17.09,
+"e": 18.46,
+"text": "The Romans are not in doubt.",
+"prob": 0.83
+},
+{
+"s": 19.48,
+"e": 19.77,
+"text": "Caerleon.",
+"prob": 0.0
+},
+{
+"s": 20.47,
+"e": 21.1,
+"text": "Caerleon.",
+"prob": 0.42
+},
+{
+"s": 25.13,
+"e": 26.54,
+"text": "The Romans are not in doubt.",
+"prob": 0.86
+},
+{
+"s": 34.32,
+"e": 35.33,
+"text": "Thadou says.",
+"prob": 0.63
+},
+{
+"s": 36.72,
+"e": 38.04,
+"text": "Caerleon was one of...",
+"prob": 0.62
+},
+{
+"s": 38.55,
+"e": 39.89,
+"text": "Just three permanent.",
+"prob": 0.68
+},
+{
+"s": 40.56,
+"e": 42.92,
+"text": "Legionnaire Fortresses in Berkeley.",
+"prob": 0.69
+},
+{
+"s": 44.07,
+"e": 46.21,
+"text": "Built to hold down a fair sum.",
+"prob": 0.76
+},
+{
+"s": 46.54,
+"e": 47.54,
+"text": "So, take a try.",
+"prob": 0.48
+},
+{
+"s": 48.93,
+"e": 49.2,
+"text": "",
+"prob": 0.0
+},
+{
+"s": 51.19,
+"e": 52.4,
+"text": "Museum Wales cells.",
+"prob": 0.21
+},
+{
+"s": 53.05,
+"e": 54.05,
+"text": "Museum Wales.",
+"prob": 0.14
+},
+{
+"s": 54.48,
+"e": 55.81,
+"text": "Museum Wales.",
+"prob": 0.28
+},
+{
+"s": 56.33,
+"e": 59.43,
+"text": "Says it held over 5,000 soldiers.",
+"prob": 0.81
+},
+{
+"s": 62.61,
+"e": 64.42,
+"text": "The amphitheatre was...",
+"prob": 0.63
+},
+{
+"s": 64.84,
+"e": 65.39,
+"text": "Begun.",
+"prob": 0.28
+},
+{
+"s": 65.78,
+"e": 68.29,
+"text": "Around 80-90.",
+"prob": 0.47
+},
+{
+"s": 68.78,
+"e": 70.2,
+"text": "With room for a boat.",
+"prob": 0.79
+},
+{
+"s": 70.68,
+"e": 71.57,
+"text": "6,000.",
+"prob": 0.53
+},
+{
+"s": 72.8,
+"e": 75.08,
+"text": "That number is an estimate.",
+"prob": 0.86
+},
+{
+"s": 79.7,
+"e": 81.17,
+"text": "Cadw calls it.",
+"prob": 0.6
+},
+{
+"s": 81.53,
+"e": 83.4,
+"text": "The Roman equivalent of today's.",
+"prob": 0.77
+},
+{
+"s": 83.72,
+"e": 85.14,
+"text": "Multiplex Cinema.",
+"prob": 0.73
+},
+{
+"s": 88.01,
+"e": 89.25,
+"text": "The legend starts with a book.",
+"prob": 0.84
+},
+{
+"s": 89.94,
+"e": 90.56,
+"text": "The history of...",
+"prob": 0.57
+},
+{
+"s": 90.92,
+"e": 91.86,
+"text": "The King of...",
+"prob": 0.48
+},
+{
+"s": 92.2,
+"e": 92.59,
+"text": "Birdie.",
+"prob": 0.26
+},
+{
+"s": 94.05,
+"e": 97.13,
+"text": "Written about 11.36. Bye.",
+"prob": 0.72
+},
+{
+"s": 97.5,
+"e": 98.22,
+"text": "Geoffrey off.",
+"prob": 0.4
+},
+{
+"s": 98.95,
+"e": 99.45,
+"text": "Monmouth.",
+"prob": 0.23
+},
+{
+"s": 103.94,
+"e": 104.78,
+"text": "His guess?",
+"prob": 0.56
+},
+{
+"s": 105.09,
+"e": 106.31,
+"text": "Sit at a table.",
+"prob": 0.82
+},
+{
+"s": 106.79,
+"e": 107.45,
+"text": "According.",
+"prob": 0.29
+},
+{
+"s": 108.38,
+"e": 109.68,
+"text": "As the rank of...",
+"prob": 0.69
+},
+{
+"s": 110.28,
+"e": 112.06,
+"text": "Each did the demand.",
+"prob": 0.46
+},
+{
+"s": 114.69,
+"e": 116.41,
+"text": "His guests sit at a table.",
+"prob": 0.72
+},
+{
+"s": 117.14,
+"e": 120.27,
+"text": "According as the rank of each did demand.",
+"prob": 0.85
+},
+{
+"s": 121.79,
+"e": 122.73,
+"text": "The Round Table.",
+"prob": 0.22
+},
+{
+"s": 123.15,
+"e": 124.74,
+"text": "Where nobody wrongs higher.",
+"prob": 0.71
+},
+{
+"s": 125.28,
+"e": 126.93,
+"text": "First appears in a poem.",
+"prob": 0.77
+},
+{
+"s": 127.31,
+"e": 127.63,
+"text": "Bye.",
+"prob": 0.84
+},
+{
+"s": 128.09,
+"e": 130.35,
+"text": "Wace in 1155.",
+"prob": 0.52
+},
+{
+"s": 130.81,
+"e": 131.49,
+"text": "Thanks for watching!",
+"prob": 0.41
+},
+{
+"s": 134.25,
+"e": 135.61,
+"text": "In 1188.",
+"prob": 0.48
+},
+{
+"s": 137.6,
+"e": 138.8,
+"text": "In 1188.",
+"prob": 0.38
+},
+{
+"s": 139.32,
+"e": 140.4,
+"text": "Gerald of Wales.",
+"prob": 0.56
+},
+{
+"s": 140.81,
+"e": 141.97,
+"text": "Visited ruins.",
+"prob": 0.69
+},
+{
+"s": 142.53,
+"e": 143.48,
+"text": "At Caerleon.",
+"prob": 0.27
+},
+{
+"s": 144.25,
+"e": 148.18,
+"text": "He listed palaces, baths, temples, and theatres.",
+"prob": 0.76
+},
+{
+"s": 148.61,
+"e": 151.22,
+"text": "He never mentions our own table.",
+"prob": 0.8
+},
+{
+"s": 152.31,
+"e": 154.74,
+"text": "In 1926.",
+"prob": 0.54
+},
+{
+"s": 155.09,
+"e": 157.24,
+"text": "The amphitheatre was dug out.",
+"prob": 0.75
+},
+{
+"s": 157.7,
+"e": 160.03,
+"text": "Amid a blaze of publicity.",
+"prob": 0.78
+},
+{
+"s": 162.98,
+"e": 164.59,
+"text": "Cadw's own booklet.",
+"prob": 0.62
+},
+{
+"s": 165.04,
+"e": 166.82,
+"text": "Calls the author's story ... ...",
+"prob": 0.47
+},
+{
+"s": 167.2,
+"e": 168.23,
+"text": "And I'm peeling.",
+"prob": 0.56
+},
+{
+"s": 169.05,
+"e": 170.94,
+"text": "Though untrue story.",
+"prob": 0.72
+},
+{
+"s": 171.57,
+"e": 172.02,
+"text": "Thank you.",
+"prob": 0.49
+},
+{
+"s": 173.37,
+"e": 173.61,
+"text": "Thanks for watching!",
+"prob": 0.43
+},
+{
+"s": 174.0,
+"e": 176.26,
+"text": "The court finds the romance are real.",
+"prob": 0.9
+},
+{
+"s": 176.7,
+"e": 177.97,
+"text": "The arena is real.",
+"prob": 0.85
+},
+{
+"s": 178.31,
+"e": 180.91,
+"text": "The Round Table link is unproven.",
+"prob": 0.54
+},
+{
+"s": 181.47,
+"e": 181.82,
+"text": "Verdict.",
+"prob": 0.47
+},
+{
+"s": 182.21,
+"e": 183.11,
+"text": "Unproven.",
+"prob": 0.55
+},
+{
+"s": 185.44,
+"e": 186.13,
+"text": "Next time.",
+"prob": 0.52
+},
+{
+"s": 186.45,
+"e": 189.08,
+"text": "A pope puts a dead pope on trial.",
+"prob": 0.9
+},
+{
+"s": 190.14,
+"e": 192.6,
+"text": "Next time, a pope puts a lead pope on trial.",
+"prob": 0.79
+},
+{
+"s": 193.08,
+"e": 194.04,
+"text": "Case adjourned.",
+"prob": 0.75
+},
+{
+"s": 195.92,
+"e": 196.42,
+"text": "Thanks for watching!",
+"prob": 0.51
+}
+]
+}

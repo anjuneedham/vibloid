@@ -1,0 +1,329 @@
+{
+"threshold": 0.0138,
+"chunks": [
+{
+"s": 0.35,
+"e": 1.27,
+"text": "",
+"prob": 0.0
+},
+{
+"s": 2.66,
+"e": 4.61,
+"text": "Source, Museum Wales.",
+"prob": 0.54
+},
+{
+"s": 5.11,
+"e": 7.16,
+"text": "The fortress was founded in AD.",
+"prob": 0.89
+},
+{
+"s": 7.49,
+"e": 8.24,
+"text": "Seven to four.",
+"prob": 0.63
+},
+{
+"s": 8.57,
+"e": 9.76,
+"text": "Or 75.",
+"prob": 0.62
+},
+{
+"s": 10.16,
+"e": 12.04,
+"text": "Thanks for watching!",
+"prob": 0.54
+},
+{
+"s": 12.91,
+"e": 13.41,
+"text": "Noted.",
+"prob": 0.65
+},
+{
+"s": 13.72,
+"e": 16.31,
+"text": "One museum page says AD88.",
+"prob": 0.77
+},
+{
+"s": 17.78,
+"e": 20.55,
+"text": "Noted. One museum page says A.D.",
+"prob": 0.81
+},
+{
+"s": 20.89,
+"e": 22.25,
+"text": "80.",
+"prob": 0.79
+},
+{
+"s": 25.01,
+"e": 27.08,
+"text": "Cacou describes Geoffrey as...",
+"prob": 0.49
+},
+{
+"s": 27.43,
+"e": 28.64,
+"text": "They're somewhat imaginative.",
+"prob": 0.8
+},
+{
+"s": 29.7,
+"e": 30.1,
+"text": "For new.",
+"prob": 0.18
+},
+{
+"s": 43.34,
+"e": 44.32,
+"text": "Thanks for watching!",
+"prob": 0.42
+},
+{
+"s": 44.7,
+"e": 44.87,
+"text": "Cut.",
+"prob": 0.56
+},
+{
+"s": 45.78,
+"e": 48.13,
+"text": "Cacou describes Geoffrey as the...",
+"prob": 0.6
+},
+{
+"s": 48.86,
+"e": 50.91,
+"text": "Cacou describes Geoffrey as the...",
+"prob": 0.59
+},
+{
+"s": 51.31,
+"e": 52.68,
+"text": "Somewhat imaginative.",
+"prob": 0.57
+},
+{
+"s": 53.26,
+"e": 54.69,
+"text": "12th Century Scholar.",
+"prob": 0.62
+},
+{
+"s": 56.8,
+"e": 58.22,
+"text": "Research Geoffrey's book.",
+"prob": 0.54
+},
+{
+"s": 58.85,
+"e": 60.66,
+"text": "Two translations and a Latin.",
+"prob": 0.6
+},
+{
+"s": 61.49,
+"e": 63.78,
+"text": "No Round Table, no amphitheatre.",
+"prob": 0.52
+},
+{
+"s": 69.76,
+"e": 70.34,
+"text": "Source.",
+"prob": 0.62
+},
+{
+"s": 71.36,
+"e": 71.83,
+"text": "Taku.",
+"prob": 0.46
+},
+{
+"s": 72.52,
+"e": 74.29,
+"text": "The Daily Mail paid for the dig.",
+"prob": 0.82
+},
+{
+"s": 74.98,
+"e": 77.46,
+"text": "In return for exclusive updates.",
+"prob": 0.76
+},
+{
+"s": 79.78,
+"e": 80.97,
+"text": "Cuckoo's Translation.",
+"prob": 0.6
+},
+{
+"s": 81.49,
+"e": 82.0,
+"text": "Lady nam- Thanks for watching!",
+"prob": 0.49
+},
+{
+"s": 82.92,
+"e": 83.97,
+"text": "Lady Nemesis.",
+"prob": 0.71
+},
+{
+"s": 84.3,
+"e": 85.95,
+"text": "I gave thee a cloak.",
+"prob": 0.78
+},
+{
+"s": 86.84,
+"e": 88.38,
+"text": "And a pair of boots.",
+"prob": 0.8
+},
+{
+"s": 88.84,
+"e": 93.25,
+"text": "Let him who took them not redeem them, unless with his own blood.",
+"prob": 0.91
+},
+{
+"s": 94.78,
+"e": 95.97,
+"text": "Roman Amphitheatre.",
+"prob": 0.62
+},
+{
+"s": 96.46,
+"e": 97.79,
+"text": "Phone, Round Table.",
+"prob": 0.36
+},
+{
+"s": 98.52,
+"e": 99.23,
+"text": "In Jeffery.",
+"prob": 0.32
+},
+{
+"s": 99.57,
+"e": 100.0,
+"text": "",
+"prob": 0.0
+},
+{
+"s": 100.61,
+"e": 101.69,
+"text": "Round Table and Geoffrey.",
+"prob": 0.26
+},
+{
+"s": 102.13,
+"e": 103.02,
+"text": "Not in the text.",
+"prob": 0.88
+},
+{
+"s": 103.67,
+"e": 105.45,
+"text": "Amphitheatre called the Round Table.",
+"prob": 0.55
+},
+{
+"s": 105.85,
+"e": 106.15,
+"text": "",
+"prob": 0.0
+},
+{
+"s": 108.33,
+"e": 108.79,
+"text": "Heh heh.",
+"prob": 0.55
+},
+{
+"s": 109.66,
+"e": 110.77,
+"text": "That's cool though.",
+"prob": 0.73
+},
+{
+"s": 112.81,
+"e": 113.6,
+"text": "Continue from here.",
+"prob": 0.71
+},
+{
+"s": 114.1,
+"e": 115.8,
+"text": "Roman amphitheatre found.",
+"prob": 0.76
+},
+{
+"s": 116.11,
+"e": 117.56,
+"text": "Round Table in Geoffrey.",
+"prob": 0.38
+},
+{
+"s": 118.02,
+"e": 118.62,
+"text": "Not in the text.",
+"prob": 0.84
+},
+{
+"s": 119.23,
+"e": 119.96,
+"text": "Alpha Theta.",
+"prob": 0.34
+},
+{
+"s": 120.4,
+"e": 121.38,
+"text": "Call the Round Table.",
+"prob": 0.47
+},
+{
+"s": 121.71,
+"e": 123.79,
+"text": "The earliest firm label we found.",
+"prob": 0.78
+},
+{
+"s": 124.45,
+"e": 125.31,
+"text": "is on maps.",
+"prob": 0.84
+},
+{
+"s": 125.62,
+"e": 127.69,
+"text": "From around 1900.",
+"prob": 0.66
+},
+{
+"s": 129.2,
+"e": 132.64,
+"text": "We could not find when the name began.",
+"prob": 0.93
+},
+{
+"s": 133.55,
+"e": 133.72,
+"text": "",
+"prob": 0.0
+},
+{
+"s": 134.18,
+"e": 134.83,
+"text": "Thanks for watching!",
+"prob": 0.53
+}
+]
+}

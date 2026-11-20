@@ -1,0 +1,629 @@
+{
+ "units": [
+  {
+   "id": "L01",
+   "beat": 1,
+   "who": "curator",
+   "start": 1.0,
+   "end": 5.872,
+   "tempo": 0.912,
+   "wpm_raw": 148,
+   "wpm_final": 135,
+   "src": [
+    [
+     0.72,
+     5.18
+    ]
+   ]
+  },
+  {
+   "id": "L02",
+   "beat": 1,
+   "who": "curator",
+   "start": 6.572,
+   "end": 14.142,
+   "tempo": 1.0,
+   "wpm_raw": 135,
+   "wpm_final": 135,
+   "src": [
+    [
+     6.45,
+     14.02
+    ]
+   ]
+  },
+  {
+   "id": "L03",
+   "beat": 2,
+   "who": "dig",
+   "start": 15.942,
+   "end": 23.142,
+   "tempo": 1.0,
+   "wpm_raw": 108,
+   "wpm_final": 108,
+   "src": [
+    [
+     1.14,
+     8.34
+    ]
+   ]
+  },
+  {
+   "id": "L04",
+   "beat": 2,
+   "who": "dig",
+   "start": 23.842,
+   "end": 31.362,
+   "tempo": 1.0,
+   "wpm_raw": 128,
+   "wpm_final": 128,
+   "src": [
+    [
+     8.5,
+     16.02
+    ]
+   ]
+  },
+  {
+   "id": "L05",
+   "beat": 2,
+   "who": "clerk",
+   "start": 32.062,
+   "end": 39.402,
+   "tempo": 1.0,
+   "wpm_raw": 98,
+   "wpm_final": 98,
+   "src": [
+    [
+     2.56,
+     9.9
+    ]
+   ]
+  },
+  {
+   "id": "L06",
+   "beat": 3,
+   "who": "curator",
+   "start": 41.202,
+   "end": 55.202,
+   "tempo": 1.0,
+   "wpm_raw": 116,
+   "wpm_final": 116,
+   "src": [
+    [
+     25.03,
+     46.35
+    ]
+   ]
+  },
+  {
+   "id": "L07",
+   "beat": 3,
+   "who": "curator",
+   "start": 55.902,
+   "end": 61.092,
+   "tempo": 1.0,
+   "wpm_raw": 104,
+   "wpm_final": 104,
+   "src": [
+    [
+     54.38,
+     59.57
+    ]
+   ]
+  },
+  {
+   "id": "L08",
+   "beat": 3,
+   "who": "curator",
+   "start": 61.792,
+   "end": 74.272,
+   "tempo": 1.0,
+   "wpm_raw": 87,
+   "wpm_final": 87,
+   "src": [
+    [
+     62.51,
+     75.22
+    ]
+   ]
+  },
+  {
+   "id": "L09",
+   "beat": 3,
+   "who": "curator",
+   "start": 74.972,
+   "end": 80.652,
+   "tempo": 1.0,
+   "wpm_raw": 106,
+   "wpm_final": 106,
+   "src": [
+    [
+     79.6,
+     85.28
+    ]
+   ]
+  },
+  {
+   "id": "L10",
+   "beat": 3,
+   "who": "doubt",
+   "start": 81.352,
+   "end": 84.224,
+   "tempo": 0.906,
+   "wpm_raw": 138,
+   "wpm_final": 125,
+   "src": [
+    [
+     4.64,
+     7.25
+    ]
+   ]
+  },
+  {
+   "id": "L11",
+   "beat": 3,
+   "who": "clerk",
+   "start": 84.924,
+   "end": 89.634,
+   "tempo": 1.0,
+   "wpm_raw": 89,
+   "wpm_final": 89,
+   "src": [
+    [
+     17.68,
+     22.39
+    ]
+   ]
+  },
+  {
+   "id": "L12",
+   "beat": 4,
+   "who": "curator",
+   "start": 91.434,
+   "end": 102.654,
+   "tempo": 1.0,
+   "wpm_raw": 112,
+   "wpm_final": 112,
+   "src": [
+    [
+     87.91,
+     99.59
+    ]
+   ]
+  },
+  {
+   "id": "L13",
+   "beat": 4,
+   "who": "dig",
+   "start": 103.354,
+   "end": 110.654,
+   "tempo": 1.0,
+   "wpm_raw": 123,
+   "wpm_final": 123,
+   "src": [
+    [
+     20.59,
+     27.89
+    ]
+   ]
+  },
+  {
+   "id": "L14",
+   "beat": 4,
+   "who": "clerk",
+   "start": 111.354,
+   "end": 117.424,
+   "tempo": 1.0,
+   "wpm_raw": 89,
+   "wpm_final": 89,
+   "src": [
+    [
+     48.76,
+     54.83
+    ]
+   ]
+  },
+  {
+   "id": "L15",
+   "beat": 4,
+   "who": "doubt",
+   "start": 118.124,
+   "end": 118.874,
+   "tempo": 1.0,
+   "wpm_raw": 80,
+   "wpm_final": 80,
+   "src": [
+    [
+     9.95,
+     10.7
+    ]
+   ]
+  },
+  {
+   "id": "L16",
+   "beat": 5,
+   "who": "clerk",
+   "start": 120.674,
+   "end": 125.157,
+   "tempo": 0.911,
+   "wpm_raw": 132,
+   "wpm_final": 120,
+   "src": [
+    [
+     56.7,
+     60.8
+    ]
+   ]
+  },
+  {
+   "id": "L17",
+   "beat": 5,
+   "who": "clerk",
+   "start": 125.857,
+   "end": 128.387,
+   "tempo": 1.0,
+   "wpm_raw": 119,
+   "wpm_final": 119,
+   "src": [
+    [
+     61.39,
+     63.92
+    ]
+   ]
+  },
+  {
+   "id": "L18",
+   "beat": 5,
+   "who": "curator",
+   "start": 129.087,
+   "end": 135.293,
+   "tempo": 0.935,
+   "wpm_raw": 144,
+   "wpm_final": 135,
+   "src": [
+    [
+     114.59,
+     120.41
+    ]
+   ]
+  },
+  {
+   "id": "L19",
+   "beat": 5,
+   "who": "curator",
+   "start": 135.993,
+   "end": 144.793,
+   "tempo": 1.0,
+   "wpm_raw": 116,
+   "wpm_final": 116,
+   "src": [
+    [
+     121.69,
+     130.49
+    ]
+   ]
+  },
+  {
+   "id": "L20",
+   "beat": 5,
+   "who": "dig",
+   "start": 145.493,
+   "end": 150.613,
+   "tempo": 1.0,
+   "wpm_raw": 94,
+   "wpm_final": 94,
+   "src": [
+    [
+     34.72,
+     39.84
+    ]
+   ]
+  },
+  {
+   "id": "L21",
+   "beat": 5,
+   "who": "doubt",
+   "start": 151.313,
+   "end": 157.056,
+   "tempo": 0.915,
+   "wpm_raw": 137,
+   "wpm_final": 125,
+   "src": [
+    [
+     13.37,
+     18.64
+    ]
+   ]
+  },
+  {
+   "id": "L22",
+   "beat": 6,
+   "who": "curator",
+   "start": 158.856,
+   "end": 172.716,
+   "tempo": 1.0,
+   "wpm_raw": 104,
+   "wpm_final": 104,
+   "src": [
+    [
+     137.5,
+     151.36
+    ]
+   ]
+  },
+  {
+   "id": "L23",
+   "beat": 6,
+   "who": "dig",
+   "start": 173.416,
+   "end": 185.196,
+   "tempo": 1.0,
+   "wpm_raw": 112,
+   "wpm_final": 112,
+   "src": [
+    [
+     51.53,
+     63.31
+    ]
+   ]
+  },
+  {
+   "id": "L24",
+   "beat": 6,
+   "who": "doubt",
+   "start": 185.896,
+   "end": 190.209,
+   "tempo": 0.919,
+   "wpm_raw": 136,
+   "wpm_final": 125,
+   "src": [
+    [
+     28.15,
+     32.12
+    ]
+   ]
+  },
+  {
+   "id": "L25",
+   "beat": 7,
+   "who": "curator",
+   "start": 192.009,
+   "end": 199.969,
+   "tempo": 1.0,
+   "wpm_raw": 98,
+   "wpm_final": 98,
+   "src": [
+    [
+     152.21,
+     160.17
+    ]
+   ]
+  },
+  {
+   "id": "L26",
+   "beat": 7,
+   "who": "clerk",
+   "start": 200.669,
+   "end": 208.589,
+   "tempo": 1.0,
+   "wpm_raw": 106,
+   "wpm_final": 106,
+   "src": [
+    [
+     69.66,
+     77.6
+    ]
+   ]
+  },
+  {
+   "id": "L27",
+   "beat": 7,
+   "who": "doubt",
+   "start": 209.289,
+   "end": 215.519,
+   "tempo": 0.963,
+   "wpm_raw": 130,
+   "wpm_final": 125,
+   "src": [
+    [
+     35.29,
+     41.3
+    ]
+   ]
+  },
+  {
+   "id": "L28",
+   "beat": 7,
+   "who": "curator",
+   "start": 216.219,
+   "end": 224.419,
+   "tempo": 1.0,
+   "wpm_raw": 88,
+   "wpm_final": 88,
+   "src": [
+    [
+     162.88,
+     171.08
+    ]
+   ]
+  },
+  {
+   "id": "L29",
+   "beat": 7,
+   "who": "dig",
+   "start": 225.119,
+   "end": 235.809,
+   "tempo": 1.0,
+   "wpm_raw": 90,
+   "wpm_final": 90,
+   "src": [
+    [
+     65.85,
+     77.53
+    ]
+   ]
+  },
+  {
+   "id": "L30",
+   "beat": 7,
+   "who": "dig",
+   "start": 236.509,
+   "end": 240.089,
+   "tempo": 1.0,
+   "wpm_raw": 117,
+   "wpm_final": 117,
+   "src": [
+    [
+     78.77,
+     82.35
+    ]
+   ]
+  },
+  {
+   "id": "L31",
+   "beat": 7,
+   "who": "clerk",
+   "start": 240.789,
+   "end": 253.216,
+   "tempo": 0.85,
+   "wpm_raw": 153,
+   "wpm_final": 130,
+   "src": [
+    [
+     82.82,
+     93.39
+    ]
+   ]
+  },
+  {
+   "id": "L32",
+   "beat": 7,
+   "who": "doubt",
+   "start": 253.916,
+   "end": 255.824,
+   "tempo": 0.948,
+   "wpm_raw": 132,
+   "wpm_final": 125,
+   "src": [
+    [
+     44.98,
+     46.8
+    ]
+   ]
+  },
+  {
+   "id": "L33",
+   "beat": 8,
+   "who": "clerk",
+   "start": 257.624,
+   "end": 272.116,
+   "tempo": 0.954,
+   "wpm_raw": 126,
+   "wpm_final": 120,
+   "src": [
+    [
+     114.0,
+     127.83
+    ]
+   ]
+  },
+  {
+   "id": "L34",
+   "beat": 8,
+   "who": "clerk",
+   "start": 272.816,
+   "end": 276.799,
+   "tempo": 0.92,
+   "wpm_raw": 130,
+   "wpm_final": 120,
+   "src": [
+    [
+     129.1,
+     132.78
+    ]
+   ]
+  },
+  {
+   "id": "L35",
+   "beat": 9,
+   "who": "curator",
+   "start": 278.599,
+   "end": 286.141,
+   "tempo": 0.946,
+   "wpm_raw": 143,
+   "wpm_final": 135,
+   "src": [
+    [
+     173.9,
+     181.05
+    ]
+   ]
+  },
+  {
+   "id": "L36",
+   "beat": 9,
+   "who": "curator",
+   "start": 287.641,
+   "end": 289.521,
+   "tempo": 1.0,
+   "wpm_raw": 64,
+   "wpm_final": 64,
+   "src": [
+    [
+     181.37,
+     183.25
+    ]
+   ]
+  },
+  {
+   "id": "L37",
+   "beat": 9,
+   "who": "dig",
+   "start": 290.221,
+   "end": 292.775,
+   "tempo": 0.883,
+   "wpm_raw": 159,
+   "wpm_final": 140,
+   "src": [
+    [
+     87.33,
+     89.6
+    ]
+   ]
+  },
+  {
+   "id": "L38",
+   "beat": 9,
+   "who": "doubt",
+   "start": 293.475,
+   "end": 295.745,
+   "tempo": 1.0,
+   "wpm_raw": 106,
+   "wpm_final": 106,
+   "src": [
+    [
+     56.56,
+     58.83
+    ]
+   ]
+  },
+  {
+   "id": "L39",
+   "beat": 10,
+   "who": "curator",
+   "start": 297.545,
+   "end": 302.408,
+   "tempo": 0.85,
+   "wpm_raw": 174,
+   "wpm_final": 148,
+   "src": [
+    [
+     190.04,
+     194.18
+    ]
+   ]
+  }
+ ],
+ "total": 302.408
+}

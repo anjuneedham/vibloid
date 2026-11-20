@@ -42,6 +42,7 @@ LEAD = 1.0
 GAP_IN_BEAT = 0.7
 GAP_BETWEEN_BEATS = 1.8
 GAP_BEFORE_VERDICT = 1.5  # gap after L35, before "Verdict: unproven."
+MAX_INNER_PAUSE = 1.0  # pauses inside a line longer than this are shortened to it (dead air, reading ahead)
 
 # per-character pace window (words per minute) and the pace above which a line is slowed
 PACE = {"curator": (115, 125, 135), "dig": (120, 135, 140), "doubt": (105, 120, 125), "clerk": (95, 110, 120)}
@@ -200,6 +201,7 @@ for l in lines:
     i, j = c["i"], c["j"]
     prev_e = C[i - 1]["e"] if i > 0 else 0.0
     next_s = C[j]["s"] if j < len(C) else len(audio[l["who"]]) / SR
+    c["run"] = list(range(i, j))
     c["cut_s"] = max(c["start"] - 0.10, (prev_e + c["start"]) / 2)
     c["cut_e"] = min(c["end"] + 0.14, (next_s + c["end"]) / 2)
     a = audio[l["who"]]
@@ -244,10 +246,31 @@ for f in flags:
 if REPORT_ONLY or missing:
     sys.exit(0)
 
+def assemble(l, c):
+    """The take's audio, with any pause inside the line longer than MAX_INNER_PAUSE shortened (room tone, not silence)."""
+    a, C = audio[l["who"]], chunks[l["who"]]
+    run = c["run"]
+    if len(run) == 1:
+        return a[int(c["cut_s"] * SR) : int(c["cut_e"] * SR)].copy()
+    parts = [a[int(c["cut_s"] * SR) : int(C[run[0]]["e"] * SR)]]
+    for k in range(len(run) - 1):
+        e0, s1 = C[run[k]]["e"], C[run[k + 1]]["s"]
+        if s1 - e0 <= MAX_INNER_PAUSE:
+            parts.append(a[int(e0 * SR) : int(s1 * SR)])
+        else:
+            half = MAX_INNER_PAUSE / 2
+            parts.append(a[int(e0 * SR) : int((e0 + half) * SR)])
+            parts.append(a[int((s1 - half) * SR) : int(s1 * SR)])
+        last = k == len(run) - 2
+        parts.append(a[int(s1 * SR) : int((c["cut_e"] if last else C[run[k + 1]]["e"]) * SR)])
+    return np.concatenate(parts).copy()
+
+
+
 # ------------------------------------------------------------------ build
 speech_db = {}
 for who in PACE:
-    parts = [audio[who][int(chosen[l["id"]]["cut_s"] * SR) : int(chosen[l["id"]]["cut_e"] * SR)] for l in lines if l["who"] == who]
+    parts = [assemble(l, chosen[l["id"]]) for l in lines if l["who"] == who]
     x = np.concatenate(parts)
     act = x[np.abs(x) > 0.02]
     speech_db[who] = 20 * np.log10(np.sqrt(np.mean(act**2)) + 1e-9)
@@ -273,7 +296,7 @@ cursor = LEAD
 units = []
 for idx, l in enumerate(lines):
     c = chosen[l["id"]]
-    x = audio[l["who"]][int(c["cut_s"] * SR) : int(c["cut_e"] * SR)].copy() * gain[l["who"]]
+    x = assemble(l, c) * gain[l["who"]]
     pk = np.max(np.abs(x))
     if pk > 0.97:
         x *= 0.97 / pk
