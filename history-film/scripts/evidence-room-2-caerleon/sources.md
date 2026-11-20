@@ -174,3 +174,18 @@ From primary works read in full (OCR; confirm spelling on the page image):
 ## Recommendation
 
 Keep the topic. The claim is well documented on both sides, the Cadw material is first-rate, and the evidence gives a clear verdict. Suggested verdict, to be decided by the writer: UNPROVEN for "Arthur's Round Table was the amphitheatre" (no source before about 1900 clearly says so, Geoffrey does not say it, and the Round Table itself is Wace's invention of 1155 at the earliest). PLAUSIBLE is not warranted for the amphitheatre link. Caerleon as Geoffrey's setting for Arthur's court is a literary fact (VERIFIED in the text), not a historical one.
+
+## Second-pass checks, 2026-11-20 (read directly, not via a summary)
+
+Read by the main session: the Cadw Caerleon Roman Amphitheatre page (https://cadw.gov.wales/visit/places-to-visit/caerleon-roman-amphitheatre) and the full text of the Cadw booklet "Trailblazers: Tessa Verney Wheeler" (https://cadw.gov.wales/sites/default/files/2026-01/Trailblazers%20-Tessa%20Wheeler%20booklet.pdf, text extracted with pdftotext).
+
+| Claim in the film | Result |
+| --- | --- |
+| Cadw page: "the Roman equivalent of today's multiplex cinema"; "Built around AD 90"; "seating for up to 6,000 spectators" | VERIFIED word for word on the page (L08, L09) |
+| Cadw page: "Geoffrey of Monmouth, the somewhat imaginative 12th-century scholar, wrote in his History of the Kings of Britain that Arthur was crowned in Caerleon and that the ruined amphitheatre was actually the remains of King Arthur's Round Table" | VERIFIED word for word (L14 and the contradiction card) |
+| Booklet: the Daily Mail "funded the Caerleon dig in return for 'exclusive' updates on the 'Arthurian' excavation" | VERIFIED. The updates were about the Arthurian dig (L26) |
+| Booklet: "The Wheelers were canny enough not to dispute this romantic idea" | VERIFIED (L27) |
+| Booklet: "It was an appealing, (though untrue), story and was guaranteed to sell newspapers." | VERIFIED (L28, with the brackets in the source) |
+| Booklet: Nemesis tablet, "Lady Nemesis, I give thee a cloak and a pair of boots; let him who took them not redeem them (unless) with his own blood." | VERIFIED as Cadw's translation (L31). The booklet uses a semicolon and "(unless)"; the film follows the script wording |
+| Booklet p. 19: "by any measurement it was she who accomplished the actual excavation of the amphitheatre" | VERIFIED, but it is a QUOTATION from the historian Lydia Carr, printed by Cadw. L29 says "Cadw says": on screen and in the description, credit it as "Cadw, quoting historian Lydia Carr" |
+| Booklet: "Tessa took over the dig officially on 22 October 1926" | VERIFIED |

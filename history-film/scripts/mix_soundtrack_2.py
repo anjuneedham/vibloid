@@ -169,7 +169,9 @@ with wave.open(tmp, "wb") as w:
     w.setsampwidth(2)
     w.setframerate(SR)
     w.writeframes((np.clip(mix, -1, 1) * 32767).astype(np.int16).tobytes())
-subprocess.run([FF, "-y", "-loglevel", "error", "-i", tmp, "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", "44100", "-codec:a", "libmp3lame", "-b:a", "192k", out_path], check=True)
+master = out_path.replace(".mp3", "-master.wav")  # lossless 48 kHz master: encode the video's AAC from this, once
+subprocess.run([FF, "-y", "-loglevel", "error", "-i", tmp, "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", "48000", "-ac", "2", "-c:a", "pcm_s16le", master], check=True)
+subprocess.run([FF, "-y", "-loglevel", "error", "-i", master, "-codec:a", "libmp3lame", "-b:a", "192k", out_path], check=True)
 
 print(f"{film}: {total:.1f}s, voice speech level {voice_db:.1f} dBFS, music {voice_db - MUSIC_BELOW_VOICE_DB:.1f} in gaps / {voice_db - MUSIC_BELOW_VOICE_DB - DUCK_DB:.1f} under speech")
 print(f"{len(log)} sound effects placed")
@@ -177,4 +179,4 @@ for t0, name, room in sorted(log):
     print(f"  {t0:7.2f}s {name:10s} room before next line: {'-' if room is None else f'{room:.2f}s'}")
 for w_ in warns:
     print("WARNING:", w_)
-print("wrote", out_path)
+print("wrote", out_path, "and", master)
