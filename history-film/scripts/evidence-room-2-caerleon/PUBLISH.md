@@ -25,12 +25,12 @@ CHAPTERS
 0:15 The Claim
 0:40 The Romans
 1:30 The Witness
-2:00 The Missing Table
+1:59 The Missing Table
 2:38 The Witnesses
 3:11 The Newspaper
-4:17 The Evidence Board
-4:38 The Verdict
-4:57 Next Case
+4:16 The Evidence Board
+4:37 The Verdict
+4:56 Next Case And Sources
 
 SOURCES
 - Cadw, Caerleon Roman Amphitheatre: https://cadw.gov.wales/visit/places-to-visit/caerleon-roman-amphitheatre
@@ -64,7 +64,7 @@ This video is a dramatised cartoon retelling for entertainment and education. Ch
 #history #KingArthur #Wales
 ```
 
-(4473 characters, limit 5,000)
+(4485 characters, limit 5,000)
 
 ## Tags
 
