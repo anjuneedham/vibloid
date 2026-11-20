@@ -1,0 +1,357 @@
+{
+ "cues": [
+  {
+   "abs": 0.05,
+   "sfx": "bell",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L01",
+   "at": 0.06,
+   "sfx": "gavel",
+   "db": 0,
+   "args": {
+    "n": 2
+   }
+  },
+  {
+   "after": "L02",
+   "at": 0.1,
+   "sfx": "lute_up",
+   "db": 0,
+   "args": {}
+  },
+  {
+   "after": "L02",
+   "at": 0.95,
+   "sfx": "page",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L03",
+   "at": 0.08,
+   "sfx": "lute_tick",
+   "db": -2,
+   "args": {}
+  },
+  {
+   "after": "L04",
+   "at": 0.28,
+   "sfx": "stamp",
+   "db": -2,
+   "args": {}
+  },
+  {
+   "after": "L05",
+   "at": 0.1,
+   "sfx": "page",
+   "db": 0,
+   "args": {}
+  },
+  {
+   "after": "L05",
+   "at": 0.95,
+   "sfx": "lute_tick",
+   "db": -4,
+   "args": {
+    "note": "D4"
+   }
+  },
+  {
+   "after": "L06",
+   "at": 0.15,
+   "sfx": "pin",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L07",
+   "at": 0.08,
+   "sfx": "quill",
+   "db": 0,
+   "args": {}
+  },
+  {
+   "after": "L08",
+   "at": 0.1,
+   "sfx": "page",
+   "db": -6,
+   "args": {}
+  },
+  {
+   "after": "L10",
+   "at": 0.08,
+   "sfx": "lute_sad",
+   "db": 0,
+   "args": {}
+  },
+  {
+   "after": "L11",
+   "at": 0.1,
+   "sfx": "bell",
+   "db": -5,
+   "args": {
+    "f0": 147.0
+   }
+  },
+  {
+   "after": "L11",
+   "at": 1.05,
+   "sfx": "page",
+   "db": -5,
+   "args": {}
+  },
+  {
+   "after": "L12",
+   "at": 0.08,
+   "sfx": "lute_tick",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L13",
+   "at": 0.1,
+   "sfx": "pin",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L15",
+   "at": 0.08,
+   "sfx": "lute_tick",
+   "db": -1,
+   "args": {
+    "note": "D3"
+   }
+  },
+  {
+   "after": "L15",
+   "at": 1.0,
+   "sfx": "page",
+   "db": -5,
+   "args": {}
+  },
+  {
+   "after": "L16",
+   "at": 0.1,
+   "sfx": "quill",
+   "db": -2,
+   "args": {}
+  },
+  {
+   "after": "L17",
+   "at": 0.12,
+   "sfx": "stamp",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L18",
+   "at": 0.08,
+   "sfx": "page",
+   "db": -6,
+   "args": {}
+  },
+  {
+   "after": "L19",
+   "at": 0.08,
+   "sfx": "lute_up",
+   "db": -2,
+   "args": {}
+  },
+  {
+   "after": "L21",
+   "at": 0.1,
+   "sfx": "lute_sad",
+   "db": 0,
+   "args": {}
+  },
+  {
+   "after": "L21",
+   "at": 1.05,
+   "sfx": "page",
+   "db": -5,
+   "args": {}
+  },
+  {
+   "after": "L22",
+   "at": 0.1,
+   "sfx": "page",
+   "db": -6,
+   "args": {}
+  },
+  {
+   "after": "L23",
+   "at": 0.08,
+   "sfx": "lute_tick",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L24",
+   "at": 0.1,
+   "sfx": "page",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L24",
+   "at": 1.0,
+   "sfx": "quill",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L25",
+   "at": 0.25,
+   "sfx": "stamp",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L26",
+   "at": 0.1,
+   "sfx": "gavel",
+   "db": -8,
+   "args": {
+    "n": 1
+   }
+  },
+  {
+   "after": "L27",
+   "at": 0.1,
+   "sfx": "page",
+   "db": -6,
+   "args": {}
+  },
+  {
+   "after": "L28",
+   "at": 0.1,
+   "sfx": "lute_tick",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L29",
+   "at": 0.08,
+   "sfx": "pin",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L30",
+   "at": 0.1,
+   "sfx": "clunk",
+   "db": 0,
+   "args": {}
+  },
+  {
+   "after": "L31",
+   "at": 0.1,
+   "sfx": "gong",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L32",
+   "at": 0.1,
+   "sfx": "bell",
+   "db": -4,
+   "args": {
+    "f0": 165.0
+   }
+  },
+  {
+   "after": "L32",
+   "at": 1.05,
+   "sfx": "page",
+   "db": -6,
+   "args": {}
+  },
+  {
+   "after": "L33",
+   "at": 0.1,
+   "sfx": "pin",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L34",
+   "at": 0.2,
+   "sfx": "timpani",
+   "db": -8,
+   "args": {}
+  },
+  {
+   "after": "L34",
+   "at": 1.05,
+   "sfx": "timpani",
+   "db": -6,
+   "args": {}
+  },
+  {
+   "after": "L35",
+   "at": 0.15,
+   "sfx": "timpani",
+   "db": -7,
+   "args": {}
+  },
+  {
+   "after": "L35",
+   "at": 0.8,
+   "sfx": "timpani",
+   "db": -4,
+   "args": {}
+  },
+  {
+   "after": "L36",
+   "at": 0.05,
+   "sfx": "stamp",
+   "db": 0,
+   "args": {}
+  },
+  {
+   "after": "L36",
+   "at": 0.1,
+   "sfx": "bell",
+   "db": -5,
+   "args": {
+    "f0": 130.0
+   }
+  },
+  {
+   "after": "L37",
+   "at": 0.08,
+   "sfx": "lute_tick",
+   "db": -3,
+   "args": {}
+  },
+  {
+   "after": "L38",
+   "at": 0.1,
+   "sfx": "page",
+   "db": -5,
+   "args": {}
+  },
+  {
+   "after": "L39",
+   "at": 0.05,
+   "sfx": "gavel",
+   "db": -1,
+   "args": {
+    "n": 3
+   }
+  },
+  {
+   "after": "L39",
+   "at": 0.15,
+   "sfx": "bell",
+   "db": -4,
+   "args": {
+    "f0": 165.0
+   }
+  }
+ ]
+}

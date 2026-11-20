@@ -264,12 +264,18 @@ const SPEAKER: Record<Who, { name: string; accent: string }> = {
 const LineCartouche: React.FC<{ id: LineId }> = ({ id }) => {
   const frame = useCurrentFrame();
   const [a, b] = lf(id);
-  const o = interpolate(frame, [a - 4, a + 6, b + 4, b + 12], [0, 1, 1, 0], clamp);
+  // hold the caption through the pause after the line (no empty lower third between lines):
+  // until the next line takes over, at most 0.9 s, then a quick fade
+  const i = LINE_IDS.indexOf(id);
+  const next = i < LINE_IDS.length - 1 ? lf(LINE_IDS[i + 1])[0] : Infinity;
+  const hold = Math.max(b + 2, Math.min(b + 27, next - 5));
+  const o = interpolate(frame, [a - 4, a + 4, hold, hold + 5], [0, 1, 1, 0], clamp);
   if (o <= 0) return null;
   const pages = linePages(id);
   const dur = b - a;
-  const pi = Math.max(0, pages.findIndex((p) => frame < a + dur * p.to));
-  const page = pages[pi === -1 ? pages.length - 1 : pi];
+  const found = pages.findIndex((p) => frame < a + dur * p.to);
+  // after the line ends (the held pause) keep the LAST page up, never jump back to the first
+  const page = pages[found === -1 ? pages.length - 1 : found];
   const p0 = a + dur * page.from;
   const p1 = a + dur * page.to;
   const words = page.text.split(" ");

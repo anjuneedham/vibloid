@@ -10,3 +10,8 @@ build
 # Regenerable draft renders (delivered to the owner as files, not stored in git)
 previews/*-draft*-silent.mp4
 public/evidence-room-2/voiceover-treated.mp3
+public/evidence-room-2/voiceover-clean.mp3
+public/evidence-room-2/final-audio.mp3
+public/evidence-room-2/short-final-audio.mp3
+public/evidence-room-2/sfx-sampler.mp3
+out/

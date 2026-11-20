@@ -38,7 +38,10 @@ const NAME: Record<Who, string> = { curator: "THE CURATOR", dig: "DIG", doubt: "
 const LinoCartouche: React.FC<{ id: LineId }> = ({ id }) => {
   const frame = useCurrentFrame();
   const [a, b] = slf(id);
-  if (frame < a - 3 || frame > b + 8) return null;
+  // hold through the short pause until the next line starts (no empty plate gaps)
+  const k = SHORT_ORDER.indexOf(id);
+  const next = k < SHORT_ORDER.length - 1 ? slf(SHORT_ORDER[k + 1])[0] : b + 20;
+  if (frame < a - 3 || frame >= Math.max(b + 2, next - 3)) return null;
   const pages = linePages(id);
   const dur = b - a;
   let pi = pages.findIndex((p) => frame < a + dur * p.to);

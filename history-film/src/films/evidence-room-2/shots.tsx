@@ -157,7 +157,7 @@ export const SlideShot: React.FC<{
   gel?: string;
   full?: boolean;
   enter?: number;
-}> = ({ cast = [], exhibit, label, art, gel = SHADOW.gelAmber, full = false, enter = 2 }) => {
+}> = ({ cast = [], exhibit, label, art, gel = SHADOW.gelAmber, full = false, enter = -8 }) => {
   const { frame, len, key: k } = useShot();
   const lamp: [number, number] = full ? [960, 300] : [360, 250];
   const cam = full
