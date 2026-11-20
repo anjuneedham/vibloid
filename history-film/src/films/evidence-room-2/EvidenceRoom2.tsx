@@ -248,7 +248,7 @@ const SHOTS: ShotDef[] = [
   { name: "s38-seal", from: C("L36", 1.4), el: <SealWrap /> },
   {
     name: "s39-room-great-story",
-    from: C("L37", 0.3),
+    from: C("L38", 0.3),
     el: <Room lampX={960} cast={[{ who: "dig", x: 560, width: 290, armL: 120, armR: -120 }, { who: "curator", x: 960, width: 300, mouth: "smile" }, { who: "doubt", x: 1360, width: 290 }]} gel={SHADOW.gelRose} gelOpacity={0.22} />,
   },
   // BEAT 10: NEXT CASE

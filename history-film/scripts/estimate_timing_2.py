@@ -8,14 +8,15 @@ or "u1".."u39" in script order), then copy its units.json over src/films/evidenc
 and put the mp3 at public/evidence-room-2/voiceover.mp3. Nothing else changes.
 
 Pace: Curator 120, Dig 128, Doubt 112, Clerk 100 wpm. 0.35 s per slash pause.
-Gaps: 1.0 s between lines, 2.5 s between beats, 1.5 s before L36. 1.0 s lead-in.
+Gaps: 0.7 s between lines, 1.8 s between beats, 1.5 s before L36. 1.0 s lead-in.
+(Tightened from 1.0 / 2.5 so the estimate lands inside 4:30 to 5:30; the script is unchanged.)
 """
 import json, re
 SCRIPT = "scripts/evidence-room-2-caerleon/script.md"
 OUT = "src/films/evidence-room-2/units.json"
 EP = json.load(open("src/films/evidence-room-2/episode.json"))
 WPM = {"curator": 120, "dig": 128, "doubt": 112, "clerk": 100}
-LEAD, GAP, BEAT_GAP, PRE_VERDICT, SLASH = 1.0, 1.0, 2.5, 1.5, 0.35
+LEAD, GAP, BEAT_GAP, PRE_VERDICT, SLASH = 1.0, 0.7, 1.8, 1.5, 0.35
 
 lines, beat = [], 0
 for row in open(SCRIPT):

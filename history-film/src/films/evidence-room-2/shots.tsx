@@ -185,7 +185,7 @@ export const SlideShot: React.FC<{
         ) : null}
         <Layer depth={0.85}>
           {full ? (
-            <LanternSlide x={422} y={92} w={1000} enter={enter} label={label} exhibit={exhibit} tilt={-0.8}>
+            <LanternSlide x={452} y={78} w={940} enter={enter} label={label} exhibit={exhibit} tilt={-0.8}>
               {art(frame)}
             </LanternSlide>
           ) : (

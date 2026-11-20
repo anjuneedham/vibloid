@@ -4,8 +4,9 @@
 // Start / end SECONDS of every line (L01..L39) come from ONE file: ./units.json.
 //
 // NOW: units.json holds ESTIMATED timings written by scripts/estimate_timing_2.py
-//      (Curator 120, Dig 128, Doubt 112, Clerk 100 wpm; 0.35 s per slash; 1.0 s between lines,
-//      2.5 s between beats, 1.5 s before L36). It carries "estimated": true, so no audio is played.
+//      (Curator 120, Dig 128, Doubt 112, Clerk 100 wpm; 0.35 s per slash; 0.7 s between lines,
+//      1.8 s between beats, 1.5 s before L36; tightened from 1.0 / 2.5 to fit 4:30 to 5:30).
+//      It carries "estimated": true, so no audio is played.
 //
 // AFTER RECORDING (the swap is one file):
 //   1. Build the clean voiceover exactly as for Part 1:  python3 scripts/build_vo.py raw.m4a transcript.json public/evidence-room-2
