@@ -95,10 +95,10 @@ export const Placard: React.FC<{ who: Who; pages: Page[]; span: Span; geom: Plac
       </div>
       <div key={i} style={{ fontFamily: COMIC, fontWeight: 700, fontSize: fs, lineHeight: 1.16, color: SHADOW.cut, opacity: swap }}>
         {words.map((w, j) => (
-          <span key={j} style={{ whiteSpace: "nowrap", opacity: interpolate(frame, [p0 + j * per, p0 + j * per + 5], [0.25, 1], clamp) }}>
-            {w}
+          <React.Fragment key={j}>
+            <span style={{ whiteSpace: "nowrap", opacity: interpolate(frame, [p0 + j * per, p0 + j * per + 5], [0.25, 1], clamp) }}>{w}</span>
             {j < words.length - 1 ? " " : ""}
-          </span>
+          </React.Fragment>
         ))}
       </div>
     </div>

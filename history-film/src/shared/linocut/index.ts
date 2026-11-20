@@ -5,3 +5,4 @@ export * from "./type";
 export * from "./stamp";
 export * from "./figures";
 export * from "./scenery";
+export * from "./banderole";

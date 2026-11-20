@@ -15,7 +15,7 @@ import {
   LanternSlide,
   Layer,
   PaperGrain,
-  PlaceTag,
+  PaperLabel,
   RoomFloor,
   RoomShelves,
   Screen,
@@ -26,7 +26,7 @@ import {
 } from "../../shared/shadow";
 import { BAR_HEIGHT, SHADOW } from "../../shared/theme";
 import EP from "./episode.json";
-import { Actor, CastSpec, clamp, drift, Finish, FLOOR, KeyLight, useShot } from "./kit";
+import { Actor, BEAT_TAGS, CastSpec, clamp, drift, Finish, FLOOR, Hang, HangPlacards, KeyLight, Rib, Ribbon, StagePlacards, useShot } from "./kit";
 import { DiggerSil, PressCamSil, ScholarSil, TableSil, WalkerSil, WindowSil } from "./art";
 
 // ------------------------------------------------------------------ PLACE: parallax silhouettes, no cast
@@ -47,13 +47,14 @@ const ArenaGlow: React.FC<{ cx: number; cy: number }> = ({ cx, cy }) => (
 
 export const PlaceShot: React.FC<{
   kind: PlaceKind;
-  place?: string;
-  sub?: string;
   zoom?: [number, number];
   pan?: [number, number];
   children?: React.ReactNode;
+  /** paper labels pinned to the scene (place, date, numbers) */
   overlay?: React.ReactNode;
-}> = ({ kind, place, sub, zoom = [1.0, 1.08], pan = [-80, 80], children, overlay }) => {
+  hang?: Hang;
+  tag?: Rib | null;
+}> = ({ kind, zoom = [1.0, 1.08], pan = [-80, 80], children, overlay, hang = { left: 60, top: 110, w: 640 }, tag = null }) => {
   const { frame, len, key: k } = useShot();
   const moon = kind === "moon";
   const hot: [number, number] = moon ? [1380, 300] : kind === "fortress" ? [1300, 420] : [760, 340];
@@ -110,7 +111,8 @@ export const PlaceShot: React.FC<{
       <PaperGrain opacity={0.42} />
       <LampVignette hot={hot} strength={0.9} />
       {overlay}
-      {place ? <div style={{ position: "absolute", inset: 0, transform: "translateY(-150px)", zIndex: 600 }}><PlaceTag place={place} sub={sub} span={[10, len - 6]} /></div> : null}
+      <Ribbon r={tag} />
+      <HangPlacards hang={hang} />
     </AbsoluteFill>
   );
 };
@@ -157,7 +159,9 @@ export const SlideShot: React.FC<{
   gel?: string;
   full?: boolean;
   enter?: number;
-}> = ({ cast = [], exhibit, label, art, gel = SHADOW.gelAmber, full = false, enter = -8 }) => {
+  /** the beat's source tag, pinned under the slide */
+  tag?: string | null;
+}> = ({ cast = [], exhibit, label, art, gel = SHADOW.gelAmber, full = false, enter = -8, tag = null }) => {
   const { frame, len, key: k } = useShot();
   const lamp: [number, number] = full ? [960, 300] : [360, 250];
   const cam = full
@@ -181,17 +185,24 @@ export const SlideShot: React.FC<{
             {cast.map((c) => (
               <Actor key={c.who} lampX={lamp[0] - 200} k={k} {...c} />
             ))}
+            <StagePlacards cast={cast.map((c) => ({ say: "above" as const, sayW: 560, ...c }))} />
           </Layer>
         ) : null}
         <Layer depth={0.85}>
           {full ? (
-            <LanternSlide x={452} y={78} w={940} enter={enter} label={label} exhibit={exhibit} tilt={-0.8}>
-              {art(frame)}
-            </LanternSlide>
+            <>
+              <LanternSlide x={70} y={84} w={940} enter={enter} label={label} exhibit={exhibit} tilt={-0.8}>
+                {art(frame)}
+              </LanternSlide>
+              {tag ? <SourceRibbonPinned text={tag} x={110} y={858} w={940} /> : null}
+            </>
           ) : (
-            <LanternSlide x={680} y={100} w={900} enter={enter} label={label} exhibit={exhibit}>
-              {art(frame)}
-            </LanternSlide>
+            <>
+              <LanternSlide x={680} y={96} w={900} enter={enter} label={label} exhibit={exhibit}>
+                {art(frame)}
+              </LanternSlide>
+              {tag ? <SourceRibbonPinned text={tag} x={720} y={842} w={960} /> : null}
+            </>
           )}
         </Layer>
         <Bloom x={lamp[0]} y={lamp[1] + 30} r={480} opacity={0.35} seed={3} />
@@ -199,9 +210,12 @@ export const SlideShot: React.FC<{
       </Stage>
       <KeyLight x={lamp[0]} strength={0.8} />
       <Finish hot={lamp} gel={gel} gelOpacity={0.2} />
+      <HangPlacards hang={full ? { left: 1120, top: 120, w: 720 } : { left: 60, top: 110, w: 560 }} onStage={cast.map((c) => ({ say: "above" as const, ...c }))} />
     </AbsoluteFill>
   );
 };
+
+const SourceRibbonPinned: React.FC<{ text: string; x: number; y: number; w: number }> = ({ text, x, y, w }) => <Ribbon r={{ text, x, y, w, rot: -1 }} />;
 
 // ------------------------------------------------------------------ SHADOW PLAY: only the screen and moving shadows
 export const PlayShot: React.FC<{
@@ -211,9 +225,12 @@ export const PlayShot: React.FC<{
   pan?: [number, number];
   far?: React.ReactNode;
   children: (frame: number) => React.ReactNode;
-  caption?: { place: string; sub?: string };
+  /** the place/date label, pinned into the scene */
+  label?: { big: string; small?: string; x: number; y: number; pin?: [number, number]; w?: number };
+  tag?: Rib | null;
+  hang?: Hang;
   gel?: string;
-}> = ({ moon = false, hot = [700, 380], zoom = [1.0, 1.06], pan = [-40, 40], far, children, caption, gel }) => {
+}> = ({ moon = false, hot = [700, 380], zoom = [1.0, 1.06], pan = [-40, 40], far, children, label, tag = null, hang = { left: 60, top: 110, w: 600 }, gel }) => {
   const { frame, len, key: k } = useShot();
   const cam = { x: drift(frame, len, pan[0], pan[1]), y: 0, zoom: drift(frame, len, zoom[0], zoom[1]) };
   return (
@@ -233,14 +250,21 @@ export const PlayShot: React.FC<{
       </Stage>
       <KeyLight x={hot[0]} y={hot[1] - 100} strength={0.8} />
       <Finish hot={hot} gel={gel ?? (moon ? SHADOW.gelTeal : SHADOW.gelAmber)} gelOpacity={0.22} />
-      {caption ? <div style={{ position: "absolute", inset: 0, transform: "translateY(-150px)", zIndex: 600 }}><PlaceTag place={caption.place} sub={caption.sub} span={[8, len - 6]} /></div> : null}
+      {label ? <PaperLabel big={label.big} small={label.small} x={label.x} y={label.y} pin={label.pin} w={label.w} enter={6} exit={len - 4} /> : null}
+      <Ribbon r={tag} />
+      <HangPlacards hang={hang} />
     </AbsoluteFill>
   );
 };
 
 /** Geoffrey (a cartoon silhouette) writing by candle. */
 export const GeoffreyPlay: React.FC = () => (
-  <PlayShot hot={[1180, 330]} caption={{ place: "ABOUT 1136", sub: "Geoffrey of Monmouth writes his History (cartoon silhouette)" }}>
+  <PlayShot
+    hot={[1180, 330]}
+    hang={{ left: 60, top: 110, w: 560 }}
+    label={{ big: "ABOUT 1136", small: "Geoffrey of Monmouth writes his History (cartoon silhouette)", x: 1270, y: 330, w: 580, pin: [1180, 640] }}
+    tag={{ text: BEAT_TAGS[4]!, x: 1270, y: 560, w: 600 }}
+  >
     {(f) => (
       <>
         <rect x={-300} y={905} width={2520} height={400} fill="white" />
@@ -260,7 +284,8 @@ export const GeraldPlay: React.FC = () => {
     <PlayShot
       hot={[1300, 360]}
       pan={[-60, 60]}
-      caption={{ place: "CAERLEON, 1188", sub: "Gerald of Wales visits the ruins (cartoon silhouette)" }}
+      label={{ big: "CAERLEON, 1188", small: "Gerald of Wales visits the ruins (cartoon silhouette)", x: 1160, y: 200, w: 660, pin: [1250, 560] }}
+      tag={{ text: BEAT_TAGS[6]!, x: 1160, y: 390, w: 700 }}
       far={
         <div style={{ position: "absolute", inset: 0, opacity: 0.85 }}>
           <Cutout id={`${k}-ru`} color={SHADOW.cutMid} rim={0.3} shade={0}>
@@ -290,7 +315,13 @@ export const GeraldPlay: React.FC = () => {
 
 /** The poet (a cartoon silhouette in a wide hat) writes a letter at an inn window; the Usk outside. */
 export const PoetPlay: React.FC = () => (
-  <PlayShot moon hot={[1200, 360]} caption={{ place: "CAERLEON, 1856", sub: "Tennyson writes a letter (cartoon silhouette)" }}>
+  <PlayShot
+    moon
+    hot={[1200, 360]}
+    hang={{ left: 60, top: 96, w: 560 }}
+    label={{ big: "CAERLEON, 1856", small: "Tennyson writes a letter (cartoon silhouette)", x: 1470, y: 190, w: 410, pin: [1440, 430] }}
+    tag={{ text: BEAT_TAGS[6]!, x: 1460, y: 760, w: 440 }}
+  >
     {(f) => (
       <>
         <WindowSil x={1000} y={170} w={440} h={600} />
@@ -299,7 +330,7 @@ export const PoetPlay: React.FC = () => (
           <path key={i} d={`M1000 ${640 + i * 34} Q 1110 ${630 + i * 34 + Math.sin(f / 9 + i) * 8} 1220 ${640 + i * 34} T 1440 ${640 + i * 34} L1440 ${650 + i * 34} Q 1330 ${660 + i * 34} 1220 ${650 + i * 34} T 1000 ${650 + i * 34} Z`} fill="white" />
         ))}
         <rect x={-300} y={905} width={2520} height={400} fill="white" />
-        <ScholarSil x={720} y={905} s={1.2} t={f} hat="brim" />
+        <ScholarSil x={1110} y={905} s={1.0} t={f} hat="brim" />
       </>
     )}
   </PlayShot>
@@ -307,7 +338,12 @@ export const PoetPlay: React.FC = () => (
 
 /** Tessa Wheeler (a cartoon silhouette with a trowel) directs the dig. */
 export const TessaPlay: React.FC = () => (
-  <PlayShot hot={[760, 360]} pan={[-30, 50]} caption={{ place: "CAERLEON, 1926", sub: "Tessa Verney Wheeler directs the dig (cartoon silhouette)" }}>
+  <PlayShot
+    hot={[760, 360]}
+    pan={[-30, 50]}
+    label={{ big: "CAERLEON, 1926", small: "Tessa Verney Wheeler directs the dig (cartoon silhouette)", x: 1080, y: 170, w: 660, pin: [1180, 560] }}
+    tag={{ text: "Cadw booklet p. 19, quoting historian Lydia Carr", x: 1080, y: 380, w: 660 }}
+  >
     {(f) => (
       <>
         <path d="M-300 905 Q 400 860 960 900 T 2220 880 L2220 1400 L-300 1400 Z" fill="white" />
@@ -348,11 +384,13 @@ export const TableGag: React.FC<{ grow: [number, number] }> = ({ grow }) => {
             <TableSil x={1100} y={FLOOR} s={1} />
           </Cutout>
           <Actor who="doubt" x={560} width={300} lampX={hot[0]} k={k} armR={-30} />
+          <StagePlacards cast={[{ who: "doubt", x: 560, width: 300, say: "above", sayW: 560 }]} />
         </Layer>
         <BeamDust lamp={hot} count={36} reach={800} seed={6} />
       </Stage>
       <KeyLight x={hot[0]} strength={0.9} />
       <Finish hot={hot} gel={SHADOW.gelTeal} gelOpacity={0.2} />
+      <Ribbon r={{ text: BEAT_TAGS[5]!, x: 1180, y: 880, w: 700 }} />
       {g > 0.6 ? (
         <div style={{ position: "absolute", left: 1180, top: 210, opacity: interpolate(g, [0.6, 1], [0, 0.9]), fontFamily: COMIC, fontWeight: 700, fontSize: 30, color: SHADOW.text, textShadow: `0 2px 10px ${SHADOW.room}` }}>
           (imagine)
@@ -454,6 +492,8 @@ export const BoardShot: React.FC<{ cards: BoardCard[] }> = ({ cards }) => {
       <div style={{ position: "absolute", right: 70, top: BAR_HEIGHT + 24, fontFamily: BANGERS, fontSize: 52, letterSpacing: 5, color: SHADOW.text, textShadow: `0 3px 14px ${SHADOW.room}`, zIndex: 600 }}>
         THE EVIDENCE BOARD
       </div>
+      <Ribbon r={{ text: BEAT_TAGS[8]!, x: 160, y: 62, w: 1060, rot: -0.6 }} />
+      <HangPlacards hang={{ left: 705, top: 330, w: 510 }} />
     </AbsoluteFill>
   );
 };
@@ -492,6 +532,7 @@ export const SealShot: React.FC<{ hit: number; speaker?: CastSpec }> = ({ hit, s
           <Layer depth={1}>
             <RoomFloor y={FLOOR} id={`${k}-fl`} />
             <Actor lampX={hot[0]} k={k} {...speaker} armR={after ? -110 : -40} browLift={after ? 0.6 : 0.2} mouth={after ? "smile" : undefined} />
+            <StagePlacards cast={[{ say: "above", sayW: 560, ...speaker }]} />
           </Layer>
         ) : null}
         <BeamDust lamp={hot} count={40} reach={800} seed={4} />
@@ -500,6 +541,8 @@ export const SealShot: React.FC<{ hit: number; speaker?: CastSpec }> = ({ hit, s
       <KeyLight x={hot[0]} y={hot[1] - 200} strength={0.7} />
       <Finish hot={hot} gelOpacity={0.16} />
       <WarmFlash amount={flash} />
+      <Ribbon r={{ text: BEAT_TAGS[9]!, x: 700, y: 858, w: 1000 }} />
+      <HangPlacards hang={{ left: 50, top: 110, w: 560 }} onStage={speaker ? [{ say: "above", ...speaker }] : []} />
     </AbsoluteFill>
   );
 };
@@ -540,9 +583,9 @@ export const TitlePlate: React.FC<{ at: number }> = ({ at }) => {
   if (t < 0) return null;
   const s = spring({ frame: t, fps, config: { damping: 14 } });
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: 150, textAlign: "center", zIndex: 500, opacity: Math.min(1, s * 1.5), transform: `translateY(${(1 - s) * -30}px)` }}>
+    <div style={{ position: "absolute", left: 0, right: 0, top: 790, textAlign: "center", zIndex: 500, opacity: Math.min(1, s * 1.5), transform: `translateY(${(1 - s) * 30}px)` }}>
       <div style={{ display: "inline-block", background: SHADOW.plate, boxShadow: `inset 0 0 0 3px ${SHADOW.brass}`, padding: "18px 50px 10px" }}>
-        <div style={{ fontFamily: BANGERS, fontSize: 34, letterSpacing: 8, color: SHADOW.brass }}>THE EVIDENCE ROOM · CASE 2</div>
+        <div style={{ fontFamily: BANGERS, fontSize: 34, letterSpacing: 8, color: SHADOW.brass }}>THE EVIDENCE ROOM · CASE 2 · CAERLEON, SOUTH WALES</div>
         <div style={{ fontFamily: BANGERS, fontSize: 92, letterSpacing: 4, color: SHADOW.text, lineHeight: 1.05 }}>{EP.caseTitle}</div>
       </div>
     </div>

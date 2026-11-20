@@ -141,13 +141,6 @@
    "args": {}
   },
   {
-   "after": "L17",
-   "at": 0.12,
-   "sfx": "stamp",
-   "db": -4,
-   "args": {}
-  },
-  {
    "after": "L18",
    "at": 0.08,
    "sfx": "page",
@@ -271,13 +264,6 @@
    "args": {}
   },
   {
-   "after": "L33",
-   "at": 0.1,
-   "sfx": "pin",
-   "db": -3,
-   "args": {}
-  },
-  {
    "after": "L34",
    "at": 0.2,
    "sfx": "timpani",
@@ -303,13 +289,6 @@
    "at": 0.8,
    "sfx": "timpani",
    "db": -4,
-   "args": {}
-  },
-  {
-   "after": "L36",
-   "at": 0.05,
-   "sfx": "stamp",
-   "db": 0,
    "args": {}
   },
   {
@@ -352,6 +331,55 @@
    "args": {
     "f0": 165.0
    }
+  },
+  {
+   "abs": 127.7,
+   "sfx": "stamp",
+   "db": -5,
+   "noduck": true,
+   "args": {}
+  },
+  {
+   "abs": 258.63,
+   "sfx": "stamp",
+   "db": -9,
+   "noduck": true,
+   "args": {}
+  },
+  {
+   "abs": 260.5,
+   "sfx": "stamp",
+   "db": -6,
+   "noduck": true,
+   "args": {}
+  },
+  {
+   "abs": 268.9,
+   "sfx": "stamp",
+   "db": -10,
+   "noduck": true,
+   "args": {}
+  },
+  {
+   "abs": 274.13,
+   "sfx": "stamp",
+   "db": -6,
+   "noduck": true,
+   "args": {}
+  },
+  {
+   "abs": 288.667,
+   "sfx": "stamp",
+   "db": 0,
+   "noduck": true,
+   "args": {}
+  },
+  {
+   "abs": 169.733,
+   "sfx": "stamp",
+   "db": -7,
+   "noduck": true,
+   "args": {}
   }
  ]
 }

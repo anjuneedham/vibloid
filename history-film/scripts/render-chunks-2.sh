@@ -10,7 +10,7 @@ npx remotion bundle --out-dir=out/bundle >/dev/null 2>&1 || { echo "bundle faile
 render() {
   local a=$1 b=$2 f=$3
   [ -s "$f" ] && return 0
-  npx remotion render out/bundle "$COMP" "$f.tmp.mp4" --frames=$a-$b --scale=$SCALE --crf=23 --muted \
+  npx remotion render out/bundle "$COMP" "$f.tmp.mp4" --frames=$a-$b --scale=$SCALE --crf=${CRF:-23} --muted --codec=h264 --pixel-format=yuv420p --color-space=bt709 \
     --concurrency=$CONC --browser-executable=/opt/pw-browsers/chromium --log=error >/dev/null 2>&1 && mv "$f.tmp.mp4" "$f" && echo "chunk $a-$b done"
 }
 n=0

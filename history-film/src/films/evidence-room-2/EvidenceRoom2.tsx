@@ -1,18 +1,18 @@
 import React from "react";
 import { AbsoluteFill, Audio, interpolate, staticFile } from "remotion";
 import { BoilDefs } from "../../shared/BoilDefs";
+import { PaperLabel } from "../../shared/shadow";
 import { BANGERS } from "../../shared/fonts";
 import { Letterbox, Wordmark } from "../../shared/Frame";
 import { SHADOW } from "../../shared/theme";
 import { BanquetArt, BookPageArt, CardArt, CompareArt, MapArt, QuoteArt, SearchArt, StatArt, TabletArt, TimelineArt } from "./art";
 import EP from "./episode.json";
-import { clamp, Dips, Room, Shot, SourceTags, Speech, useShot } from "./kit";
+import { BEAT_TAGS, clamp, Dips, Room, Shot, useShot } from "./kit";
 import { LineId, linePages } from "./lines";
 import {
   BoardShot,
   DigCrew,
   EndCard,
-  FactPlate,
   GeoffreyPlay,
   GeraldPlay,
   PlaceShot,
@@ -117,26 +117,48 @@ const Tablet = () => <TabletArt k={useLineK("L31")} />;
 type ShotDef = { name: string; from: number; el: React.ReactNode };
 
 const ROOM_LAMP = 900;
+const T = BEAT_TAGS as Record<number, string>;
+const DIG_UP = { armL: 130, armR: -130, browLift: 1 };
 const SHOTS: ShotDef[] = [
-  // BEAT 1: THE CASE
+  // BEAT 1: THE CASE (no source tag in the script)
   {
     name: "s01-room-open",
     from: 0,
-    el: <Room lampX={760} zoom={[1.0, 1.07]} pan={[-40, 30]} cast={[{ who: "curator", x: 880, width: 320 }, { who: "clerk", x: 1560, width: 240, eyesClosed: true, headDrop: 10, idle: false }]} />,
+    el: (
+      <Room
+        lampX={760}
+        zoom={[1.0, 1.07]}
+        pan={[-40, 30]}
+        cast={[
+          { who: "curator", x: 900, width: 320, say: "left" },
+          { who: "clerk", x: 1580, width: 240, eyesClosed: true, headDrop: 10, idle: false },
+        ]}
+      />
+    ),
   },
-  { name: "s02-place-title", from: pg("L02", 1) - 6, el: <PlaceShot kind="moon" zoom={[1.0, 1.06]} place="CAERLEON, SOUTH WALES" overlay={<TitlePlate at={6} />} /> },
+  { name: "s02-place-title", from: pg("L02", 1) - 6, el: <PlaceShot kind="moon" zoom={[1.0, 1.06]} overlay={<TitlePlate at={6} />} /> },
   // BEAT 2: THE CLAIM
   {
     name: "s03-room-claim",
     from: B[2],
-    el: <Room lampX={ROOM_LAMP} cast={[{ who: "dig", x: 600, width: 300, armL: 130, armR: -130, browLift: 1 }, { who: "doubt", x: 1300, width: 290 }, { who: "clerk", x: 1640, width: 240 }]} />,
+    el: <Room lampX={ROOM_LAMP} tag={T[2]} cast={[{ who: "dig", x: 520, width: 300, say: "right", ...DIG_UP }, { who: "doubt", x: 1450, width: 290, say: "left" }]} />,
   },
-  { name: "s04-place-arena", from: C("L04", 0.3), el: <PlaceShot kind="ruins" place="OUTSIDE THE FORTRESS WALLS" sub="Caerleon, south Wales" /> },
-  { name: "s05-slide-map", from: pg("L04", 2) - 4, el: <SlideShot full exhibit="EXHIBIT A" label="Ordnance Survey 2nd edition, recorded 1898 to 1908" art={() => <MapSlide />} /> },
+  {
+    name: "s04-place-arena",
+    from: C("L04", 0.3),
+    el: (
+      <PlaceShot
+        kind="ruins"
+        overlay={<PaperLabel big="THE ARENA" small="outside the fortress walls" x={1160} y={340} w={560} pin={[1060, 720]} enter={8} />}
+        tag={{ text: T[2], x: 1160, y: 520, w: 640 }}
+      />
+    ),
+  },
+  { name: "s05-slide-map", from: pg("L04", 2) - 4, el: <SlideShot full tag={T[2]} exhibit="EXHIBIT A" label="Ordnance Survey 2nd edition, recorded 1898 to 1908" art={() => <MapSlide />} /> },
   {
     name: "s06-slide-founded",
     from: C("L05"),
-    el: <SlideShot cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="EXHIBIT B" label="Museum Wales" art={() => <QuoteArt kicker="MUSEUM WALES" quote="It was founded in AD 74 or 75" cite="Museum Wales, Caerleon, City of the Legion" />} gel={SHADOW.gelTeal} />,
+    el: <SlideShot tag={T[2]} cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="EXHIBIT B" label="Museum Wales" art={() => <QuoteArt kicker="MUSEUM WALES" quote="It was founded in AD 74 or 75" cite="Museum Wales, Caerleon, City of the Legion" />} gel={SHADOW.gelTeal} />,
   },
   // BEAT 3: THE ROMANS
   {
@@ -145,13 +167,17 @@ const SHOTS: ShotDef[] = [
     el: (
       <PlaceShot
         kind="fortress"
-        place="ISCA (CAERLEON), ABOUT AD 75"
-        sub="Fortress of the Second Augustan Legion"
-        overlay={<FactPlate at={pg("L06", 1) - B[3]} big="ONE OF JUST THREE" small="permanent legionary fortresses in Britain (Cadw)" />}
+        tag={{ text: T[3], x: 760, y: 450, w: 520 }}
+        overlay={
+          <>
+            <PaperLabel big="ISCA (CAERLEON)" small="Roman fortress, about AD 75" x={760} y={250} w={520} pin={[860, 610]} enter={8} />
+            <PaperLabel big="ONE OF JUST THREE" small="permanent legionary fortresses in Britain (Cadw)" x={1160} y={560} w={600} pin={[1250, 720]} enter={pg("L06", 1) - B[3]} />
+          </>
+        }
       />
     ),
   },
-  { name: "s08-slide-soldiers", from: C("L07"), el: <SlideShot full exhibit="EXHIBIT C" label="Museum Wales" art={() => <StatSlide />} /> },
+  { name: "s08-slide-soldiers", from: C("L07"), el: <SlideShot full tag={T[3]} exhibit="EXHIBIT C" label="Museum Wales" art={() => <StatSlide />} /> },
   {
     name: "s09-place-amphitheatre",
     from: C("L08"),
@@ -159,12 +185,11 @@ const SHOTS: ShotDef[] = [
       <PlaceShot
         kind="ruins"
         zoom={[1.02, 1.12]}
-        place="THE AMPHITHEATRE"
-        sub="outside the fortress walls"
+        tag={{ text: T[3], x: 1180, y: 290, w: 600 }}
         overlay={
           <>
-            <FactPlate at={10} to={pg("L08", 1) - C("L08")} big="BEGUN AROUND AD 90" small="Cadw; Museum Wales" />
-            <FactPlate at={pg("L08", 1) - C("L08")} big="ABOUT 6,000 SEATS" small="an estimate (Cadw; Museum Wales)" />
+            <PaperLabel big="BEGUN AROUND AD 90" small="Cadw; Museum Wales" x={1180} y={390} w={600} pin={[1100, 730]} enter={10} exit={pg("L08", 1) - C("L08")} />
+            <PaperLabel big="ABOUT 6,000 SEATS" small="an estimate (Cadw; Museum Wales)" x={1180} y={390} w={600} pin={[1100, 730]} enter={pg("L08", 1) - C("L08") + 6} />
           </>
         }
       />
@@ -173,42 +198,47 @@ const SHOTS: ShotDef[] = [
   {
     name: "s10-slide-multiplex",
     from: C("L09"),
-    el: <SlideShot full exhibit="EXHIBIT D" label="Cadw" art={() => <QuoteArt kicker="CADW CALLS IT" quote="the Roman equivalent of today’s multiplex cinema" cite="Cadw, Caerleon Roman Amphitheatre page" fs={70} />} />,
+    el: <SlideShot full tag={T[3]} exhibit="EXHIBIT D" label="Cadw" art={() => <QuoteArt kicker="CADW CALLS IT" quote="the Roman equivalent of today’s multiplex cinema" cite="Cadw, Caerleon Roman Amphitheatre page" fs={70} />} />,
   },
-  { name: "s11-room-doubt", from: C("L10", 0.25), el: <Room lampX={ROOM_LAMP} zoom={[1.12, 1.15]} lean={0} cast={[{ who: "doubt", x: 960, width: 330 }]} gel={SHADOW.gelTeal} gelOpacity={0.24} /> },
-  { name: "s12-slide-ad90-ad80", from: C("L11"), el: <SlideShot cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="CONTRADICTION" label="Cadw vs Museum Wales" art={() => <Ad90vs80 />} gel={SHADOW.gelTeal} /> },
+  { name: "s11-room-doubt", from: C("L10", 0.25), el: <Room lampX={ROOM_LAMP} tag={T[3]} zoom={[1.12, 1.15]} lean={0} cast={[{ who: "doubt", x: 900, width: 330, say: "right" }]} gel={SHADOW.gelTeal} gelOpacity={0.24} /> },
+  { name: "s12-slide-ad90-ad80", from: C("L11"), el: <SlideShot tag={T[3]} cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="CONTRADICTION" label="Cadw vs Museum Wales" art={() => <Ad90vs80 />} gel={SHADOW.gelTeal} /> },
   // BEAT 4: THE WITNESS
   { name: "s13-play-geoffrey", from: B[4], el: <GeoffreyPlay /> },
-  { name: "s14-slide-giles", from: C("L13"), el: <SlideShot cast={[{ who: "dig", x: 340, width: 300, armR: -120, armL: 40 }]} exhibit="EXHIBIT E" label="Geoffrey, Book IX ch. 12" art={() => <GilesPage />} /> },
+  { name: "s14-slide-giles", from: C("L13"), el: <SlideShot tag={T[4]} cast={[{ who: "dig", x: 340, width: 300, armR: -120, armL: 40 }]} exhibit="EXHIBIT E" label="Geoffrey, Book IX ch. 12" art={() => <GilesPage />} /> },
   {
     name: "s15-slide-cadw-geoffrey",
     from: C("L14"),
-    el: <SlideShot cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="EXHIBIT F" label="Cadw" art={() => <QuoteArt kicker="CADW ON GEOFFREY" quote="the somewhat imaginative 12th-century scholar" cite="Cadw, Caerleon Roman Amphitheatre page" fs={66} />} gel={SHADOW.gelTeal} />,
+    el: <SlideShot tag={T[4]} cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="EXHIBIT F" label="Cadw" art={() => <QuoteArt kicker="CADW ON GEOFFREY" quote="the somewhat imaginative 12th-century scholar" cite="Cadw, Caerleon Roman Amphitheatre page" fs={66} />} gel={SHADOW.gelTeal} />,
   },
-  { name: "s16-room-somewhat", from: C("L15", 0.2), el: <Room lampX={ROOM_LAMP} zoom={[1.16, 1.18]} lean={0} cast={[{ who: "doubt", x: 960, width: 330, browTilt: 1 }]} gel={SHADOW.gelTeal} gelOpacity={0.24} /> },
+  { name: "s16-room-somewhat", from: C("L15", 0.2), el: <Room lampX={ROOM_LAMP} tag={T[4]} zoom={[1.16, 1.18]} lean={0} cast={[{ who: "doubt", x: 900, width: 330, browTilt: 1, say: "right" }]} gel={SHADOW.gelTeal} gelOpacity={0.24} /> },
   // BEAT 5: THE MISSING TABLE
-  { name: "s17-slide-search", from: B[5], el: <SlideShot cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="EXHIBIT G" label="Three editions searched" art={(f) => <SearchArt k={f / 90} />} gel={SHADOW.gelTeal} /> },
-  { name: "s18-slide-cadw-vs-geoffrey", from: C("L17", 0.2), el: <SlideShot full exhibit="CONTRADICTION" label="Cadw vs Geoffrey's own text" art={() => <CadwVsGeoffrey />} /> },
-  { name: "s19-slide-banquet", from: C("L18"), el: <SlideShot full exhibit="EXHIBIT H" label="Geoffrey, Book IX ch. 13 (Evans)" art={() => <Banquet />} /> },
-  { name: "s20-slide-wace", from: C("L19"), el: <SlideShot full exhibit="EXHIBIT I" label="Geoffrey c. 1136, Wace 1155" art={() => <Timeline />} /> },
+  { name: "s17-slide-search", from: B[5], el: <SlideShot tag={T[5]} cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]} exhibit="EXHIBIT G" label="Three editions searched" art={(f) => <SearchArt k={f / 90} />} gel={SHADOW.gelTeal} /> },
+  { name: "s18-slide-cadw-vs-geoffrey", from: C("L17", 0.2), el: <SlideShot full tag={T[5]} exhibit="CONTRADICTION" label="Cadw vs Geoffrey's own text" art={() => <CadwVsGeoffrey />} /> },
+  { name: "s19-slide-banquet", from: C("L18"), el: <SlideShot full tag={T[5]} exhibit="EXHIBIT H" label="Geoffrey, Book IX ch. 13 (Evans)" art={() => <Banquet />} /> },
+  { name: "s20-slide-wace", from: C("L19"), el: <SlideShot full tag={T[5]} exhibit="EXHIBIT I" label="Geoffrey c. 1136, Wace 1155" art={() => <Timeline />} /> },
   {
     name: "s21-room-dig-doubt",
     from: C("L20", 0.3),
-    el: <Room lampX={ROOM_LAMP} cast={[{ who: "dig", x: 640, width: 300, armL: 120, armR: -120, browLift: 1 }, { who: "doubt", x: 1280, width: 290 }]} />,
+    el: <Room lampX={ROOM_LAMP} tag={T[5]} cast={[{ who: "dig", x: 520, width: 300, say: "right", ...DIG_UP }, { who: "doubt", x: 1450, width: 290, say: "left" }]} />,
   },
   { name: "s22-play-table", from: pg("L21", 1) - 4, el: <TableGagWrap /> },
   // BEAT 6: THE WITNESSES
   { name: "s23-play-gerald", from: B[6], el: <GeraldPlay /> },
-  { name: "s24-slide-hoare", from: pg("L22", 2) - 4, el: <SlideShot full exhibit="EXHIBIT J" label="Gerald of Wales, 1188" art={() => <HoarePage />} /> },
+  { name: "s24-slide-hoare", from: pg("L22", 2) - 4, el: <SlideShot full tag={T[6]} exhibit="EXHIBIT J" label="Gerald of Wales, 1188" art={() => <HoarePage />} /> },
   { name: "s25-play-poet", from: C("L23"), el: <PoetPlay /> },
-  { name: "s26-slide-memoir", from: pg("L23", 3) - 4, el: <SlideShot full exhibit="EXHIBIT K" label="Hallam Tennyson, Memoir, 1897" art={() => <MemoirPage />} /> },
-  { name: "s27-room-lovely", from: C("L24"), el: <Room lampX={ROOM_LAMP} cast={[{ who: "dig", x: 640, width: 300 }, { who: "doubt", x: 1280, width: 290 }]} gel={SHADOW.gelTeal} gelOpacity={0.2} /> },
+  { name: "s26-slide-memoir", from: pg("L23", 3) - 4, el: <SlideShot full tag={T[6]} exhibit="EXHIBIT K" label="Hallam Tennyson, Memoir, 1897" art={() => <MemoirPage />} /> },
+  { name: "s27-room-lovely", from: C("L24"), el: <Room lampX={ROOM_LAMP} tag={T[6]} cast={[{ who: "dig", x: 520, width: 300, say: "right" }, { who: "doubt", x: 1450, width: 290, say: "left" }]} gel={SHADOW.gelTeal} gelOpacity={0.2} /> },
   // BEAT 7: THE NEWSPAPER
   {
     name: "s28-place-dig1926",
     from: B[7],
     el: (
-      <PlaceShot kind="ruins" place="CAERLEON, 1926" sub="the amphitheatre is dug out" pan={[-40, 60]}>
+      <PlaceShot
+        kind="ruins"
+        pan={[-40, 60]}
+        overlay={<PaperLabel big="CAERLEON, 1926" small="the amphitheatre is dug out" x={1160} y={330} w={560} pin={[1000, 760]} enter={8} />}
+        tag={{ text: T[7], x: 1160, y: 510, w: 680 }}
+      >
         <DigCrew />
         <PressFlash />
       </PlaceShot>
@@ -219,6 +249,7 @@ const SHOTS: ShotDef[] = [
     from: C("L26"),
     el: (
       <SlideShot
+        tag={T[7]}
         cast={[{ who: "clerk", x: 340, width: 290, armR: -60 }]}
         exhibit="EXHIBIT L"
         label="Cadw booklet, pp. 22 to 23"
@@ -230,26 +261,34 @@ const SHOTS: ShotDef[] = [
   {
     name: "s30-slide-canny",
     from: C("L27"),
-    el: <SlideShot cast={[{ who: "doubt", x: 340, width: 290 }]} exhibit="EXHIBIT M" label="Cadw booklet" art={() => <QuoteArt kicker="CADW BOOKLET" quote="The Wheelers were canny enough not to dispute this romantic idea" cite="Cadw, Trailblazers booklet, pp. 22 to 23" fs={56} />} gel={SHADOW.gelTeal} />,
+    el: <SlideShot tag={T[7]} cast={[{ who: "doubt", x: 340, width: 290 }]} exhibit="EXHIBIT M" label="Cadw booklet" art={() => <QuoteArt kicker="CADW BOOKLET" quote="The Wheelers were canny enough not to dispute this romantic idea" cite="Cadw, Trailblazers booklet, pp. 22 to 23" fs={56} />} gel={SHADOW.gelTeal} />,
   },
   {
     name: "s31-slide-untrue",
     from: C("L28"),
-    el: <SlideShot cast={[{ who: "curator", x: 340, width: 300, armR: -50 }]} exhibit="EXHIBIT N" label="Cadw booklet" art={() => <QuoteArt kicker="CADW’S OWN BOOKLET" quote="an appealing, (though untrue), story and was guaranteed to sell newspapers." cite="Cadw, Trailblazers booklet, pp. 22 to 23" fs={56} />} />,
+    el: <SlideShot tag={T[7]} cast={[{ who: "curator", x: 340, width: 300, armR: -50 }]} exhibit="EXHIBIT N" label="Cadw booklet" art={() => <QuoteArt kicker="CADW’S OWN BOOKLET" quote="an appealing, (though untrue), story and was guaranteed to sell newspapers." cite="Cadw, Trailblazers booklet, pp. 22 to 23" fs={56} />} />,
   },
   { name: "s32-play-tessa", from: C("L29"), el: <TessaPlay /> },
-  { name: "s33-slide-tablet-in", from: C("L30", 0.3), el: <SlideShot cast={[{ who: "dig", x: 340, width: 300, armL: 120, armR: -120, browLift: 1 }]} exhibit="EXHIBIT O" label="Lead curse tablet" art={() => <TabletArt k={0} />} /> },
-  { name: "s34-slide-tablet", from: C("L31"), el: <SlideShot full exhibit="EXHIBIT O" label="Cadw's translation" art={() => <Tablet />} gel={SHADOW.gelTeal} /> },
-  { name: "s35-room-evidence", from: C("L32", 0.2), el: <Room lampX={ROOM_LAMP} zoom={[1.1, 1.13]} lean={0} cast={[{ who: "doubt", x: 960, width: 330, browLift: 0.6 }]} /> },
+  { name: "s33-slide-tablet-in", from: C("L30", 0.3), el: <SlideShot tag={T[7]} cast={[{ who: "dig", x: 340, width: 300, ...DIG_UP }]} exhibit="EXHIBIT O" label="Lead curse tablet" art={() => <TabletArt k={0} />} /> },
+  { name: "s34-slide-tablet", from: C("L31"), el: <SlideShot full tag={T[7]} exhibit="EXHIBIT O" label="Cadw's translation" art={() => <Tablet />} gel={SHADOW.gelTeal} /> },
+  { name: "s35-room-evidence", from: C("L32", 0.2), el: <Room lampX={ROOM_LAMP} tag={T[7]} zoom={[1.1, 1.13]} lean={0} cast={[{ who: "doubt", x: 900, width: 330, browLift: 0.6, say: "right" }]} /> },
   // BEAT 8: THE EVIDENCE BOARD
   { name: "s36-board", from: B[8], el: <BoardWrap /> },
   // BEAT 9: THE VERDICT
-  { name: "s37-room-court-finds", from: B[9], el: <Room lampX={960} zoom={[1.04, 1.13]} lean={0} cast={[{ who: "curator", x: 960, width: 330 }]} gel={SHADOW.gelRose} gelOpacity={0.16} moths={false} /> },
+  { name: "s37-room-court-finds", from: B[9], el: <Room lampX={960} tag={T[9]} zoom={[1.04, 1.13]} lean={0} cast={[{ who: "curator", x: 1040, width: 330, say: "left" }]} gel={SHADOW.gelRose} gelOpacity={0.16} moths={false} /> },
   { name: "s38-seal", from: C("L36", 1.4), el: <SealWrap /> },
   {
     name: "s39-room-great-story",
     from: C("L38", 0.3),
-    el: <Room lampX={960} cast={[{ who: "dig", x: 560, width: 290, armL: 120, armR: -120 }, { who: "curator", x: 960, width: 300, mouth: "smile" }, { who: "doubt", x: 1360, width: 290 }]} gel={SHADOW.gelRose} gelOpacity={0.22} />,
+    el: (
+      <Room
+        lampX={960}
+        tag={T[9]}
+        cast={[{ who: "dig", x: 400, width: 290, armL: 120, armR: -120, say: "above" }, { who: "curator", x: 960, width: 300, mouth: "smile" }, { who: "doubt", x: 1500, width: 290, say: "above", sayW: 500 }]}
+        gel={SHADOW.gelRose}
+        gelOpacity={0.22}
+      />
+    ),
   },
   // BEAT 10: NEXT CASE
   { name: "s40-room-next-case", from: B[10], el: <NextCase /> },
@@ -284,8 +323,8 @@ function SealWrap() {
 function NextCase() {
   return (
     <AbsoluteFill>
-      <Room lampX={960} dim={0.7} lean={0} zoom={[1.02, 1.08]} cast={[{ who: "curator", x: 760, width: 300 }]} lit={[2]} />
-      <FactPlate at={14} big={EP.teaserCard} small="Pinned for next time" x={1000} y={260} />
+      <Room lampX={960} dim={0.7} lean={0} zoom={[1.02, 1.08]} cast={[{ who: "curator", x: 820, width: 300, say: "left" }]} lit={[2]} />
+      <PaperLabel big={EP.teaserCard} small="pinned to the board for next time" x={1020} y={250} w={760} pin={[1100, 236]} enter={14} rot={2} />
     </AbsoluteFill>
   );
 }
@@ -305,8 +344,6 @@ export const EvidenceRoom2: React.FC = () => (
         {s.el}
       </Shot>
     ))}
-    <SourceTags />
-    <Speech />
     <Dips at={DIPS} />
     {HAS_VOICEOVER ? <Audio src={staticFile(VOICEOVER_FILE)} /> : null}
     <Letterbox />

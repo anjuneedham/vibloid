@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { AbsoluteFill, Easing, interpolate, Sequence, useCurrentFrame } from "remotion";
-import type { Who } from "../../shared/comic";
+import { actorBox, type Who } from "../../shared/comic";
 import { BANGERS, COMIC } from "../../shared/fonts";
 import type { Span } from "../../shared/moment";
 import type { PlayerProps } from "../../shared/Player";
@@ -10,7 +10,11 @@ import {
   Cutout,
   Gel,
   HangingLamp,
+  idleMotion,
   lampSwing,
+  Placard,
+  PlacardGeom,
+  SourceRibbon,
   LampVignette,
   Layer,
   Moths,
@@ -25,7 +29,7 @@ import {
   Stage,
 } from "../../shared/shadow";
 import { BAR_HEIGHT, SHADOW } from "../../shared/theme";
-import { LINE_IDS, LINE_TEXT, LineId, linePages } from "./lines";
+import { LINE_IDS, LINE_TEXT, LineId, linePages, ON_EXHIBIT } from "./lines";
 import { beatSpan, lf } from "./timing";
 
 // Building blocks for EvidenceRoom2 (lantern-lit shadow theatre). Everything is placed in ABSOLUTE frames
@@ -72,7 +76,78 @@ export const useTalk = (who: Who): Span[] => {
 };
 
 // ------------------------------------------------------------------ cast on the stage
-export type CastSpec = { who: Who; x: number; width?: number; feet?: number; idle?: boolean } & Partial<Omit<PlayerProps, "who" | "x">>;
+export type CastSpec = {
+  who: Who;
+  x: number;
+  width?: number;
+  feet?: number;
+  idle?: boolean;
+  /** where this puppet's speech placard stands: beside the head (left / right) or above the hat */
+  say?: "left" | "right" | "above";
+  sayW?: number;
+} & Partial<Omit<PlayerProps, "who" | "x">>;
+
+/** Lines that touch this shot (local spans), in order. */
+const useShotLines = () => {
+  const { S, len } = useShot();
+  return LINE_IDS.map((id) => ({ id, span: S(id) })).filter(({ span }) => span[1] > -30 && span[0] < len + 10);
+};
+
+/** Rod placard geometry for a puppet (stage coordinates, before sway). */
+const rodGeom = (c: CastSpec): PlacardGeom => {
+  const width = c.width ?? 290;
+  const feet = c.feet ?? FLOOR;
+  const b = actorBox(c.who, c.x, feet, width);
+  const h = b.h * b.sy;
+  if (c.say === "above") {
+    const w = c.sayW ?? 600;
+    return { mount: "rod", left: c.x - w / 2, bottom: feet - h - 18, w, rodX: 34 };
+  }
+  const w = c.sayW ?? 540;
+  const bottom = feet - h * 0.4;
+  return c.say === "left" ? { mount: "rod", left: c.x - width * 0.42 - 14 - w, bottom, w, rodX: w * 0.5 } : { mount: "rod", left: c.x + width * 0.42 + 14, bottom, w, rodX: w * 0.5 };
+};
+
+/**
+ * Speech placards for the puppets on stage. Render INSIDE the same Layer as the cast, so they move with the camera;
+ * each placard also follows its speaker's idle sway and lift.
+ */
+export const StagePlacards: React.FC<{ cast: CastSpec[] }> = ({ cast }) => {
+  const { frame, key: k } = useShot();
+  const lines = useShotLines();
+  return (
+    <>
+      {lines.map(({ id, span }) => {
+        const c = cast.find((m) => m.who === LINE_TEXT[id].who && m.say);
+        if (!c) return null;
+        const m = c.idle === false ? { rot: 0, lift: 0 } : idleMotion(c.who, frame, k.length + c.x);
+        return (
+          <div key={id} style={{ position: "absolute", inset: 0, transform: `translateY(${-m.lift}px) rotate(${m.rot}deg)`, transformOrigin: `${c.x}px ${c.feet ?? FLOOR}px`, zIndex: 30 }}>
+            <Placard who={c.who} pages={linePages(id)} span={span} geom={rodGeom(c)} suppress={ON_EXHIBIT[id]} />
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+export type Hang = { left: number; top: number; w: number };
+/** Speech placards hung from the top of the stage for any voice NOT standing on stage with a placard. Screen space. */
+export const HangPlacards: React.FC<{ hang: Hang; onStage?: CastSpec[] }> = ({ hang, onStage = [] }) => {
+  const lines = useShotLines();
+  return (
+    <>
+      {lines.map(({ id, span }) => {
+        const who = LINE_TEXT[id].who;
+        if (onStage.some((m) => m.who === who && m.say)) return null;
+        return <Placard key={id} who={who} pages={linePages(id)} span={span} geom={{ mount: "hang", ...hang }} suppress={ON_EXHIBIT[id]} />;
+      })}
+    </>
+  );
+};
+
+export type Rib = { text: string; x: number; y: number; w?: number; rot?: number };
+export const Ribbon: React.FC<{ r?: Rib | null }> = ({ r }) => (r ? <SourceRibbon text={r.text} x={r.x} y={r.y} w={r.w} rot={r.rot} /> : null);
 
 /** Camera lean toward whoever is speaking (two-shot rule: lean ~ instead of cutting). Returns cam x. */
 export const useLean = (cast: CastSpec[], amount = 0.2) => {
@@ -94,7 +169,7 @@ export const useLean = (cast: CastSpec[], amount = 0.2) => {
   return x;
 };
 
-export const Actor: React.FC<CastSpec & { lampX: number; k: string }> = ({ who, x, width = 290, feet = FLOOR, lampX, k, ...rest }) => {
+export const Actor: React.FC<CastSpec & { lampX: number; k: string }> = ({ who, x, width = 290, feet = FLOOR, lampX, k, say: _say, sayW: _sayW, ...rest }) => {
   const talk = useTalk(who);
   return <ShadowActor who={who} x={x} feet={feet} width={width} lampX={lampX} talk={talk} boil="ink" seed={k.length + x} {...rest} />;
 };
@@ -186,8 +261,11 @@ export const Room: React.FC<{
   labels?: string[];
   table?: boolean;
   moths?: boolean;
+  /** source ribbon, pinned to the top-left corner of the pin-board (moves with it) */
+  tag?: string | null;
+  hang?: Hang;
   children?: React.ReactNode;
-}> = ({ cast, lampX = 900, zoom = [1.0, 1.05], pan = [0, 0], lean = 0.2, gel, gelOpacity, dim = 0, lit = [], labels = BOARD_LABELS, table = true, moths = true, children }) => {
+}> = ({ cast, lampX = 900, zoom = [1.0, 1.05], pan = [0, 0], lean = 0.2, gel, gelOpacity, dim = 0, lit = [], labels = BOARD_LABELS, table = true, moths = true, tag = null, hang = { left: 60, top: 110, w: 600 }, children }) => {
   const { frame, len, key: k } = useShot();
   const lx = useLean(cast, lean);
   const cam = { x: lx + drift(frame, len, pan[0], pan[1]), y: drift(frame, len, 0, -10), zoom: drift(frame, len, zoom[0], zoom[1]) };
@@ -238,6 +316,7 @@ export const Room: React.FC<{
             <Actor key={c.who} lampX={lamp[0]} k={k} {...c} />
           ))}
           {children}
+          <StagePlacards cast={cast} />
         </Layer>
         <Bloom x={lamp[0]} y={lamp[1] + 30} r={520} opacity={0.42 * (1 - dim * 0.4)} seed={k.length} />
         <BeamDust lamp={lamp} count={50} reach={900} seed={k.length} />
@@ -249,11 +328,14 @@ export const Room: React.FC<{
       <KeyLight x={lamp[0]} strength={1 + dim * 0.5} />
       {dim > 0 ? <AbsoluteFill style={{ background: SHADOW.room, opacity: dim * 0.45, mixBlendMode: "multiply" }} /> : null}
       <Finish hot={lamp} gel={gel} gelOpacity={gelOpacity} />
+      {/* the source ribbon pinned to the front edge of the stage */}
+      {tag ? <SourceRibbon text={tag} x={44} y={936} w={1180} rot={-0.6} /> : null}
+      <HangPlacards hang={hang} onStage={cast} />
     </AbsoluteFill>
   );
 };
 
-// ------------------------------------------------------------------ the lower-third cartouche (one plate per line, pages inside)
+// ------------------------------------------------------------------ (retired) the lower-third cartouche (one plate per line, pages inside)
 const SPEAKER: Record<Who, { name: string; accent: string }> = {
   curator: { name: "THE CURATOR", accent: SHADOW.brass },
   dig: { name: "DIG", accent: SHADOW.gelAmber },

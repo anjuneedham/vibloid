@@ -135,6 +135,7 @@ bed = bed * (10 ** ((voice_db - MUSIC_BELOW_VOICE_DB - rms_db(bed)) / 20)) * env
 
 # ------------------------------------------------------------------ sound effects
 fx = np.zeros(N + 10 * SR, dtype=np.float32)
+fx_loud = np.zeros(N + 10 * SR, dtype=np.float32)  # cues locked to a visual hit (stamps): not ducked under speech
 log, warns = [], []
 for c in cues:
     if "abs" in c:
@@ -150,12 +151,12 @@ for c in cues:
     x = sfx.LIB[c["sfx"]](**c.get("args", {}))
     x = x * (10 ** ((PEAK_DB[c["sfx"]] + c.get("db", 0)) / 20))
     i = int(t0 * SR)
-    fx[i : i + len(x)] += x[: len(fx) - i]
+    (fx_loud if c.get("noduck") else fx)[i : i + len(x)] += x[: len(fx) - i]
     room = (nxt - t0) if nxt else None
     log.append((t0, c["sfx"], room))
     if room is not None and CORE[c["sfx"]] > room - 0.04:
         warns.append(f"{c['sfx']} after {c.get('after')} at {t0:.2f}s needs {CORE[c['sfx']]:.2f}s but only {room:.2f}s before the next line")
-fx = fx[:N] * env_sfx
+fx = fx[:N] * env_sfx + fx_loud[:N]
 
 # fire crackle under everything, very quiet
 amb = sfx.crackle(total)[:N]

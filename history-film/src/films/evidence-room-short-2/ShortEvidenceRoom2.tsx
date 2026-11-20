@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
 import type { Who } from "../../shared/comic";
 import { BANGERS, COMIC, FELL } from "../../shared/fonts";
-import { CarvedHeadline, InkWipe, LinoActor, LinoAmphi, LinoDefs, LinoGround, LinoPaper, LinoStamp, LinoSun, NameBlock, Rays, regOffset, useThump } from "../../shared/linocut";
+import { Banderole, CarvedHeadline, InkWipe, LinoActor, LinoAmphi, LinoDefs, LinoGround, LinoPaper, LinoStamp, LinoSun, NameBlock, Rays, regOffset, StampedSource, useThump } from "../../shared/linocut";
 import type { Span } from "../../shared/moment";
 import { LINO } from "../../shared/theme";
 import EP from "../evidence-room-2/episode.json";
@@ -35,49 +35,29 @@ const useScene = (start: number) => {
 // ------------------------------------------------------------------ the printed cartouche (speech, lower third)
 const NAME: Record<Who, string> = { curator: "THE CURATOR", dig: "DIG", doubt: "DOUBT", clerk: "THE CLERK" };
 
-const LinoCartouche: React.FC<{ id: LineId }> = ({ id }) => {
-  const frame = useCurrentFrame();
-  const [a, b] = slf(id);
-  // hold through the short pause until the next line starts (no empty plate gaps)
-  const k = SHORT_ORDER.indexOf(id);
-  const next = k < SHORT_ORDER.length - 1 ? slf(SHORT_ORDER[k + 1])[0] : b + 20;
-  if (frame < a - 3 || frame >= Math.max(b + 2, next - 3)) return null;
-  const pages = linePages(id);
-  const dur = b - a;
-  let pi = pages.findIndex((p) => frame < a + dur * p.to);
-  if (pi < 0) pi = pages.length - 1;
-  const page = pages[pi];
-  const p0 = a + dur * page.from;
-  const words = page.text.split(" ");
-  const per = Math.max(1, Math.min(3, (a + dur * page.to - p0) / (words.length * 2.4)));
-  return (
-    <div style={{ position: "absolute", left: 64, top: 1180, width: SAFE_R - 64, zIndex: 70 }}>
-      <div style={{ position: "relative", background: LINO.paper, border: `8px solid ${LINO.ink}`, padding: "40px 30px 22px", filter: "url(#lino-ink)", minHeight: 120 }}>
-        <div style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 48, lineHeight: 1.16, color: LINO.ink }}>
-          {words.map((w, i) => (
-            <span key={i} style={{ whiteSpace: "nowrap", opacity: frame >= Math.floor((p0 + i * per) / 2) * 2 ? 1 : 0.12 }}>
-              {w}{" "}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div style={{ position: "absolute", left: 24, top: -30, background: LINO.red, padding: "6px 16px 0", filter: "url(#lino-ink)" }}>
-        <div style={{ fontFamily: BANGERS, fontSize: 46, letterSpacing: 3, color: LINO.paper, lineHeight: 1.05 }}>{NAME[LINE_TEXT[id].who]}</div>
-      </div>
-    </div>
-  );
+/** Where each speaking figure's hand is in its scene (the banderole's ribbon starts there). */
+const HAND: Partial<Record<LineId, [number, number]>> = {
+  L02: [870, 964],
+  L04: [359, 922],
+  L09: [682, 911],
+  L10: [588, 879],
+  L17: [240, 970],
+  L26: [740, 970],
+  L28: [570, 880],
+  L36: [390, 890],
+  L37: [370, 930],
+  L38: [590, 910],
 };
 
-/** Source tag: the black bar is printed (bitten edges), the words are clean so they read at phone size. */
-const Tag: React.FC<{ text: string }> = ({ text }) => (
-  <div style={{ position: "absolute", left: 64, top: 1412, maxWidth: SAFE_R - 64, zIndex: 60 }}>
-    <div style={{ position: "absolute", inset: 0, background: LINO.ink, filter: "url(#lino-ink)" }} />
-    <div style={{ position: "relative", padding: "9px 18px 11px" }}>
-      <span style={{ fontFamily: BANGERS, fontSize: 32, letterSpacing: 2, color: LINO.red, marginRight: 12 }}>SOURCE</span>
-      <span style={{ fontFamily: COMIC, fontWeight: 700, fontSize: 30, color: LINO.paper, lineHeight: 1.2 }}>{text}</span>
-    </div>
-  </div>
-);
+/** The speech scroll for one line, tied to the speaker; it stays up through the pause until the next line begins. */
+const LineScroll: React.FC<{ id: LineId }> = ({ id }) => {
+  const k = SHORT_ORDER.indexOf(id);
+  const next = k < SHORT_ORDER.length - 1 ? slf(SHORT_ORDER[k + 1])[0] : 1e9;
+  return <Banderole name={NAME[LINE_TEXT[id].who]} pages={linePages(id)} span={slf(id)} left={70} top={1186} w={840} from={HAND[id] ?? [480, 1000]} until={next} suppress={id === "L09" || id === "L28" ? [1] : []} />;
+};
+
+/** Source: stamped on the print, just under the speech scroll. */
+const Tag: React.FC<{ text: string }> = ({ text }) => <StampedSource text={text} x={64} y={1418} w={SAFE_R - 64} />;
 
 const TAG = {
   hook: "Cadw; Museum Wales (full list in the description)",
@@ -364,7 +344,7 @@ export const ShortEvidenceRoom2: React.FC = () => {
             </g>
           </svg>
           {SHORT_ORDER.map((id) => (
-            <LinoCartouche key={id} id={id} />
+            <LineScroll key={id} id={id} />
           ))}
         </LinoPaper>
       </AbsoluteFill>

@@ -112,3 +112,17 @@ export const linePages = (id: LineId): { text: string; from: number; to: number 
     return { text: p.text, from, to: acc / total };
   });
 };
+
+/**
+ * Pages whose words are ALREADY on the exhibit in that shot (the quote card / page / tablet): the placard keeps
+ * the lead-in up instead, so the same words never show twice at once.
+ */
+export const ON_EXHIBIT: Partial<Record<LineId, number[]>> = {
+  L09: [1],
+  L14: [1],
+  L18: [1],
+  L23: [3],
+  L27: [1],
+  L28: [1],
+  L31: [1, 2, 3, 4],
+};
