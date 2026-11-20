@@ -6,6 +6,7 @@ import { EvidenceRoom1 } from "./films/evidence-room-1/EvidenceRoom1";
 import { TOTAL_FRAMES } from "./films/evidence-room-1/timing";
 import { SHORT_FRAMES, ShortEvidenceRoom1 } from "./films/evidence-room-short-1/ShortEvidenceRoom1";
 import { Thumbnail1 } from "./films/series/Thumbnail1";
+import { Thumbnail2 } from "./films/series/Thumbnail2";
 import { CastHead } from "./films/series/CastHead";
 import { CastSheet } from "./films/series/CastSheet";
 import { Test10s } from "./films/test/Test10s";
@@ -47,6 +48,7 @@ export const RemotionRoot: React.FC = () => {
       <Still id="CastHead" component={CastHead} width={400} height={400} defaultProps={{ who: "curator" as const }} />
       <Composition id="ShortEvidenceRoom1" component={ShortEvidenceRoom1} durationInFrames={SHORT_FRAMES} fps={FPS} width={1080} height={1920} />
       <Still id="Thumbnail1" component={Thumbnail1} width={1280} height={720} />
+      <Still id="Thumbnail2" component={Thumbnail2} width={WIDTH} height={HEIGHT} />
       <Still id="CastSheet" component={CastSheet} width={WIDTH} height={HEIGHT} />
       <Composition id="ShadowStyleTest" component={ShadowStyleTest} durationInFrames={SHADOW_TEST_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
       <Composition id="LinocutStyleTest" component={LinocutStyleTest} durationInFrames={LINO_TEST_FRAMES} fps={FPS} width={1080} height={1920} />
