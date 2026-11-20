@@ -76,7 +76,7 @@ L37 [DIG] [S] But it is a great story!
 L38 [DOUBT] [S] Great stories sell newspapers.
 
 ## BEAT 10: NEXT CASE
-L39 [CURATOR] Next time: [PART 3 CASE, TO BE CHOSEN]. / Case adjourned.
+L39 [CURATOR] Next time: a pope puts a dead pope on trial. / Case adjourned.
 
 ---
 
@@ -98,4 +98,4 @@ Order: hook (L02) / claim (L04) / cinema joke (L09, L10) / no table in Geoffrey 
 5. L19: Wace 1155 as the first Round Table is VERIFIED from three sources. Do not quote Wace's lines on screen until the Weiss translation is checked.
 6. L08: the 6,000 is a Cadw / Museum Wales estimate. AD 90 versus AD 80 is shown on screen (L11).
 7. Not used on purpose: the 1405 French army "Round Table" (does not say Caerleon), Gough 1789, the Hanbury Arms plaque, Alcock / Dumville / Halsall quotes, "training" use of the amphitheatre.
-8. Part 3 teaser (L39): needs a case. Pick one before recording.
+8. Part 3 teaser (L39): settled as the Cadaver Synod (Rome, 897). The teaser wording is verified safe in `../evidence-room-3-cadaver-synod/sources.md`.
