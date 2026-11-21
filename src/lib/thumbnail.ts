@@ -74,7 +74,7 @@ export async function renderThumbnail(o: { bgPath: string; outPath: string; text
  * is placed bottom-left as the channel's recurring "reactor" character.
  */
 export type ThumbTemplate = "A" | "B" | "C";
-export async function renderTemplateThumbnail(o: { template: ThumbTemplate; bgPath: string; outPath: string; text: string; characterPath?: string; accent?: string }) {
+export async function renderTemplateThumbnail(o: { template: ThumbTemplate; bgPath: string; outPath: string; text: string; characterPath?: string; characters?: { path: string; side: "left" | "right" }[]; accent?: string }) {
   const words = o.text.trim().split(/\s+/);
   if (words.length > 3) throw new Error("template thumbnail text must be 3 words or fewer");
   const text = o.text.toUpperCase().replace(/'/g, "’").replace(/:/g, "\\:");
@@ -96,8 +96,15 @@ export async function renderTemplateThumbnail(o: { template: ThumbTemplate; bgPa
       `drawtext=fontfile='${FONT}':text='${text}':fontsize=${Math.min(110, fs1)}:fontcolor=${accent}:borderw=4:bordercolor=white:x=(w-text_w)/2:y=30`;
   }
   const args = ["-y", "-i", o.bgPath];
-  if (o.characterPath) {
-    args.push("-i", o.characterPath, "-filter_complex", `[0:v]${vf}[b];[1:v]scale=-1:420[c];[b][c]overlay=30:H-h-10`);
+  const chars = o.characters ?? (o.characterPath ? [{ path: o.characterPath, side: "left" as const }] : []);
+  if (chars.length) {
+    // Characters sit in the lower corners but lifted ~90px so TV/phone overlays (duration badge, progress bar) never cover faces.
+    let fc = `[0:v]${vf}[b0]`;
+    chars.forEach((c, i) => {
+      args.push("-i", c.path);
+      fc += `;[${i + 1}:v]scale=-1:400[c${i}];[b${i}][c${i}]overlay=${c.side === "left" ? "10" : "W-w-10"}:H-h-90[b${i + 1}]`;
+    });
+    args.push("-filter_complex", fc, "-map", `[b${chars.length}]`);
   } else args.push("-vf", vf);
   await run("ffmpeg", [...args, "-frames:v", "1", "-update", "1", o.outPath]);
   return { template: o.template, text };
