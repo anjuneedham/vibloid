@@ -7,11 +7,11 @@ Taken from Crayon Capital's approach: **one subject, one idea, 1–3 words, bold
 |---|---|---|
 | **A: Name** | The story is a person or place | Name huge across the top, white with black outline. Subject fills the frame. Optional character bottom-left. |
 | **B: Number** | There's a shocking figure | Red stat top-left ("-$6.3 BILLION"). Subject below. |
-| **C: Board** | Mystery, scandal, spy | Evidence-board frame, red pins and string, red label strip at the bottom. |
+| **C: Board** | Mystery, scandal, spy | Evidence-board frame, red pins and string, red label strip at the top. |
 
 Samples: `docs/thumb-A.png`, `docs/thumb-B.png`, `docs/thumb-C.png` (placeholder background).
 
-Rules: text never repeats the title. Read it at phone size before uploading. Upload all 3 to YouTube Test & Compare.
+Rules: all text and the subject's face go in the top half. TV and phone apps cover the bottom with the duration, progress bar and title. Text never repeats the title. Read it at phone size before uploading. Upload all 3 to YouTube Test & Compare.
 
 The biggest missing piece is a **recurring character**, like Crayon's little banker. Pass one PNG as `characterPath` and it goes on every thumbnail. For example, a scribe with a quill for Past Tense and a bearded prospector for Gold Journal.
 

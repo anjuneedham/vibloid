@@ -68,7 +68,8 @@ export async function renderThumbnail(o: { bgPath: string; outPath: string; text
  * Simple story-channel templates (inspired by illustrated explainer channels):
  *  A "name"   – big subject name across the top, subject image fills the frame.
  *  B "number" – big red stat top-left (e.g. "-$6.3 BILLION") with a down-arrow, subject below.
- *  C "board"  – evidence-board look: subject image framed with red pins/string and a label strip at the bottom.
+ *  C "board"  – evidence-board look: subject image framed with red pins/string and a label strip at the top.
+ * All text sits in the top third: TV and mobile overlay the duration, progress bar and title on the bottom.
  * Text is white with a thick black outline (no dark box), 1-3 words. Optional `characterPath` (PNG with alpha)
  * is placed bottom-left as the channel's recurring "reactor" character.
  */
@@ -89,10 +90,10 @@ export async function renderTemplateThumbnail(o: { template: ThumbTemplate; bgPa
     vf = `${base},drawtext=fontfile='${FONT}':text='${text}':fontsize=${fs2}:fontcolor=${accent}:borderw=10:bordercolor=white:x=40:y=30`;
   } else {
     vf = `${base},drawbox=x=0:y=0:w=iw:h=ih:color=0x6D4C2F:t=24,` +
-      `drawbox=x=150:y=120:w=18:h=18:color=${accent}:t=fill,drawbox=x=1110:y=140:w=18:h=18:color=${accent}:t=fill,` +
-      `drawbox=x=159:y=128:w=960:h=4:color=${accent}:t=fill,` +
-      `drawbox=x=0:y=${H - 150}:w=iw:h=150:color=black@0.85:t=fill,` +
-      `drawtext=fontfile='${FONT}':text='${text}':fontsize=${Math.min(110, fs1)}:fontcolor=${accent}:borderw=4:bordercolor=white:x=(w-text_w)/2:y=${H - 130}`;
+      `drawbox=x=150:y=230:w=18:h=18:color=${accent}:t=fill,drawbox=x=1110:y=250:w=18:h=18:color=${accent}:t=fill,` +
+      `drawbox=x=159:y=238:w=960:h=4:color=${accent}:t=fill,` +
+      `drawbox=x=0:y=0:w=iw:h=170:color=black@0.85:t=fill,` +
+      `drawtext=fontfile='${FONT}':text='${text}':fontsize=${Math.min(110, fs1)}:fontcolor=${accent}:borderw=4:bordercolor=white:x=(w-text_w)/2:y=30`;
   }
   const args = ["-y", "-i", o.bgPath];
   if (o.characterPath) {
