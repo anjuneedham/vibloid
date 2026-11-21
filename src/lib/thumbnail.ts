@@ -63,3 +63,41 @@ export async function renderThumbnail(o: { bgPath: string; outPath: string; text
   } finally { fs.rmSync(tf, { force: true }); }
   return { text: lines.join(" "), contrast: +contrast.toFixed(2), alpha: +alpha.toFixed(2), fontsize };
 }
+
+/**
+ * Simple story-channel templates (inspired by illustrated explainer channels):
+ *  A "name"   – big subject name across the top, subject image fills the frame.
+ *  B "number" – big red stat top-left (e.g. "-$6.3 BILLION") with a down-arrow, subject below.
+ *  C "board"  – evidence-board look: subject image framed with red pins/string and a label strip at the bottom.
+ * Text is white with a thick black outline (no dark box), 1-3 words. Optional `characterPath` (PNG with alpha)
+ * is placed bottom-left as the channel's recurring "reactor" character.
+ */
+export type ThumbTemplate = "A" | "B" | "C";
+export async function renderTemplateThumbnail(o: { template: ThumbTemplate; bgPath: string; outPath: string; text: string; characterPath?: string; accent?: string }) {
+  const words = o.text.trim().split(/\s+/);
+  if (words.length > 3) throw new Error("template thumbnail text must be 3 words or fewer");
+  const text = o.text.toUpperCase().replace(/'/g, "’").replace(/:/g, "\\:");
+  const accent = o.accent ?? "0xE53935";
+  const base = `scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},eq=saturation=1.35:contrast=1.1,vignette=PI/5`;
+  const fs1 = Math.min(150, Math.floor(1180 / (0.62 * text.length)));
+  const outline = `fontcolor=white:borderw=10:bordercolor=black:shadowx=6:shadowy=6:shadowcolor=black@0.6`;
+  let vf: string;
+  if (o.template === "A") {
+    vf = `${base},drawtext=fontfile='${FONT}':text='${text}':fontsize=${fs1}:${outline}:x=(w-text_w)/2:y=30`;
+  } else if (o.template === "B") {
+    const fs2 = Math.min(140, Math.floor(1000 / (0.62 * text.length)));
+    vf = `${base},drawtext=fontfile='${FONT}':text='${text}':fontsize=${fs2}:fontcolor=${accent}:borderw=10:bordercolor=white:x=40:y=30`;
+  } else {
+    vf = `${base},drawbox=x=0:y=0:w=iw:h=ih:color=0x6D4C2F:t=24,` +
+      `drawbox=x=150:y=120:w=18:h=18:color=${accent}:t=fill,drawbox=x=1110:y=140:w=18:h=18:color=${accent}:t=fill,` +
+      `drawbox=x=159:y=128:w=960:h=4:color=${accent}:t=fill,` +
+      `drawbox=x=0:y=${H - 150}:w=iw:h=150:color=black@0.85:t=fill,` +
+      `drawtext=fontfile='${FONT}':text='${text}':fontsize=${Math.min(110, fs1)}:fontcolor=${accent}:borderw=4:bordercolor=white:x=(w-text_w)/2:y=${H - 130}`;
+  }
+  const args = ["-y", "-i", o.bgPath];
+  if (o.characterPath) {
+    args.push("-i", o.characterPath, "-filter_complex", `[0:v]${vf}[b];[1:v]scale=-1:420[c];[b][c]overlay=30:H-h-10`);
+  } else args.push("-vf", vf);
+  await run("ffmpeg", [...args, "-frames:v", "1", "-update", "1", o.outPath]);
+  return { template: o.template, text };
+}
