@@ -32,6 +32,20 @@ Readability: one idea per sentence, about 15 words or fewer. Say every name and 
 
 ## Past Tense (history)
 
+**Recurring cast** (Evidence Room, in `history-film/src/shared/cast` on branch `ccr-8df25987-ah0f5r`; see `previews/evidence-room-cast.png`):
+- The Curator: bowler hat and monocle, the host
+- Dig: pith helmet, believes every find
+- Doubt: red scarf, sleepy eyes, the sceptic
+- The Clerk: round glasses and inkwell, keeps the sources
+
+Build Past Tense thumbnails in Remotion with the existing `Actor` / `BigText` / `StampMark` pieces, like `series/Thumbnail1.tsx` ("TOMB ON TRIAL" + "NOT PROVEN" stamp). That file already is template A with two reactors. Put the BigText at the top for TV. Characters stand at the sides with feet at the bottom; the overlays only cover their feet.
+
+| Video | Text (top) | Cast | Stamp / prop |
+|---|---|---|---|
+| Prometheus | STOLE FROM ZEUS | Dig amazed (left), Doubt arms crossed (right) | flame in a fennel stalk, centre |
+| Jesus records | ROMAN RECORDS | The Clerk holding a scroll, Doubt squinting | stamp: "EVIDENCE?" |
+| Vietnam spy | THE PERFECT SPY | The Curator with a magnifying glass, Dig shocked | redacted photo pinned on the board, stamp: "DOUBLE AGENT" |
+
 ### 1. Prometheus
 - **Titles:** *Prometheus: The God Who Betrayed Zeus* · *Why Zeus Chained Prometheus Forever* · *The Myth of Prometheus Explained Like You're 5*
 - **Thumbnail:** A, "PROMETHEUS" (chained figure, eagle) · alt C, "STOLE FROM ZEUS"
